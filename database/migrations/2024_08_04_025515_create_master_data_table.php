@@ -92,34 +92,36 @@ return new class extends Migration
             $table->string('anak_ke');
             $table->string('agama')->default('islam');
             $table->string('hobi');
-            $table->string('aktivitas_pendidikan');
+            $table->enum('aktivitas_pendidikan', ['aktif', 'nonaktif'])->default('aktif');
             $table->string('npsn');
-            $table->string('no_kip')->nullable();
+            $table->string('no_kip');
             $table->string('no_kk');
             $table->string('nama_kepala_keluarga');
 
-            // $table->string('nama_sekolah');
-            // $table->string('yang_membiyayai_sekolah');
-            $table->foreignId('kelas_id')->constrained('kelas')->onDelete('cascade');
-            $table->foreignId('kamar_id')->constrained('kamars')->onDelete('cascade');
-
-            $table->enum('riwayat_penyakit', ['santri sehat', 'kurang sehat'])->default('santri sehat');
+            $table->enum('riwayat_penyakit', ['santri sehat', 'kurang sehat']);
             $table->enum('status_kesantrian', ['aktif', 'nonaktif']);
             $table->enum('status_santri', ['reguler', 'dhuafa', 'yatim-piatu']);
-            // $table->foreignId('semester_id')->constrained('semesters')->onDelete('cascade');
-            // $table->foreignId('angkatan_id')->constrained('angkatans')->onDelete('cascade');
+
+            $table->string('asal_sekolah')->default('Sekolah');
+            $table->string('yang_membiayai_sekolah')->default('Ayah');
+
+            $table->foreignId('kelas_id')->nullable()->constrained('kelas')->onDelete('cascade')->default(1);
+            $table->foreignId('kamar_id')->nullable()->constrained('kamars')->onDelete('cascade')->default(1);
+            $table->foreignId('semester_id')->nullable()->constrained('semesters')->onDelete('cascade')->default(1);
+            $table->foreignId('angkatan_id')->nullable()->constrained('angkatans')->onDelete('cascade')->default(1);
+
             $table->timestamps();
         });
 
         Schema::create('orang_tua_santris', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('santri_id')->constrained('santris')->onDelete('cascade');
+            $table->foreignId('santri_id')->nullable()->constrained('santris')->onDelete('cascade');
 
             // Data Ayah
             $table->string('nama_ayah');
             $table->enum('status_ayah', ['hidup', 'meniggal']);
             $table->enum('kewarganegaraan_ayah', ['WNI', 'WNA'])->default('WNI');
-            $table->string('nik_ayah');
+            $table->string('nik_ayah')->default("0081921827873");
             $table->string('tempat_lahir_ayah');
             $table->string('tanggal_lahir_ayah');
             $table->string('pendidikan_terakhir_ayah');
@@ -149,8 +151,8 @@ return new class extends Migration
             $table->string('rw');
             $table->string('alamat');
             $table->string('kode_pos');
+            $table->enum('status_orang_tua', ['kawin', 'cerai hidup', 'cerai mati']);
 
-            $table->enum('status_orang_tua', ['yatim', 'piatu', 'yatim-piatu']);
             $table->timestamps();
         });
     }

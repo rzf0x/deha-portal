@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             KamarTableSeeder::class,
             SantriSeeder::class,
             AngkatanSeeder::class,
+            SemesterSeeder::class,
             RoleSeeder::class,
             AdminSeeder::class,
             PembayaranDetailSeeder::class,
