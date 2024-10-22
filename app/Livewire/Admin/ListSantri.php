@@ -32,8 +32,17 @@ class ListSantri extends Component
     public $npsn = '70005521';
 
     // data
-    public $kelas, $kamar, $semester, $angkatan, $santri_id, $santriEditId;
+    public $kelas, $kamar, $semester, $angkatan, $santri_id, $santriEditId, $formPage = 1;
 
+
+    public function prevForm()
+    {
+        $this->formPage--;
+    }
+    public function nextForm()
+    {
+        $this->formPage++;
+    }
     public function create()
     {
         $this->santriForm->reset();
