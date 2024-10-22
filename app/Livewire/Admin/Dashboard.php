@@ -2,6 +2,11 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\Jenjang;
+use App\Models\Kamar;
+use App\Models\Kelas;
+use App\Models\Santri;
+use App\Models\WaliKelas;
 use Asantibanez\LivewireCharts\Models\PieChartModel;
 use Livewire\Component;
 use Livewire\attributes\Title;
@@ -10,7 +15,7 @@ use Detection\MobileDetect;
 class Dashboard extends Component
 {
     // Integer
-    public $totalJenjang, $totalKelas, $totalKamar, $totalAdmin, $totalSantri;
+    public $totalJenjang, $totalKelas, $totalKamar, $waliKelas, $totalSantri;
 
     // Bool
     public $isMobile = false;
@@ -19,11 +24,10 @@ class Dashboard extends Component
 
     public function mount(MobileDetect $mobileDetect)
     {
-        $this->totalJenjang = 5;
-        $this->totalKelas = 3;
-        $this->totalKamar = 24;
-        $this->totalAdmin = 2;
-        $this->totalSantri = 10;
+        $this->totalKelas = count(Kelas::all());
+        $this->totalKamar = count(Kamar::all());
+        $this->waliKelas = count(WaliKelas::all());;
+        $this->totalSantri = count(Santri::all());
 
         $this->isMobile = $mobileDetect->isMobile();
     }
