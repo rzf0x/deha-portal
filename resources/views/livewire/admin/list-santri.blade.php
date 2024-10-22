@@ -145,8 +145,11 @@
                             {{-- Kewarganegaraan --}}
                             <div class="form-group col-lg-4">
                                 <label for="kewarganegaraan">Kewarganegaraan</label>
-                                <input type="text" class="form-control" wire:model="santriForm.kewarganegaraan"
-                                    id="kewarganegaraan" placeholder="Indonesia">
+                                <select class="form-select" wire:model="santriForm.kewarganegaraan">
+                                    <option value="">-- Kewarganegaraan --</option>
+                                    <option value="wni">WNI</option>
+                                    <option value="wna">WNA</option>
+                                </select>
                                 @error('santriForm.kewarganegaraan')
                                     <span class="text-danger error">{{ $message }}</span>
                                 @enderror
@@ -231,16 +234,9 @@
 
                             {{-- Hobi --}}
                             <div class="form-group col-lg-4">
-                                <label for="hobi">Hobi</label>
-                                <select class="form-select" wire:model="santriForm.hobi">
-                                    <option value="">-- Pilih Hobi --</option>
-                                    <option value="olahraga">olahraga</option>
-                                    <option value="kesenian">kesenian</option>
-                                    <option value="membaca">membaca</option>
-                                    <option value="menulis">menulis</option>
-                                    <option value="jalan-jalan">jalan-jalan</option>
-                                    <option value="lainnya">lainnya</option>
-                                </select>
+                                <label for="nisn">Hobi</label>
+                                <input type="text" class="form-control" wire:model="santriForm.hobi" id="hobi"
+                                    placeholder="Main Bola">
 
                                 @error('santriForm.hobi')
                                     <span class="text-danger error">{{ $message }}</span>
@@ -251,6 +247,7 @@
                             <div class="form-group col-lg-4">
                                 <label for="aktivitas_pendidikan">Aktivitas Pendidikan</label>
                                 <select class="form-select" wire:model="santriForm.aktivitas_pendidikan">
+                                    <option value="">-- Aktivitas Pendidikan --</option>
                                     <option value="aktif">aktif</option>
                                     <option value="nonaktif">nonaktif</option>
                                 </select>
@@ -294,8 +291,8 @@
                                 <label for="riwayat_penyakit">Riwayat Penyakit</label>
                                 <select class="form-select" wire:model="santriForm.riwayat_penyakit">
                                     <option value="">-- Riwayat Penyakit --</option>
-                                    <option value="santri sehat">santri sehat</option>
-                                    <option value="santri kurang sehat">santri kurang sehat</option>
+                                    <option value="sehat">sehat</option>
+                                    <option value="kurang_sehat">kurang sehat</option>
                                 </select>
 
                                 @error('santriForm.riwayat_penyakit')
@@ -324,7 +321,7 @@
                                     <option value="">-- Status Santri --</option>
                                     <option value="reguler">reguler</option>
                                     <option value="yatim">yatim</option>
-                                    <option value="yatim-piatu">yatim-piatu</option>
+                                    <option value="yatim_piatu">yatim piatu</option>
                                 </select>
 
                                 @error('santriForm.status_santri')
@@ -422,6 +419,7 @@
                                     <span class="text-danger error">{{ $message }}</span>
                                 @enderror
                             </div>
+
                         @elseif ($formCount == 2)
                             {{-- Nama Ayah --}}
                             <div class="form-group col-lg-4">
@@ -451,8 +449,8 @@
                                 <label for="kewarganegaraan_ayah">Kewarganegaraan Ayah</label>
                                 <select class="form-select" wire:model="waliSantriForm.kewarganegaraan_ayah">
                                     <option value="">-- Kewarganegaraan --</option>
-                                    <option value="WNI">WNI</option>
-                                    <option value="WNA">WNA</option>
+                                    <option value="wni">WNI</option>
+                                    <option value="wna">WNA</option>
                                 </select>
                                 @error('waliSantriForm.kewarganegaraan_ayah')
                                     <span class="text-danger error">{{ $message }}</span>
@@ -562,18 +560,6 @@
                                 @enderror
                             </div>
 
-                            {{-- Kewarganegaraan ibu --}}
-                            <div class="form-group col-lg-4">
-                                <label for="kewarganegaraan_ibu">Kewarganegaraan ibu</label>
-                                <select class="form-select" wire:model="waliSantriForm.kewarganegaraan_ibu">
-                                    <option value="WNI">WNI</option>
-                                    <option value="WNA">WNA</option>
-                                </select>
-                                @error('waliSantriForm.kewarganegaraan_ibu')
-                                    <span class="text-danger error">{{ $message }}</span>
-                                @enderror
-                            </div>
-
                             {{-- NIK ibu --}}
                             <div class="form-group col-lg-4">
                                 <label for="nik_ibu">NIK ibu</label>
@@ -595,6 +581,19 @@
                                 @enderror
                             </div>
 
+                            {{-- Kewarganegaraan ibu --}}
+                            <div class="form-group col-lg-4">
+                                <label for="kewarganegaraan_ibu">Kewarganegaraan ibu</label>
+                                <select class="form-select" wire:model="waliSantriForm.kewarganegaraan_ibu">
+                                    <option value="">-- Kewarganegaraan --</option>
+                                    <option value="wni">WNI</option>
+                                    <option value="wna">WNA</option>
+                                </select>
+                                @error('waliSantriForm.kewarganegaraan_ibu')
+                                    <span class="text-danger error">{{ $message }}</span>
+                                @enderror
+                            </div>
+
                             {{-- Tanggal Lahir ibu --}}
                             <div class="form-group col-lg-4">
                                 <label for="tanggal_lahir_ibu">Tanggal Lahir ibu</label>
@@ -606,8 +605,18 @@
                                 @enderror
                             </div>
 
-                            {{-- Pendidikan Terakhir ibu --}}
+                            {{-- Pekerjaan ibu --}}
                             <div class="form-group col-lg-4">
+                                <label for="pekerjaan_ibu">Pekerjaan ibu</label>
+                                <input type="text" class="form-control" wire:model="waliSantriForm.pekerjaan_ibu"
+                                    id="pekerjaan_ibu" placeholder="Programmer">
+                                @error('waliSantriForm.pekerjaan_ibu')
+                                    <span class="text-danger error">{{ $message }}</span>
+                                @enderror
+                            </div>
+
+                             {{-- Pendidikan Terakhir ibu --}}
+                             <div class="form-group col-lg-4">
                                 <label for="pendidikan_terakhir_ibu">Pendidikan Terakhir ibu</label>
                                 <select class="form-select" wire:model="waliSantriForm.pendidikan_terakhir_ibu">
                                     <option value="">-- Pendidikan --</option>
@@ -619,16 +628,6 @@
                                     <option value="sarjana">Sarjana</option>
                                 </select>
                                 @error('waliSantriForm.pendidikan_terakhir_ibu')
-                                    <span class="text-danger error">{{ $message }}</span>
-                                @enderror
-                            </div>
-
-                            {{-- Pekerjaan ibu --}}
-                            <div class="form-group col-lg-4">
-                                <label for="pekerjaan_ibu">Pekerjaan ibu</label>
-                                <input type="text" class="form-control" wire:model="waliSantriForm.pekerjaan_ibu"
-                                    id="pekerjaan_ibu" placeholder="Programmer">
-                                @error('waliSantriForm.pekerjaan_ibu')
                                     <span class="text-danger error">{{ $message }}</span>
                                 @enderror
                             </div>

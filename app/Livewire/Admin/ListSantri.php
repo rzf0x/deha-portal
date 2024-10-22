@@ -36,7 +36,8 @@ class ListSantri extends Component
 
     public function create()
     {
-        $this->resetField();
+        $this->santriForm->reset();
+        $this->waliSantriForm->reset();
     }
 
     public function store()
@@ -44,10 +45,13 @@ class ListSantri extends Component
         try {
             $this->santriForm->validate();
             $this->waliSantriForm->validate();
-            // Santri::create($this->santriForm->all());
-            // OrangTuaSantri::create($this->santriForm->all());
-            dd($this->santriForm->all(), $this->waliSantriForm->all());
-            return to_route('admin.master-santri.santri');
+            $santri = Santri::create($this->santriForm->all());
+            $waliSantriData = $this->waliSantriForm->all();
+            
+            $waliSantriData['santri_id'] = $santri->id;
+            OrangTuaSantri::create($waliSantriData);
+            // dd($this->santriForm->all(), $this->waliSantriForm->all());
+            return to_route('admin.master-santri.santri')->with(['success' => "Data success created!"]);
         } catch (\Exception $e) {
             dd($e->getMessage());
         }
@@ -69,26 +73,26 @@ class ListSantri extends Component
         return Santri::with('kelas', 'kamar')->paginate(5);
     }
 
-    private function resetField()
-    {
-        $this->nama = '';
-        $this->nisn = '';
-        $this->nism = '';
-        $this->kewarganegaraan = '';
-        $this->nik = '';
-        $this->tempat_lahir = '';
-        $this->tanggal_lahir = '';
-        $this->jenis_kelamin = '';
-        $this->jumlah_saudara_kandung = '';
-        $this->anak_ke = '';
-        $this->agama = '';
-        $this->hobi = '';
-        $this->aktivitas_pendidikan = '';
-        $this->npsn = '';
-        $this->no_kip = '';
-        $this->no_kk = '';
-        $this->nama_kepala_keluarga = '';
-    }
+    // private function resetField()
+    // {
+    //     $this->nama = '';
+    //     $this->nisn = '';
+    //     $this->nism = '';
+    //     $this->kewarganegaraan = '';
+    //     $this->nik = '';
+    //     $this->tempat_lahir = '';
+    //     $this->tanggal_lahir = '';
+    //     $this->jenis_kelamin = '';
+    //     $this->jumlah_saudara_kandung = '';
+    //     $this->anak_ke = '';
+    //     $this->agama = '';
+    //     $this->hobi = '';
+    //     $this->aktivitas_pendidikan = '';
+    //     $this->npsn = '';
+    //     $this->no_kip = '';
+    //     $this->no_kk = '';
+    //     $this->nama_kepala_keluarga = '';
+    // }
 
     public function nextFormCount()
     {

@@ -83,7 +83,7 @@ return new class extends Migration
             $table->string('nama');
             $table->string('nisn');
             $table->string('nism');
-            $table->string('kewarganegaraan')->default('Indonesia');
+            $table->enum('kewarganegaraan', ['wni', 'wna'])->default('wni');
             $table->bigInteger('nik');
             $table->string('tempat_lahir');
             $table->string('tanggal_lahir');
@@ -94,13 +94,13 @@ return new class extends Migration
             $table->string('hobi');
             $table->enum('aktivitas_pendidikan', ['aktif', 'nonaktif'])->default('aktif');
             $table->string('npsn');
-            $table->string('no_kip');
+            $table->string('no_kip')->nullable();
             $table->string('no_kk');
             $table->string('nama_kepala_keluarga');
 
-            $table->enum('riwayat_penyakit', ['santri sehat', 'kurang sehat']);
+            $table->enum('riwayat_penyakit', ['sehat', 'kurang_sehat']);
             $table->enum('status_kesantrian', ['aktif', 'nonaktif']);
-            $table->enum('status_santri', ['reguler', 'dhuafa', 'yatim-piatu']);
+            $table->enum('status_santri', ['reguler', 'dhuafa', 'yatim_piatu']);
 
             $table->string('asal_sekolah')->default('Sekolah');
             $table->string('yang_membiayai_sekolah')->default('Ayah');
@@ -119,11 +119,11 @@ return new class extends Migration
 
             // Data Ayah
             $table->string('nama_ayah');
-            $table->enum('status_ayah', ['hidup', 'meniggal']);
-            $table->enum('kewarganegaraan_ayah', ['WNI', 'WNA'])->default('WNI');
+            $table->enum('status_ayah', ['hidup', 'meninggal']);
+            $table->enum('kewarganegaraan_ayah', ['wni', 'wna'])->default('wni');
             $table->string('nik_ayah')->default("0081921827873");
             $table->string('tempat_lahir_ayah');
-            $table->string('tanggal_lahir_ayah');
+            $table->date('tanggal_lahir_ayah')->default(date(now()));
             $table->string('pendidikan_terakhir_ayah');
             $table->string('pekerjaan_ayah');
             $table->string('penghasilan_ayah');
@@ -131,8 +131,8 @@ return new class extends Migration
 
             // Data Ibu
             $table->string('nama_ibu');
-            $table->enum('status_ibu', ['hidup', 'meniggal']);
-            $table->enum('kewarganegaraan_ibu', ['WNI', 'WNA'])->default('WNI');
+            $table->enum('status_ibu', ['hidup', 'meninggal'])->default("hidup");
+            $table->enum('kewarganegaraan_ibu', ['wni', 'wna'])->default('wni');
             $table->string('nik_ibu');
             $table->string('tempat_lahir_ibu');
             $table->string('tanggal_lahir_ibu');
@@ -151,7 +151,7 @@ return new class extends Migration
             $table->string('rw');
             $table->string('alamat');
             $table->string('kode_pos');
-            $table->enum('status_orang_tua', ['kawin', 'cerai hidup', 'cerai mati']);
+            $table->enum('status_orang_tua', ['kawin', 'cerai hidup', 'cerai mati'])->default("kawin");
 
             $table->timestamps();
         });
