@@ -73,7 +73,7 @@ class WaliSantriForm extends Form
     #[Validate('required')]
     public $status_orang_tua;
 
-    #[Validate('required')]
+    #[Validate('nullable')]
     public $santri_id;
 }
 

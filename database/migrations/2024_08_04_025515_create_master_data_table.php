@@ -87,7 +87,7 @@ return new class extends Migration
             $table->bigInteger('nik');
             $table->string('tempat_lahir');
             $table->string('tanggal_lahir');
-            $table->enum('jenis_kelamin', ['perempuan', 'laki-laki'])->default('laki-laki');
+            $table->enum('jenis_kelamin', ['perempuan', 'laki-laki']);
             $table->string('jumlah_saudara_kandung');
             $table->string('anak_ke');
             $table->string('agama')->default('islam');
@@ -115,7 +115,7 @@ return new class extends Migration
 
         Schema::create('orang_tua_santris', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('santri_id')->constrained('santris')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('santri_id')->nullable()->constrained('santris')->onDelete('cascade')->onUpdate('cascade');
 
             // Data Ayah
             $table->string('nama_ayah');
