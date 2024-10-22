@@ -11,7 +11,6 @@ use App\Models\Santri;
 use App\Models\Kamar;
 use App\Models\Kelas;
 use App\Models\OrangTuaSantri;
-use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
@@ -19,7 +18,6 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
 use Maatwebsite\Excel\Facades\Excel;
-use PhpParser\Node\Stmt\TryCatch;
 
 class ListSantri extends Component
 {
@@ -34,7 +32,7 @@ class ListSantri extends Component
     public $npsn = '70005521';
 
     // data
-    public $kelas, $kamar, $semester, $angkatan, $santri_id, $santriEditId, $formCount = 1;
+    public $kelas, $kamar, $semester, $angkatan, $santri_id, $santriEditId;
 
     public function create()
     {
@@ -54,11 +52,11 @@ class ListSantri extends Component
             $this->santriForm->foto = $imgUrl;
         }
         $santri = Santri::create($this->santriForm->all());
-        
+
         $waliSantriData = $this->waliSantriForm->all();
         $waliSantriData['santri_id'] = $santri->id;
         OrangTuaSantri::create($waliSantriData);
-        return to_route('admin.master-santri.santri')->with(['success' => "Data success created!"]);
+        return to_route('admin.master-santri.santri')->with(['message' => "Success created " . $this->santriForm->nama . " !"]);
     }
 
     #[On('editWaliSantri')]
@@ -152,13 +150,14 @@ class ListSantri extends Component
         Santri::where('id', $this->santriEditId)->update($this->santriForm->all());
         OrangTuaSantri::where('santri_id', $this->santriEditId)->update($this->waliSantriForm->all());
 
-        return to_route('admin.master-santri.santri')->with(['success' => "Data success updated!"]);
+        return to_route('admin.master-santri.santri')->with(['message' => "Success updated " . Santri::where('id', $this->santriEditId)->value('nama') . " !"]);
     }
 
 
     public function delete($santriId)
     {
         Santri::findOrFail($santriId)->delete();
+        return session()->flash('message', "Data has been deleted!");
     }
 
     public function export()
@@ -192,16 +191,6 @@ class ListSantri extends Component
     //     $this->no_kk = '';
     //     $this->nama_kepala_keluarga = '';
     // }
-
-    public function nextFormCount()
-    {
-        $this->formCount++;
-    }
-
-    public function prevFormCount()
-    {
-        $this->formCount--;
-    }
 
     public function render()
     {

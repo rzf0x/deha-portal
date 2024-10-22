@@ -4,10 +4,12 @@ namespace App\Livewire\Admin;
 
 use App\Models\OrangTuaSantri;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 
 class ListWaliSantri extends Component
 {
+    #[Title('Halaman List Wali Santri')]
     #[Computed]
     public function getData()
     {
