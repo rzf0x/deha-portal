@@ -51,7 +51,6 @@ class Login extends Component
     public function logout()
     {
         Auth::logout();
-
         return $this->redirectRoute('/', navigate: true);
     }
 
