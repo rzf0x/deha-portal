@@ -12,7 +12,7 @@
             <div class="row">
                 <div class="col-lg-4 mb-2 text-center">
                     @if ($santri->foto)
-                        <img src="{{ asset($santri->foto) }}" class="img-fluid w-75 mx-auto" alt="">
+                        <img src="{{ Storage::url('images/santri/' . basename($santri->foto)) }}" class="img-fluid w-75 mx-auto" alt="">
                     @else
                         <img src="{{ asset('dist/assets/compiled/jpg/1.jpg') }}" class="img-fluid rounded-3 w-75 mx-auto"
                             alt="">

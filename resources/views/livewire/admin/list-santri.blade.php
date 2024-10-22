@@ -103,7 +103,8 @@
             <div class="modal-content">
                 <div class="modal-header {{ $santriEditId ? 'bg-warning' : 'bg-primary' }}">
                     <h5 class="modal-title {{ $santriEditId ? 'text-dark' : 'text-white' }}">
-                        {{ $santriEditId ? 'Update' : 'Create' }} {{ $formPage == 1 ? 'Santri' : ($formPage == 2 ? 'Wali Santri' : 'Alamat Santri') }}
+                        {{ $santriEditId ? 'Update' : 'Create' }}
+                        {{ $formPage == 1 ? 'Santri' : ($formPage == 2 ? 'Wali Santri' : 'Alamat Santri') }}
                     </h5>
                     <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
                         <i data-feather="x"></i>
@@ -149,6 +150,16 @@
                                     <input type="text" class="form-control" wire:model="santriForm.nism"
                                         id="nism" placeholder="20241021982">
                                     @error('santriForm.nism')
+                                        <span class="text-danger error">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                {{-- NPSN --}}
+                                <div class="form-group col-lg-4">
+                                    <label for="npsn">NPSN</label>
+                                    <input type="text" class="form-control" wire:model="santriForm.npsn"
+                                        id="npsn" placeholder="70047049">
+                                    @error('santriForm.npsn')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -290,16 +301,6 @@
                                         <option value="nonaktif">nonaktif</option>
                                     </select>
                                     @error('santriForm.aktivitas_pendidikan')
-                                        <span class="text-danger error">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                {{-- NPSN --}}
-                                <div class="form-group col-lg-4">
-                                    <label for="npsn">NPSN</label>
-                                    <input type="text" class="form-control" wire:model="santriForm.npsn"
-                                        id="npsn" placeholder="70047049">
-                                    @error('santriForm.npsn')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
                                 </div>
