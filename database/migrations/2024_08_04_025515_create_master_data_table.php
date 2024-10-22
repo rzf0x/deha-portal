@@ -99,7 +99,7 @@ return new class extends Migration
             $table->string('nama_kepala_keluarga');
 
             $table->enum('riwayat_penyakit', ['sehat', 'kurang_sehat']);
-            $table->enum('status_kesantrian', ['aktif', 'nonaktif']);
+            $table->enum('status_kesantrian', ['aktif', 'nonaktif'])->default('aktif');
             $table->enum('status_santri', ['reguler', 'dhuafa', 'yatim_piatu']);
 
             $table->string('asal_sekolah')->default('Sekolah');
@@ -124,7 +124,7 @@ return new class extends Migration
             $table->string('nik_ayah')->default("0081921827873");
             $table->string('tempat_lahir_ayah');
             $table->date('tanggal_lahir_ayah')->default(date(now()));
-            $table->string('pendidikan_terakhir_ayah');
+            $table->enum('pendidikan_terakhir_ayah', ['sd', 'smp', 'sma', 'slta', 'diploma', 'sarjana'])->default("sarjana");
             $table->string('pekerjaan_ayah');
             $table->string('penghasilan_ayah');
             $table->string('no_telp_ayah');
@@ -136,7 +136,7 @@ return new class extends Migration
             $table->string('nik_ibu');
             $table->string('tempat_lahir_ibu');
             $table->string('tanggal_lahir_ibu');
-            $table->string('pendidikan_terakhir_ibu');
+            $table->enum('pendidikan_terakhir_ibu', ['sd', 'smp', 'sma', 'slta', 'diploma', 'sarjana'])->default("sarjana");
             $table->string('pekerjaan_ibu');
             $table->string('penghasilan_ibu');
             $table->string('no_telp_ibu');

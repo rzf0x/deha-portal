@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             PembayaranTimelineSeeder::class,
             PembayaranTipeSeeder::class,
             PembayaranSeeder::class,
+            OrangTuaSeeder::class
         ]);
     }
 }
