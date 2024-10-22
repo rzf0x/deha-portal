@@ -12,6 +12,7 @@ use App\Models\Kamar;
 use App\Models\Kelas;
 use App\Models\OrangTuaSantri;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -31,9 +32,6 @@ class ListSantri extends Component
     // data
     public $kelas, $kamar, $semester, $angkatan, $santri_id, $santriEditId, $formCount = 1;
 
-    // Bool
-    public $isEdit = false;
-
     public function create()
     {
         $this->santriForm->reset();
@@ -50,15 +48,12 @@ class ListSantri extends Component
 
         $waliSantriData['santri_id'] = $santri->id;
         OrangTuaSantri::create($waliSantriData);
-        // dd($this->santriForm->all(), $this->waliSantriForm->all());
         return to_route('admin.master-santri.santri')->with(['success' => "Data success created!"]);
     }
 
-
+    #[On('editWaliSantri')]
     public function edit($santriId)
     {
-        $this->santriForm->reset();
-        $this->waliSantriForm->reset();
         $this->santriEditId = $santriId;
 
         // Data Santri
@@ -179,13 +174,11 @@ class ListSantri extends Component
     public function nextFormCount()
     {
         $this->formCount++;
-        // dd($this->formCount);
     }
 
     public function prevFormCount()
     {
         $this->formCount--;
-        // dd($this->formCount);
     }
 
     public function render()
@@ -194,6 +187,7 @@ class ListSantri extends Component
         $this->kamar = Kamar::with('waliKamar')->get();
         $this->semester = Semester::all();
         $this->angkatan = Angkatan::all();
+
         return view('livewire.admin.list-santri');
     }
 }

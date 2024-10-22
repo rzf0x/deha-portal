@@ -43,7 +43,7 @@ class SantriForm extends Form
     public $nama_kepala_keluarga;
     #[Validate('required')]
     public $riwayat_penyakit;
-    #[Validate('required')]
+    #[Validate('required|in:aktif,nonaktif')]
     public $status_kesantrian;
     #[Validate('required')]
     public $status_santri;

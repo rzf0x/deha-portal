@@ -9,6 +9,9 @@
 
     <div class="card">
         <div class="card-body">
+            @if ($santriEditId)
+                <p>ID Santri yang sedang diedit: {{ $santriEditId }}</p>
+            @endif
             <div class="d-flex justify-content-end">
                 <button wire:click="create()" type="button" class="btn btn-primary block" data-bs-toggle="modal"
                     data-bs-target="#default">
@@ -16,7 +19,6 @@
                     <span class="ms-1">Create Data</span>
                 </button>
             </div>
-
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -304,7 +306,8 @@
                                 {{-- Status Kesantrian --}}
                                 <div class="form-group col-lg-4">
                                     <label for="status_kesantrian">Status Kesantrian</label>
-                                    <select class="form-select" wire:model="santriForm.status_kesantrian">
+                                    <select class="form-select" wire:model.defer="santriForm.status_kesantrian">
+                                        <option value="">-- Status Kesantrian --</option>
                                         <option value="aktif">aktif</option>
                                         <option value="nonaktif">nonaktif</option>
                                     </select>
@@ -611,7 +614,7 @@
                                 {{-- Pendidikan Terakhir ibu --}}
                                 <div class="form-group col-lg-4">
                                     <label for="pendidikan_terakhir_ibu">Pendidikan Terakhir ibu</label>
-                                    <select class="form-select" wire:model="waliSantriForm.pendidikan_terakhir_ibu">
+                                    <select class="form-select" wire:model.defer="waliSantriForm.pendidikan_terakhir_ibu">
                                         <option value="">-- Pendidikan --</option>
                                         <option value="sd">SD</option>
                                         <option value="smp">SMP</option>
@@ -796,4 +799,13 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('livewire:load', function() {
+            Livewire.on('openModal', (data) => {
+                const modalId = data.modalId;
+                const modalElement = new bootstrap.Modal(document.getElementById(modalId));
+                modalElement.show();
+            });
+        });
+    </script>
 </div>

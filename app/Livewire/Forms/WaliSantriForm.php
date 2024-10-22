@@ -20,7 +20,7 @@ class WaliSantriForm extends Form
     public $tempat_lahir_ayah;
     #[Validate('required')]
     public $tanggal_lahir_ayah;
-    #[Validate('required')]
+    #[Validate('required|in:sd,smp,sma,slta,diploma,sarjana')]
     public $pendidikan_terakhir_ayah;
     #[Validate('required')]
     public $pekerjaan_ayah;
@@ -42,7 +42,7 @@ class WaliSantriForm extends Form
     public $tempat_lahir_ibu;
     #[Validate('required')]
     public $tanggal_lahir_ibu;
-    #[Validate('required')]
+    #[Validate('required|in:sd,smp,sma,slta,diploma,sarjana')]
     public $pendidikan_terakhir_ibu;
     #[Validate('required')]
     public $pekerjaan_ibu;
@@ -73,6 +73,7 @@ class WaliSantriForm extends Form
     #[Validate('required')]
     public $status_orang_tua;
 
-    #[Validate('nullable')]
+    #[Validate('required')]
     public $santri_id;
 }
+
