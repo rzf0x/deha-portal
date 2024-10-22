@@ -158,6 +158,20 @@
                                     @enderror
                                 </div>
 
+                                {{-- Status Kesantrian --}}
+                                <div class="form-group col-lg-4">
+                                    <label for="status_kesantrian">Status Kesantrian</label>
+                                    <select class="form-select" wire:model.defer="santriForm.status_kesantrian">
+                                        <option value="">-- Status Kesantrian --</option>
+                                        <option value="aktif">aktif</option>
+                                        <option value="nonaktif">nonaktif</option>
+                                    </select>
+
+                                    @error('santriForm.status_kesantrian')
+                                        <span class="text-danger error">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
                                 {{-- NIK --}}
                                 <div class="form-group col-lg-4">
                                     <label for="nik">NIK</label>
@@ -299,20 +313,6 @@
                                     <input type="text" class="form-control" wire:model="santriForm.no_kk"
                                         id="no_kk" placeholder="3327070903170010">
                                     @error('santriForm.no_kk')
-                                        <span class="text-danger error">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                {{-- Status Kesantrian --}}
-                                <div class="form-group col-lg-4">
-                                    <label for="status_kesantrian">Status Kesantrian</label>
-                                    <select class="form-select" wire:model.defer="santriForm.status_kesantrian">
-                                        <option value="">-- Status Kesantrian --</option>
-                                        <option value="aktif">aktif</option>
-                                        <option value="nonaktif">nonaktif</option>
-                                    </select>
-
-                                    @error('santriForm.status_kesantrian')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -614,7 +614,8 @@
                                 {{-- Pendidikan Terakhir ibu --}}
                                 <div class="form-group col-lg-4">
                                     <label for="pendidikan_terakhir_ibu">Pendidikan Terakhir ibu</label>
-                                    <select class="form-select" wire:model.defer="waliSantriForm.pendidikan_terakhir_ibu">
+                                    <select class="form-select"
+                                        wire:model.defer="waliSantriForm.pendidikan_terakhir_ibu">
                                         <option value="">-- Pendidikan --</option>
                                         <option value="sd">SD</option>
                                         <option value="smp">SMP</option>
