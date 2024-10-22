@@ -14,8 +14,8 @@ class PembayaranTimelineSeeder extends Seeder
     public function run(): void
     {
         $months = [
-            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember',
-            'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'January', 'February', 'March', 'April', 'May', 'June', 
+            'July', 'August', 'September', 'October', 'November', 'December'
         ];
 
         foreach ($months as $month) {

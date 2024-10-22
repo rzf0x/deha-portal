@@ -33,11 +33,51 @@ class PembayaranSeeder extends Seeder
         $testing = [
             [
                 'status' => $data[rand(0, 2)],
-                'nominal' => '12',
+                'nominal' => 12000,
                 'metode_pembayaran' => 'cash',
                 'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
                 'santri_id' => 1, // Sesuaikan dengan ID santri yang ada
-                'pembayaran_timeline_id' => 1,
+                'pembayaran_timeline_id' => 10,
+            ],
+            [
+                'status' => $data[rand(0, 2)],
+                'nominal' => 12000,
+                'metode_pembayaran' => 'cash',
+                'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
+                'santri_id' => 2, // Sesuaikan dengan ID santri yang ada
+                'pembayaran_timeline_id' => 10,
+            ],
+            [
+                'status' => $data[rand(0, 2)],
+                'nominal' => 12000,
+                'metode_pembayaran' => 'cash',
+                'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
+                'santri_id' => 3, // Sesuaikan dengan ID santri yang ada
+                'pembayaran_timeline_id' => 10,
+            ],
+            [
+                'status' => $data[rand(0, 2)],
+                'nominal' => 12000,
+                'metode_pembayaran' => 'cash',
+                'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
+                'santri_id' => 4, // Sesuaikan dengan ID santri yang ada
+                'pembayaran_timeline_id' => 10,
+            ],
+            [
+                'status' => $data[rand(0, 2)],
+                'nominal' => 12000,
+                'metode_pembayaran' => 'cash',
+                'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
+                'santri_id' => 5, // Sesuaikan dengan ID santri yang ada
+                'pembayaran_timeline_id' => 10,
+            ],
+            [
+                'status' => $data[rand(0, 2)],
+                'nominal' => 12000,
+                'metode_pembayaran' => 'cash',
+                'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
+                'santri_id' => 6, // Sesuaikan dengan ID santri yang ada
+                'pembayaran_timeline_id' => 10,
             ],
         ];
 
