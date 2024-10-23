@@ -2,9 +2,12 @@
 
 namespace App\Livewire\Admin;
 
+use App\Models\admin\Semester;
+use App\Models\Jenjang;
 use App\Models\Kamar;
 use App\Models\Kelas;
 use App\Models\Santri;
+use App\Models\WaliKamar;
 use App\Models\WaliKelas;
 use Asantibanez\LivewireCharts\Models\PieChartModel;
 use Livewire\Component;
@@ -16,7 +19,7 @@ class Dashboard extends Component
 {
     use WithPagination;
     // Integer
-    public $kelasSantriTotalPutra, $kelasSantriTotalPutri, $santri, $totalJenjang, $totalKelas, $totalKamar, $waliKelas, $totalSantri, $kelas;
+    public $waliKamar, $totalSemester, $kelasSantriTotalPutra, $kelasSantriTotalPutri, $santri, $totalJenjang, $totalKelas, $totalKamar, $waliKelas, $totalSantri, $kelas;
 
     // Bool
     public $isMobile = false;
@@ -28,9 +31,12 @@ class Dashboard extends Component
         $this->santri = Santri::with(['kelas', 'kamar', 'angkatan'])->take(5)->get();
         $this->totalKelas = count(Kelas::all());
         $this->totalKamar = count(Kamar::all());
-        $this->waliKelas = count(WaliKelas::all());;
+        $this->totalJenjang = count(Jenjang::all());
         $this->totalSantri = count(Santri::all());
+        $this->totalSemester = count(Semester::all());
         $this->kelas = Kelas::pluck('nama')->all();
+        $this->waliKelas = count(WaliKelas::all());
+        $this->waliKamar = count(WaliKamar::all());
 
         $this->kelasSantriTotalPutra = Kelas::withCount(['santri' => function ($query) {
             $query->where('jenis_kelamin', 'putera');

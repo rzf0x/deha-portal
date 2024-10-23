@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\ListSantri;
 
+use App\Models\OrangTuaSantri;
 use App\Models\Santri;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -9,7 +10,7 @@ use Livewire\Component;
 class DetailSantri extends Component
 {
     // Array
-    public $santri;
+    public $santri, $wali, $formPage = 1;
 
     #[Title('Halaman Detail Biodata Santri')]
 
@@ -17,6 +18,17 @@ class DetailSantri extends Component
     {
         // Mengambil data santri berdasarkan nism dan langsung mengeksekusi query
         $this->santri = Santri::where('nism', $id)->first();
+        $this->wali = OrangTuaSantri::find($this->santri->id);
+    }
+
+    
+    public function prevForm()
+    {
+        $this->formPage--;
+    }
+    public function nextForm()
+    {
+        $this->formPage++;
     }
 
     public function render()
