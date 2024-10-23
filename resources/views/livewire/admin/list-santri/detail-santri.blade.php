@@ -1,33 +1,35 @@
 <div>
 
     <div class="d-flex mb-2">
-        <button class="btn btn-primary">
+        <a href="{{ route('admin.master-santri.santri') }}" class="btn btn-primary">
             <i class="bi bi-arrow-left-circle-fill"></i>
             Kembali ke list santri
-        </button>
+        </a>
     </div>
 
-    <div class="card">
+    <div class="card mt-3">
         <div class="card-body">
             <div class="row">
-                <div class="col-lg-4 mb-2 text-center">
+                <div class="col-lg-4 mb-4 text-center">
                     @if ($santri->foto)
-                        <img src="{{ Storage::url('images/santri/' . basename($santri->foto)) }}" class="img-fluid w-75 mx-auto" alt="">
+                        <img style="object-fit: cover"
+                            src="{{ Storage::url('images/santri/' . basename($santri->foto)) }}"
+                            class="img-fluid w-100 rounded-2 h-100 mx-auto" alt="">
                     @else
-                        <img src="{{ asset('dist/assets/compiled/jpg/1.jpg') }}" class="img-fluid rounded-3 w-75 mx-auto"
-                            alt="">
+                        <img src="{{ asset('dist/assets/compiled/jpg/1.jpg') }}"
+                            class="img-fluid rounded-3 w-75 mx-auto" alt="">
                     @endif
 
                     <div class="mt-2">
                         {{-- Status Kesantrian --}}
                         <p>
                             Status kesantrian :
-                            <span class="badge {{ $santri->status_kesantrian == 'aktif' ? 'bg-primary' : 'bg-secondary' }}">
+                            <span
+                                class="badge {{ $santri->status_kesantrian == 'aktif' ? 'bg-primary' : 'bg-secondary' }}">
                                 {{ $santri->status_kesantrian }}
                             </span>
                         </p>
                     </div>
-
                 </div>
                 <div class="col-lg-8 row mb-2">
                     <div class="col-lg-4 mb-2">
@@ -116,7 +118,7 @@
 
                         <!-- NPSN Santri -->
                         <x-more-components.form-input-basic label="NPSN Santri" name="npsn"
-                        value="{{ $santri->npsn }}" readonly="true" />
+                            value="{{ $santri->npsn }}" readonly="true" />
 
                         <!-- Riwayat Penyakit Santri -->
                         <x-more-components.form-input-basic label="Riwayat Penyakit Santri" name="riwayat_penyakit"

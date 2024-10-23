@@ -48,7 +48,7 @@
                                 </td>
                                 <td>
                                     <span class="badge bg-success">
-                                        {{ $item->jenis_kelamin }}
+                                        {{ $item->jenis_kelamin == 'putera' ? 'laki-laki' : 'perempuan' }}
                                     </span>
                                 </td>
                                 <td>
@@ -67,7 +67,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="d-flex gap-2">
+                                    <div class="d-flex gap-2"> 
                                         <button wire:click="edit({{ $item->id }})" data-bs-toggle="modal"
                                             data-bs-target="#default" class="btn btn-sm btn-warning">
                                             <i class="bi bi-pencil-square"></i>
@@ -252,8 +252,8 @@
                                     <label for="jenis_kelamin">Jenis Kelamin</label>
                                     <select class="form-select" wire:model="santriForm.jenis_kelamin">
                                         <option value="">-- Pilih Jenis Kelamin --</option>
-                                        <option value="laki-laki">laki-laki</option>
-                                        <option value="perempuan">perempuan</option>
+                                        <option value="putera">laki-laki</option>
+                                        <option value="puteri">perempuan</option>
                                     </select>
                                     @error('santriForm.jenis_kelamin')
                                         <span class="text-danger error">{{ $message }}</span>

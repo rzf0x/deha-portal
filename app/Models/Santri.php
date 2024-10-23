@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\admin\Angkatan;
+use App\Models\admin\Semester;
 use App\Models\Spp\Pembayaran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -58,20 +59,20 @@ class Santri extends Model
         return $this->belongsTo(Kamar::class, 'kamar_id');
     }
 
-    // public function semester()
-    // {
-    //     return $this->belongsTo(Semester::class);
-    // }
+    public function semester()
+    {
+        return $this->belongsTo(Semester::class);
+    }
 
     public function angkatan()
     {
         return $this->belongsTo(Angkatan::class);
     }
 
-    // public function orangTuaSantri()
-    // {
-    //     return $this->hasOne(OrangTuaSantri::class);
-    // }
+    public function orangTuaSantri()
+    {
+        return $this->hasOne(OrangTuaSantri::class);
+    }
 
     public function Pembayaran()
     {

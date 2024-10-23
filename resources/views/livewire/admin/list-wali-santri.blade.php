@@ -24,7 +24,7 @@
                             <td>{{ $item->nama_ibu }}</td>
                             <td>
                                 <span class="badge bg-success">
-                                    {{ $item->santri->jenis_kelamin }}
+                                    {{ $item->santri->jenis_kelamin == 'putera' ? 'laki-laki' : 'perempuan' }}
                                 </span>
                             </td>
                             <td>

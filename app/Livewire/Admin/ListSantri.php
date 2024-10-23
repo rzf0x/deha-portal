@@ -34,6 +34,13 @@ class ListSantri extends Component
     // data
     public $kelas, $kamar, $semester, $angkatan, $santri_id, $santriEditId, $formPage = 1;
 
+    public function mount()
+    {
+        $this->kelas = Kelas::with('jenjang')->get();
+        $this->kamar = Kamar::with('waliKamar')->get();
+        $this->semester = Semester::all();
+        $this->angkatan = Angkatan::all();
+    }
 
     public function prevForm()
     {
@@ -177,7 +184,7 @@ class ListSantri extends Component
     #[Computed]
     public function getData()
     {
-        return Santri::with('kelas', 'kamar')->paginate(5);
+        return Santri::with(['kelas', 'kamar'])->paginate(5);
     }
 
     // private function resetField()
@@ -203,11 +210,6 @@ class ListSantri extends Component
 
     public function render()
     {
-        $this->kelas = Kelas::with('jenjang')->get();
-        $this->kamar = Kamar::with('waliKamar')->get();
-        $this->semester = Semester::all();
-        $this->angkatan = Angkatan::all();
-
         return view('livewire.admin.list-santri');
     }
 }

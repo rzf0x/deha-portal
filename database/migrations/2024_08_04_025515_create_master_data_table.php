@@ -87,7 +87,7 @@ return new class extends Migration
             $table->bigInteger('nik');
             $table->string('tempat_lahir');
             $table->string('tanggal_lahir');
-            $table->enum('jenis_kelamin', ['perempuan', 'laki-laki']);
+            $table->enum('jenis_kelamin', ['puteri', 'putera']);
             $table->string('jumlah_saudara_kandung');
             $table->string('anak_ke');
             $table->string('agama')->default('islam');

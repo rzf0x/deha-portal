@@ -14,16 +14,15 @@ class KamarTableSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            // Ikhwan
             [
                 'nama' => 'Kamar Umar bin Khattab',
                 'wali_kamar' => 1,
                 'kamar_tipe' => 'putera',
             ],
             [
-                'nama' => 'Kamar Umar bin Khattab',
+                'nama' => 'Kamar Siti Khadijah',
                 'wali_kamar' => 2,
-                'kamar_tipe' => 'putera',
+                'kamar_tipe' => 'puteri',
             ],
         ];
 

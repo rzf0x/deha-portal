@@ -22,4 +22,9 @@ class Kelas extends Model
     {
         return $this->belongsTo(WaliKelas::class, 'wali_kelas');
     }
+
+    public function santri()
+    {
+        return $this->hasOne(Santri::class);
+    }
 }
