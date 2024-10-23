@@ -28,7 +28,7 @@ class Dashboard extends Component
 
     public function mount(MobileDetect $mobileDetect)
     {
-        $this->santri = Santri::with(['kelas', 'kamar', 'angkatan'])->take(5)->get();
+        $this->santri = Santri::with(['kelas', 'kamar', 'angkatan'])->take(7)->get();
         $this->totalKelas = count(Kelas::all());
         $this->totalKamar = count(Kamar::all());
         $this->totalJenjang = count(Jenjang::all());

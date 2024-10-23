@@ -23,17 +23,20 @@
     <div style="gap: 5rem;" class="d-flex flex-column">
         <div class="row">
             <div style="height: 28rem;" wire:ignore class="container-canvas col-lg-8">
-                <h3 class="mb-3">Overview Total Santri</h3>
+                <h4 class="mb-3">Overview Total Santri</h4>
                 <canvas wire:ignore id="santriChart" class="bg-white rounded-4 p-4 h-100 w-100"></canvas>
             </div>
             <div style="height: 28rem;" wire:ignore class="container-canvas col-lg-4">
-                <h3 class="mb-3">Total Wali</h3>
+                <h4 class="mb-3">Total Wali</h4>
                 <canvas wire:ignore id="waliChart" class="bg-white rounded-4 p-4 h-100 w-100"></canvas>
             </div>
         </div>
         
         <div class="table-santri">
-            <h3 class="mb-3">Nama-nama santri</h3>
+            <div class="d-flex justify-content-between">
+                <h4 class="mb-3">Tabel Santri</h4>
+                <a style="text-decoration: underline;" class="text-dark" wire:navigate href="{{route('admin.master-santri.santri')}}">See all santri</a>
+            </div>
             <div class="card">
                 <div class="card-body">
                     <div class="table-responsive">

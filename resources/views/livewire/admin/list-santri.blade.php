@@ -9,7 +9,14 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-between mb-4">
+                <div class="filter-option d-flex">
+                    <div style="background-color: #fafafa;" class="search px-4 border border-2 py-2 rounded-5">
+                        <input class="bg-transparent" style="border: none; outline: none;" type="text"
+                            wire:model.live='search' placeholder="Cari santri...">
+                        <a href="#" class="search_icon"><i class="fa fa-search" aria-hidden="true"></i></a>
+                    </div>
+                </div>
                 <button wire:click="create()" type="button" class="btn btn-primary block" data-bs-toggle="modal"
                     data-bs-target="#default">
                     <i class="bi bi-plus-circle"></i>
@@ -67,7 +74,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <div class="d-flex gap-2"> 
+                                    <div class="d-flex gap-2">
                                         <button wire:click="edit({{ $item->id }})" data-bs-toggle="modal"
                                             data-bs-target="#default" class="btn btn-sm btn-warning">
                                             <i class="bi bi-pencil-square"></i>

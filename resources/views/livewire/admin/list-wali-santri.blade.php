@@ -1,5 +1,12 @@
 <div class="card">
     <div class="card-body">
+        <div class="filter-option d-flex mb-4">
+            <div style="background-color: #fafafa;" class="search px-4 border border-2 py-2 rounded-5">
+                <input class="bg-transparent" style="border: none; outline: none;" type="text"
+                    wire:model.live='search' placeholder="Cari wali...">
+                <a href="#" class="search_icon"><i class="fa fa-search" aria-hidden="true"></i></a>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>

@@ -14,6 +14,7 @@ use App\Models\OrangTuaSantri;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -34,6 +35,8 @@ class ListSantri extends Component
     // data
     public $kelas, $kamar, $semester, $angkatan, $santri_id, $santriEditId, $formPage = 1;
 
+    #[Url(except: '', as: 'q-santri')]
+    public $search;
     public function mount()
     {
         $this->kelas = Kelas::with('jenjang')->get();
@@ -184,6 +187,29 @@ class ListSantri extends Component
     #[Computed]
     public function getData()
     {
+        if ($this->search) {
+            return Santri::with(['kelas', 'kamar'])
+                ->where(function ($query) {
+                    $query->whereRaw('nama LIKE ? OR CASE 
+                        WHEN jenis_kelamin = "putera" THEN "laki-laki"
+                        WHEN jenis_kelamin = "puteri" THEN "perempuan"
+                        END LIKE ?', [
+                        "%{$this->search}%",
+                        "%{$this->search}%"
+                    ]);
+                })
+                ->orWhereHas('kelas', function ($query) {
+                    $query->where('nama', 'LIKE', "%{$this->search}%");
+                })
+                ->orWhereHas('kelas.jenjang', function ($query) {
+                    $query->where('nama', 'LIKE', "%{$this->search}%");
+                })
+                ->orWhereHas('kamar', function ($query) {
+                    $query->where('nama', 'LIKE', "%{$this->search}%");
+                })
+                ->paginate(5);
+        }
+
         return Santri::with(['kelas', 'kamar'])->paginate(5);
     }
 
