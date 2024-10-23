@@ -14,6 +14,7 @@ class ListWaliSantri extends Component
 
     #[Url(except: '', as: 'q-wali')]
     public $search;
+    
     #[Computed]
     public function getData()
     {
