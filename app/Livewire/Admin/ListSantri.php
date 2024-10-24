@@ -12,7 +12,6 @@ use App\Models\Kamar;
 use App\Models\Kelas;
 use App\Models\OrangTuaSantri;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;

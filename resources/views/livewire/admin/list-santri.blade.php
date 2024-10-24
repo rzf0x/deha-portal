@@ -94,7 +94,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">Tidak ada data yang di tampilkan</td>
+                                <td colspan="8" class="text-center">{{$search ? "Data tidak ditemukan!" : "Tidak ada data yang di tampilkan"}}</td>
                             </tr>
                         @endforelse
                     </tbody>

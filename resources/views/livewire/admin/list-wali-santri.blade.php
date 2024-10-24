@@ -53,7 +53,7 @@
                                 <div class="d-flex gap-2">
                                     {{-- parse santri_id of wali santri on edit url params --}}
                                     <a href="{{ route('admin.master-santri.santri') }}?wali={{ $item->santri_id }}"
-                                        class="btn btn-sm btn-warning" wire:navigate >
+                                        class="btn btn-sm btn-warning" wire:navigate>
                                         <i class="bi bi-pencil-square"></i>
                                         Edit
                                     </a>
@@ -66,7 +66,8 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="8" class="text-center">Tidak ada data yang di tampilkan</td>
+                            <td colspan="8" class="text-center">
+                                {{ $search ? 'Data tidak ditemukan!' : 'Tidak ada data yang di tampilkan' }}</td>
                         </tr>
                     @endforelse
                 </tbody>
