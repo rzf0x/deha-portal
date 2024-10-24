@@ -2,8 +2,8 @@
     <div class="card-body">
         <div class="filter-option d-flex mb-4">
             <div style="background-color: #fafafa;" class="search px-4 border border-2 py-2 rounded-5">
-                <input class="bg-transparent" style="border: none; outline: none;" type="text"
-                    wire:model.live='search' placeholder="Cari wali...">
+                <input class="bg-transparent" style="border: none; outline: none;" type="text" wire:model.live='search'
+                    placeholder="Cari wali...">
                 <a href="#" class="search_icon"><i class="fa fa-search" aria-hidden="true"></i></a>
             </div>
         </div>
@@ -51,11 +51,12 @@
                             </td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    <a href="{{ route('admin.master-santri.santri') }}" wire:navigate
-                                        wire:click="edit({{ $item->santri_id}})" data-bs-toggle="modal"
-                                        data-bs-target="#default" class="btn btn-sm btn-warning">
+                                    {{-- parse santri_id of wali santri on edit url params --}}
+                                    <a href="{{ route('admin.master-santri.santri') }}?wali={{ $item->santri_id }}"
+                                        class="btn btn-sm btn-warning" wire:navigate >
                                         <i class="bi bi-pencil-square"></i>
-                                        Edit</a>
+                                        Edit
+                                    </a>
                                     <button wire:confirm="Yakin ingin menghapus data {{ $item->nama }}"
                                         wire:click="delete({{ $item->id }})" class="btn btn-sm btn-danger">
                                         <i class="bi bi-trash-fill"></i>

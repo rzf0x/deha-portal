@@ -37,8 +37,17 @@ class ListSantri extends Component
 
     #[Url(except: '', as: 'q-santri')]
     public $search;
+
     public function mount()
     {
+        // get url params edit has id wali santri
+        if(request()->has('wali')) {
+            // parse argument of edit function parameter
+            $this->edit(request()->wali);
+            // trigger livewire javascript dispatch
+            $this->dispatch('showModal');
+        }
+
         $this->kelas = Kelas::with('jenjang')->get();
         $this->kamar = Kamar::with('waliKamar')->get();
         $this->semester = Semester::all();
@@ -78,7 +87,6 @@ class ListSantri extends Component
         return to_route('admin.master-santri.santri')->with(['message' => "Success created " . $this->santriForm->nama . " !"]);
     }
 
-    #[On('editWaliSantri')]
     public function edit($santriId)
     {
         $this->santriEditId = $santriId;

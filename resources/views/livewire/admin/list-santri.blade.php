@@ -819,3 +819,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    Livewire.on('showModal', function() {
+        var modal = new bootstrap.Modal(document.getElementById('default'));
+        modal.show();
+    });
+</script>
