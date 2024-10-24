@@ -21,21 +21,22 @@
         </div>
     </div>
     <div style="gap: 5rem;" class="d-flex flex-column">
-        <div class="row">
-            <div style="height: 28rem;" wire:ignore class="container-canvas col-lg-8">
+        <div class="row" wire:ignore>
+            <div class="col-lg-8">
                 <h4 class="mb-3">Overview Total Santri</h4>
-                <canvas wire:ignore id="santriChart" class="bg-white rounded-4 p-4 h-100 w-100"></canvas>
+                <div id="santriChart" class="bg-white rounded-4 p-4 h-100 w-100"></div>
             </div>
-            <div style="height: 28rem;" wire:ignore class="container-canvas col-lg-4">
+            <div class="col-lg-4">
                 <h4 class="mb-3">Total Wali</h4>
-                <canvas wire:ignore id="waliChart" class="bg-white rounded-4 p-4 h-100 w-100"></canvas>
+                <div id="waliChart" class="bg-white rounded-4 p-4 h-100 w-100"></div>
             </div>
         </div>
-        
+
         <div class="table-santri">
             <div class="d-flex justify-content-between">
                 <h4 class="mb-3">Tabel Santri</h4>
-                <a style="text-decoration: underline;" class="text-dark" wire:navigate href="{{route('admin.master-santri.santri')}}">See all santri</a>
+                <a style="text-decoration: underline;" class="text-dark" wire:navigate
+                    href="{{ route('admin.master-santri.santri') }}">See all santri</a>
             </div>
             <div class="card">
                 <div class="card-body">
@@ -93,79 +94,95 @@
     </div>
 </section>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
-    const xValuesSantri = @json($kelas);
-    xValuesSantri.map(kelas => `${kelas} Laki-laki`);
-    xValuesSantri.map(kelas => `${kelas} Perempuan`);
-
-    new Chart("santriChart", {
-        type: "bar",
-        data: {
-            labels: xValuesSantri,
-            datasets: [{
-                    label: 'Laki-laki',
-                    data: @json($kelasSantriTotalPutra),
-                    backgroundColor: "#1c1dab",
-                    borderColor: "#1c1dab",
-                    fill: false
-                },
-                {
-                    label: 'Perempuan',
-                    data: @json($kelasSantriTotalPutri),
-                    backgroundColor: "#e893c5",
-                    borderColor: "#e893c5",
-                    fill: false
-                }
-            ]
+    // Bar Chart (Santri Chart)
+    var santriOptions = {
+        series: [{
+            name: 'Laki-laki',
+            data: @json($kelasSantriTotalPutra)
+        }, {
+            name: 'Perempuan',
+            data: @json($kelasSantriTotalPutri)
+        }],
+        chart: {
+            type: 'bar',
+            height: 400,
+            stacked: false,
         },
-        options: {
-            maintainAspectRatio: false,
-            responsive: true,
-            legend: {
-                display: true,
-                labels: {
-                    fontColor: "#333",
-                    fontSize: 14
-                }
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '55%',
             },
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        min: 0,
-                        max: 20,
-                        stepSize: 2
-                    }
-                }]
+        },
+        dataLabels: {
+            enabled: false
+        },
+        colors: ['#1c1dab', '#e893c5'],
+        xaxis: {
+            categories: @json($kelas),
+        },
+        yaxis: {
+            min: 0,
+            max: 20,
+            tickAmount: 10,
+        },
+        legend: {
+            position: 'top',
+            fontSize: '14px',
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                legend: {
+                    position: 'bottom',
+                    offsetX: -10,
+                    offsetY: 0
+                }
             }
-        }
-    });
+        }]
+    };
+
+    var santriChart = new ApexCharts(document.querySelector("#santriChart"), santriOptions);
+    santriChart.render();
 
     var xValues = ["Total Jenjang", "Total Semester", "Total Kelas"];
     var yValues = [@json($totalJenjang), @json($totalSemester), @json($waliKamar)];
-    var barColors = [
-        "#f7b7a3",
-        "#57167e",
-        "#fff1c9",
-    ];
-
-    new Chart("waliChart", {
-        type: "pie",
-        data: {
-            labels: xValues,
-            datasets: [{
-                backgroundColor: barColors,
-                data: yValues
-            }]
+    // Pie Chart (Wali Chart)
+    var waliOptions = {
+        series: yValues,
+        chart: {
+            type: 'pie',
+            height: 400
         },
-        options: {
-            maintainAspectRatio: false,
-            responsive: true,
-            title: {
-                display: true,
-                text: "Jumlah Keseluruhan Wali Pondok",
-                fontSize: 16
+        labels: xValues,
+        colors: ['#f7b7a3', '#57167e', '#fff1c9'],
+        legend: {
+            position: 'bottom',
+            fontSize: '14px',
+        },
+        title: {
+            text: 'Jumlah Keseluruhan Wali Pondok',
+            align: 'center',
+            style: {
+                fontSize: '16px'
             }
-        }
-    });
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 280
+                },
+                legend: {
+                    position: 'bottom'
+                }
+            }
+        }]
+    };
+
+    var waliChart = new ApexCharts(document.querySelector("#waliChart"), waliOptions);
+    waliChart.render();
 </script>

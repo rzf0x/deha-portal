@@ -29,14 +29,14 @@ class Dashboard extends Component
     public function mount(MobileDetect $mobileDetect)
     {
         $this->santri = Santri::with(['kelas', 'kamar', 'angkatan'])->take(7)->get();
-        $this->totalKelas = count(Kelas::all());
-        $this->totalKamar = count(Kamar::all());
-        $this->totalJenjang = count(Jenjang::all());
-        $this->totalSantri = count(Santri::all());
-        $this->totalSemester = count(Semester::all());
+        $this->totalKelas = Kelas::count();
+        $this->totalKamar = Kamar::count();
+        $this->totalJenjang = Jenjang::count();
+        $this->totalSantri = Santri::count();
+        $this->totalSemester = Semester::count();
         $this->kelas = Kelas::pluck('nama')->all();
-        $this->waliKelas = count(WaliKelas::all());
-        $this->waliKamar = count(WaliKamar::all());
+        $this->waliKelas = WaliKelas::count();
+        $this->waliKamar = WaliKamar::count();
 
         $this->kelasSantriTotalPutra = Kelas::withCount(['santri' => function ($query) {
             $query->where('jenis_kelamin', 'putera');

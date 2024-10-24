@@ -8,6 +8,7 @@
 
     <link rel="shortcut icon" href="{{ asset('logo.webp') }}" type="image/x-icon">
     <link rel="shortcut icon" href="{{ asset('logo.webp') }}" type="image/png">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.css">
 
     <link rel="shortcut icon" href="{{ asset('logo.webp') }}" type="image/x-icon">
 
