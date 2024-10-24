@@ -6,6 +6,7 @@ use App\Livewire\Admin\Spp\LaporanKeuangan;
 use App\Livewire\Admin\Spp\ListItemPembayaran;
 use App\Livewire\Admin\Spp\Pembayaran;
 use App\Livewire\Admin\Spp\PembayaranCicilan;
+use App\Livewire\Admin\Spp\TambahSantri;
 use App\Livewire\Auth\Logout;
 use Illuminate\Support\Facades\Route;
 
@@ -83,6 +84,7 @@ Route::prefix('spp')->middleware('auth')->group(function(){
     Route::get('/pembayaran', Pembayaran::class)->name('spp.pembayaran');
     Route::get('/list-item-pembayaran', ListItemPembayaran::class)->name('spp.list-item-pembayaran');
     Route::get('/pembayaran-cicilan', PembayaranCicilan::class)->name('spp.pembayaran-cicilan');
+    Route::get('/tambah-santri', TambahSantri::class)->name('spp.tambah-santri');
 
     Route::get('/laporan-keuangan', LaporanKeuangan::class)->name('spp.laporan-keuangan');
 });

@@ -6,6 +6,7 @@ use App\Models\Santri;
 use App\Models\Spp\DetailItemPembayaran;
 use App\Models\Spp\Pembayaran;
 use Carbon\Carbon;
+use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -21,14 +22,13 @@ class DashboardSpp extends Component
     public $totalNominal;
     public $totalNominalDiterima;
     public $totalNominalTertunda;
-    public $rataRataPembayaran;
-    public $persentaseKelunasan;
     public $persentasePembayaran;
     public $tagihanAkanJatuhTempo;
-    public $bulanBelumTuntas;
+    public $pembayaranHarian;
 
     public function mount()
     {
+
         $this->bulanSekarang = Carbon::now()->monthName;
 
         $santri = Santri::where('status_kesantrian', 'aktif')
@@ -66,28 +66,20 @@ class DashboardSpp extends Component
         $this->totalNominalTertunda = $this->formatRupiah($totalNominalPembayaran - $totalNominalTerbayar);
         $this->totalNominal = $this->formatRupiah($totalNominalPembayaran);
 
-        if ($this->totalSantri > 0) {
-            $rataRata = $totalNominalTerbayar / $this->totalSantri;
-            $this->rataRataPembayaran = $this->formatRupiah($rataRata);
-        } else {
-            $this->rataRataPembayaran = 0;
-        }
-
-        if ($this->totalNominalDiterima > 0) {
-            $this->persentaseKelunasan = ($this->lunas / $this->totalSantri) * 100;
-        } else {
-            $this->persentaseKelunasan = 0;
-        }
-
         if ($this->totalNominalDiterima > 0) {
             $this->persentasePembayaran = ($totalNominalTerbayar / $totalNominalPembayaran) * 100;
         } else {
             $this->persentasePembayaran = 0;
         }
         $this->tagihanAkanJatuhTempo = $this->calculateDueDate();
-        $this->bulanBelumTuntas = 1;
-    }
 
+        $this->pembayaranHarian = Pembayaran::selectRaw('DATE(created_at) as tanggal, SUM(nominal) as total')
+            ->whereMonth('created_at', Carbon::now()->month)
+            ->whereYear('created_at', Carbon::now()->year)
+            ->groupBy('tanggal')
+            ->orderBy('tanggal')
+            ->get();
+    }
     private function formatRupiah($angka)
     {
         return number_format($angka, 0, ',', '.');

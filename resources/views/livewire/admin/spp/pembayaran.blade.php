@@ -15,7 +15,7 @@
 
     <div class="d-flex">
         @foreach ($searchResults as $santri)
-            <div wire:click="selectSantri({{ $santri->id }})" class="mx-2 card w-25">
+            <div wire:click="selectSantri({{ $santri->id }})" class="mx-2 card w-25" role="button">
                 <div class="card-body text-center">
                     <span class="d-block mb-3">
                         <img src="{{ $santri->foto }}" class="w-50" alt="">
@@ -31,12 +31,12 @@
 
 
     @if ($santriSelected && $santriSelected->id)
-        <div class="card">
-            <div class="row">
+    <div class="row">
+        <div class="col-12">
                 {{-- Biodata Santri --}}
-                <div class="col-md-4">
-                    <div class="card-title">
-                        <h3 class="mt-3 ml-4">Biodata Santri</h3>
+                <div class="card p-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Biodata Santri</h3>
                     </div>
                     <div class="row card-body">
                         <div class="col-lg-6">
@@ -64,7 +64,7 @@
                 {{-- #Biodata Santri --}}
 
                 {{-- Pembayaran --}}
-                <div class="col-md-4">
+                <div class="card p-4">
                     <div>
                         <div class="card-title ">
                             <h3 class="mt-3">Timeline Pembayaran</h3>
@@ -132,7 +132,7 @@
 
                 {{-- Detail Pembayaran --}}
                 @if ($showCicilanModal === false)
-                <div class="col-md-4">
+                <div class="card p-4">
                     <div>
                         <div class="card-title ">
                             <h3 class="mt-3">Pilih Metode Pembayaran:</h3>
@@ -159,7 +159,7 @@
                 </div>
                 @elseif ($showCicilanModal === true)
 
-                <div class="col-md-4">
+                <div class="card p-4">
                     <div class="card">
                         <div class="card-title">
                             <h3 class="mt-3">Rincian Cicilan</h3>
