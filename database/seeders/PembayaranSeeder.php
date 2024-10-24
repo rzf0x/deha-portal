@@ -81,6 +81,8 @@ class PembayaranSeeder extends Seeder
             ],
         ];
 
-        Pembayaran::insert($testing);
+        foreach ($testing as $item) {
+            Pembayaran::create($item);
+        }
     }
 }
