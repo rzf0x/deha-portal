@@ -9,7 +9,14 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="d-flex justify-content-end">
+            <div class="d-flex justify-content-between mb-4">
+                <div class="filter-option d-flex">
+                    <div style="background-color: #fafafa;" class="search px-4 border border-2 py-2 rounded-5">
+                        <input class="bg-transparent" style="border: none; outline: none;" type="text"
+                            wire:model.live='search' placeholder="Cari santri...">
+                        <a href="#" class="search_icon"><i class="fa fa-search" aria-hidden="true"></i></a>
+                    </div>
+                </div>
                 <button wire:click="create()" type="button" class="btn btn-primary block" data-bs-toggle="modal"
                     data-bs-target="#default">
                     <i class="bi bi-plus-circle"></i>
@@ -48,7 +55,7 @@
                                 </td>
                                 <td>
                                     <span class="badge bg-success">
-                                        {{ $item->jenis_kelamin }}
+                                        {{ $item->jenis_kelamin == 'putera' ? 'laki-laki' : 'perempuan' }}
                                     </span>
                                 </td>
                                 <td>
@@ -87,7 +94,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">Tidak ada data yang di tampilkan</td>
+                                <td colspan="8" class="text-center">{{$search ? "Data tidak ditemukan!" : "Tidak ada data yang di tampilkan"}}</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -103,7 +110,8 @@
             <div class="modal-content">
                 <div class="modal-header {{ $santriEditId ? 'bg-warning' : 'bg-primary' }}">
                     <h5 class="modal-title {{ $santriEditId ? 'text-dark' : 'text-white' }}">
-                        {{ $santriEditId ? 'Update' : 'Create' }} {{ $formPage == 1 ? 'Santri' : ($formPage == 2 ? 'Wali Santri' : 'Alamat Santri') }}
+                        {{ $santriEditId ? 'Update' : 'Create' }}
+                        {{ $formPage == 1 ? 'Santri' : ($formPage == 2 ? 'Wali Santri' : 'Alamat Santri') }}
                     </h5>
                     <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
                         <i data-feather="x"></i>
@@ -149,6 +157,16 @@
                                     <input type="text" class="form-control" wire:model="santriForm.nism"
                                         id="nism" placeholder="20241021982">
                                     @error('santriForm.nism')
+                                        <span class="text-danger error">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
+                                {{-- NPSN --}}
+                                <div class="form-group col-lg-4">
+                                    <label for="npsn">NPSN</label>
+                                    <input type="text" class="form-control" wire:model="santriForm.npsn"
+                                        id="npsn" placeholder="70047049">
+                                    @error('santriForm.npsn')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -241,8 +259,8 @@
                                     <label for="jenis_kelamin">Jenis Kelamin</label>
                                     <select class="form-select" wire:model="santriForm.jenis_kelamin">
                                         <option value="">-- Pilih Jenis Kelamin --</option>
-                                        <option value="laki-laki">laki-laki</option>
-                                        <option value="perempuan">perempuan</option>
+                                        <option value="putera">laki-laki</option>
+                                        <option value="puteri">perempuan</option>
                                     </select>
                                     @error('santriForm.jenis_kelamin')
                                         <span class="text-danger error">{{ $message }}</span>
@@ -290,16 +308,6 @@
                                         <option value="nonaktif">nonaktif</option>
                                     </select>
                                     @error('santriForm.aktivitas_pendidikan')
-                                        <span class="text-danger error">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                {{-- NPSN --}}
-                                <div class="form-group col-lg-4">
-                                    <label for="npsn">NPSN</label>
-                                    <input type="text" class="form-control" wire:model="santriForm.npsn"
-                                        id="npsn" placeholder="70047049">
-                                    @error('santriForm.npsn')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -811,3 +819,10 @@
         </div>
     </div>
 </div>
+
+<script>
+    Livewire.on('showModal', function() {
+        var modal = new bootstrap.Modal(document.getElementById('default'));
+        modal.show();
+    });
+</script>

@@ -12,8 +12,8 @@ use App\Models\Kamar;
 use App\Models\Kelas;
 use App\Models\OrangTuaSantri;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -34,6 +34,24 @@ class ListSantri extends Component
     // data
     public $kelas, $kamar, $semester, $angkatan, $santri_id, $santriEditId, $formPage = 1;
 
+    #[Url(except: '', as: 'q-santri')]
+    public $search;
+
+    public function mount()
+    {
+        // get url params edit has id wali santri
+        if(request()->has('wali')) {
+            // parse argument of edit function parameter
+            $this->edit(request()->wali);
+            // trigger livewire javascript dispatch
+            $this->dispatch('showModal');
+        }
+
+        $this->kelas = Kelas::with('jenjang')->get();
+        $this->kamar = Kamar::with('waliKamar')->get();
+        $this->semester = Semester::all();
+        $this->angkatan = Angkatan::all();
+    }
 
     public function prevForm()
     {
@@ -68,7 +86,6 @@ class ListSantri extends Component
         return to_route('admin.master-santri.santri')->with(['message' => "Success created " . $this->santriForm->nama . " !"]);
     }
 
-    #[On('editWaliSantri')]
     public function edit($santriId)
     {
         $this->santriEditId = $santriId;
@@ -177,7 +194,30 @@ class ListSantri extends Component
     #[Computed]
     public function getData()
     {
-        return Santri::with('kelas', 'kamar')->paginate(5);
+        if ($this->search) {
+            return Santri::with(['kelas', 'kamar'])
+                ->where(function ($query) {
+                    $query->whereRaw('nama LIKE ? OR CASE 
+                        WHEN jenis_kelamin = "putera" THEN "laki-laki"
+                        WHEN jenis_kelamin = "puteri" THEN "perempuan"
+                        END LIKE ?', [
+                        "%{$this->search}%",
+                        "%{$this->search}%"
+                    ]);
+                })
+                ->orWhereHas('kelas', function ($query) {
+                    $query->where('nama', 'LIKE', "%{$this->search}%");
+                })
+                ->orWhereHas('kelas.jenjang', function ($query) {
+                    $query->where('nama', 'LIKE', "%{$this->search}%");
+                })
+                ->orWhereHas('kamar', function ($query) {
+                    $query->where('nama', 'LIKE', "%{$this->search}%");
+                })
+                ->paginate(5);
+        }
+
+        return Santri::with(['kelas', 'kamar'])->paginate(5);
     }
 
     // private function resetField()
@@ -203,11 +243,6 @@ class ListSantri extends Component
 
     public function render()
     {
-        $this->kelas = Kelas::with('jenjang')->get();
-        $this->kamar = Kamar::with('waliKamar')->get();
-        $this->semester = Semester::all();
-        $this->angkatan = Angkatan::all();
-
         return view('livewire.admin.list-santri');
     }
 }

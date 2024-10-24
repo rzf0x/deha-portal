@@ -2,7 +2,7 @@
     <li class="sidebar-title">Menu</li>
 
     <li class="sidebar-item {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
-        <a href="{{ route('admin.dashboard') }}" wire:navigate class='sidebar-link'>
+        <a href="{{ route('admin.dashboard') }}" class='sidebar-link'>
             <i class="bi bi-grid-fill"></i>
             <span>Dashboard</span>
         </a>
@@ -13,7 +13,7 @@
 
     {{-- Master Pondok --}}
     <li class="sidebar-item has-sub {{ Request::routeIs('admin.master-pondok*') ? 'active' : '' }}">
-        <a href="#" class='sidebar-link'>
+        <a href="" class='sidebar-link'>
             <i class="bi bi-stack"></i>
             <span>Master Pondok</span>
         </a>
@@ -63,46 +63,46 @@
             </li>
         </ul>
     </li>
-    {{-- #Master Pondok --}}
+    {{-- Master Pondok --}}
 
     {{-- Master Santri --}}
     <li class="sidebar-item has-sub {{ Request::routeIs('admin.master-santri*') ? 'active' : '' }}">
-        <a href="#" class='sidebar-link'>
+        <a href="" class='sidebar-link'>
             <i class="bi bi-people"></i>
             <span>Master Santri</span>
         </a>
 
         <ul class="submenu ">
             <li class="submenu-item  ">
-                <a href="{{ route('admin.master-santri.santri') }}" wire:navigate.hover
-                    class="submenu-link">List Santri</a>
+                <a href="{{ route('admin.master-santri.santri') }}" wire:navigate
+                    class="submenu-link {{ Request::routeIs('admin.master-santri.santri') ? 'text-primary fs-6' : '' }}">List Santri</a>
             </li>
             <li class="submenu-item">
-                <a href="{{ route('admin.master-santri.wali-santri') }}" wire:navigate.hover
-                    class="submenu-link">List Wali Santri</a>
+                <a href="{{ route('admin.master-santri.wali-santri') }}" wire:navigate
+                    class="submenu-link {{ Request::routeIs('admin.master-santri.wali-santri') ? 'text-primary fs-6' : '' }}">List Wali Santri</a>
             </li>
         </ul>
     </li>
-    {{-- #Master Santri --}}
+    {{-- Master Santri --}}
 
     {{-- Master Admin --}}
     <li class="sidebar-item has-sub {{ Request::routeIs('admin.master-admin*') ? 'active' : '' }}">
-        <a href="#" class='sidebar-link'>
+        <a href="" class='sidebar-link'>
             <i class="bi bi-person-gear"></i>
             <span>Master Admin</span>
         </a>
 
         <ul class="submenu ">
             <li class="submenu-item  ">
-                <a href="{{ route('admin.master-admin.list-admin') }}" wire:navigate.hover class="submenu-link">List Admin</a>
+                <a href="{{ route('admin.master-admin.list-admin') }}" wire:navigate class="submenu-link {{ Request::routeIs('admin.master-admin.list-admin') ? 'text-primary fs-6' : '' }}">List Admin</a>
             </li>
             <li class="submenu-item">
-                <a href="{{ route('admin.master-admin.list-role') }}" wire:navigate.hover class="submenu-link">Tambah Role</a>
+                <a href="{{ route('admin.master-admin.list-role') }}" wire:navigate class="submenu-link {{ Request::routeIs('admin.master-admin.list-role') ? 'text-primary fs-6' : '' }}">Tambah Role</a>
             </li>
         </ul>
     </li>
-    {{-- #Master Admin --}}
+    {{-- Master Admin --}}
 
-    {{-- #Data Master Pondok --}}
+    {{-- Data Master Pondok --}}
 
 </ul>
