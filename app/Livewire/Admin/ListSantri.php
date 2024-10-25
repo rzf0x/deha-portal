@@ -16,6 +16,7 @@ use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -31,8 +32,6 @@ class ListSantri extends Component
 
     public SantriForm $santriForm;
     public WaliSantriForm $waliSantriForm;
-
-
     public $npsn = '70005521';
 
     // data
@@ -40,6 +39,9 @@ class ListSantri extends Component
 
     #[Url(except: '', as: 'q-santri')]
     public $search;
+
+    #[Validate('nullable|image|mimes:jpeg,png,jpg|max:4084')]
+    public $foto;
 
     public function mount()
     {
@@ -76,11 +78,12 @@ class ListSantri extends Component
     {
         $this->santriForm->validate();
         $this->waliSantriForm->validate();
-
-        if ($this->santriForm->foto) {
-            $originalFileName = time() . "-" . $this->santriForm->foto->hashname();
-            $imgUrl = $this->santriForm->foto->storeAs('images/santri', $originalFileName, 'public');
-            $this->santriForm->foto = $imgUrl;
+        
+        $this->validate();
+        if ($this->foto) {
+            $originalFileName = time() . "-" . $this->foto->hashname();
+            $imgUrl = $this->foto->storeAs('images/santri', $originalFileName, 'public');
+            $this->foto = $imgUrl;
         }
 
         $santri = Santri::create($this->santriForm->all());
@@ -102,7 +105,7 @@ class ListSantri extends Component
         // Data Wali dan Data Alamat
         $waliData = OrangTuaSantri::where('santri_id', $santriId)->first();
 
-        $this->santriForm->foto = $santriData->foto;
+        $this->foto = $santriData->foto;
         $this->santriForm->nama = $santriData->nama;
         $this->santriForm->nisn = $santriData->nisn;
         $this->santriForm->nism = $santriData->nism;
@@ -172,15 +175,17 @@ class ListSantri extends Component
     public function editStore()
     {
         $this->santriForm->validate();
+        
         $santri = Santri::findOrFail($this->santriEditId);
         $santriData = $this->santriForm->all();
-
-        if ($this->santriForm->foto && is_object($this->santriForm->foto)) {
+        
+        if ($this->foto && is_object($this->foto)) {
             if ($santri->foto && Storage::disk('public')->exists($santri->foto)) {
+                $this->validate();
                 Storage::disk('public')->delete($santri->foto);
             }
-            $fileName = time() . '-' . $this->santriForm->foto->hashname();
-            $imgUrl = $this->santriForm->foto->storeAs('images/santri', $fileName, 'public');
+            $fileName = time() . '-' . $this->foto->hashname();
+            $imgUrl = $this->foto->storeAs('images/santri', $fileName, 'public');
             $santriData['foto'] = $imgUrl;
         } else {
             $santriData['foto'] = $santri->foto;

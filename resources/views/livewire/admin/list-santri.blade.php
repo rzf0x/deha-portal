@@ -113,23 +113,11 @@
                     <form wire:submit.prevent={{ $santriEditId ? 'editStore' : 'createStore' }} class="row">
                         @if ($formPage == 1)
                             <div class="steppers santri row">
+                                {{-- Preview image yang baru diupload --}}
                                 {{-- Foto --}}
                                 <div class="form-group col-lg-4">
                                     <label for="foto">Foto</label>
-                                    <input type="file" class="form-control" wire:model="santriForm.foto"
-                                        id="foto" />
-                                    {{-- Preview image yang baru diupload --}}
-                                    @if ($santriForm->foto && is_object($santriForm->foto))
-                                        <img src="{{ $santriForm->foto->temporaryUrl() }}" class="mt-2"
-                                            style="max-width: 200px; height: auto;" alt="Preview">
-                                        {{-- Preview image yang sudah ada --}}
-                                    @elseif ($santriForm->foto)
-                                        <img src="{{ Storage::url($santriForm->foto) }}" class="mt-2"
-                                            style="max-width: 200px; height: auto;" alt="Current photo">
-                                    @endif
-                                    @error('santriForm.foto')
-                                        <span class="text-danger error">{{ $message }}</span>
-                                    @enderror
+                                    <input type="file" class="form-control" wire:model="foto" id="foto" />
                                 </div>
 
                                 {{-- Nama --}}
@@ -807,10 +795,21 @@
                                     <span class="d-none d-sm-block">Tutup</span>
                                 </button>
                                 <button type="submit"
-                                    class="btn ms-1 {{ $santriEditId ? 'bg-warning' : 'bg-primary' }}">
-                                    <i class="bx bx-check d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block {{ $santriEditId ? 'text-dark' : 'text-white' }}">
-                                        {{ $santriEditId ? 'Ubah Data' : 'Buat Data Baru' }}
+                                    class="btn ms-1 {{ $santriEditId ? 'bg-warning' : 'bg-primary' }}"
+                                    wire:loading.attr="disabled" wire:target="foto">
+                                    <span wire:loading.remove wire:target="foto">
+                                        <i class="bx bx-check d-block d-sm-none"></i>
+                                        <span
+                                            class="d-none d-sm-block {{ $santriEditId ? 'text-dark' : 'text-white' }}">
+                                            {{ $santriEditId ? 'Ubah Data' : 'Buat Data Baru' }}
+                                        </span>
+                                    </span>
+                                    <span wire:loading wire:target="foto">
+                                        <i class="bx bx-loader bx-spin d-block d-sm-none"></i>
+                                        <span
+                                            class="d-none d-sm-block {{ $santriEditId ? 'text-dark' : 'text-white' }}">
+                                            Mengupload Foto...
+                                        </span>
                                     </span>
                                 </button>
                             </div>
