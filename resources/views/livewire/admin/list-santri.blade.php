@@ -79,10 +79,10 @@
                                             data-bs-target="#default" class="btn btn-sm btn-warning">
                                             <i class="bi bi-pencil-square"></i>
                                             Edit</button>
-                                        <button wire:confirm="Yakin ingin menghapus data {{ $item->nama }}"
-                                            wire:click="delete({{ $item->id }})" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash-fill"></i>
-                                            Delete</button>
+                                        <button onclick="confirmDelete({{ $item->id }}, '{{ $item->nama }}')"
+                                            class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash-fill"></i> Delete
+                                        </button>
                                         <a href="{{ route('admin.master-santri.detail-santri', ['id' => $item->nism]) }}"
                                             wire:navigate>
                                             <button class="btn btn-sm btn-success text-white">
@@ -94,7 +94,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">{{$search ? "Data tidak ditemukan!" : "Tidak ada data yang di tampilkan"}}</td>
+                                <td colspan="8" class="text-center">
+                                    {{ $search ? 'Data tidak ditemukan!' : 'Tidak ada data yang di tampilkan' }}</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -110,7 +111,7 @@
             <div class="modal-content">
                 <div class="modal-header {{ $santriEditId ? 'bg-warning' : 'bg-primary' }}">
                     <h5 class="modal-title {{ $santriEditId ? 'text-dark' : 'text-white' }}">
-                        {{ $santriEditId ? 'Update' : 'Create' }}
+                        {{ $santriEditId ? 'Ubah' : 'Buat' }}
                         {{ $formPage == 1 ? 'Santri' : ($formPage == 2 ? 'Wali Santri' : 'Alamat Santri') }}
                     </h5>
                 </div>
@@ -754,15 +755,6 @@
                                     @enderror
                                 </div>
 
-                                {{-- Alamat --}}
-                                <div class="form-group col-lg-4">
-                                    <label for="alamat">Alamat Lengkap</label>
-                                    <textarea name="alamat_lengkap" id="alamat" class="form-control" wire:model="waliSantriForm.alamat" cols="30" rows="10"></textarea>
-                                    @error('waliSantriForm.alamat')
-                                        <span class="text-danger error">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
                                 {{-- Kode Pos --}}
                                 <div class="form-group col-lg-4">
                                     <label for="kode_pos">Kode Pos</label>
@@ -786,19 +778,30 @@
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
                                 </div>
+
+                                {{-- Alamat --}}
+                                <div class="form-group col-lg-12">
+                                    <label for="alamat">Alamat Lengkap</label>
+                                    <textarea name="alamat_lengkap" id="alamat" class="form-control" wire:model="waliSantriForm.alamat"
+                                        cols="30" rows="2"></textarea>
+                                    @error('waliSantriForm.alamat')
+                                        <span class="text-danger error">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
                             </div>
                         @endif
                         <div class="modal-footer d-flex justify-content-between">
                             <div class="form-paginate d-flex">
                                 <button {{ $formPage == 1 ? 'disabled' : '' }} type="button" wire:click='prevForm'
-                                    class="prev-form btn">Prev</button>
+                                    class="prev-form btn">Sebelumnya</button>
                                 <button {{ $formPage == 3 ? 'disabled' : '' }} type="button" wire:click='nextForm'
-                                    class="next-form btn text-primary">Next</button>
+                                    class="next-form btn text-primary">Selanjutnya</button>
                             </div>
                             <div class="cta-buttons">
                                 <button type="button" class="btn" data-bs-dismiss="modal">
                                     <i class="bx bx-x d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block">Close</span>
+                                    <span class="d-none d-sm-block">Tutup</span>
                                 </button>
                                 <button type="submit"
                                     class="btn ms-1 {{ $santriEditId ? 'bg-warning' : 'bg-primary' }}">
@@ -816,9 +819,32 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     Livewire.on('showModal', function() {
         var modal = new bootstrap.Modal(document.getElementById('default'));
         modal.show();
     });
+
+    function confirmDelete(id, name) {
+        Swal.fire({
+            title: 'Yakin ingin menghapus data ' + name + '?',
+            text: "Data yang sudah dihapus tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('delete', {santriId: id} );
+                Swal.fire(
+                    'Terhapus!',
+                    'Data berhasil dihapus.',
+                    'success'
+                )
+            }
+        })
+    }
 </script>

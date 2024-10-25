@@ -1,8 +1,8 @@
 <ul class="menu">
     <li class="sidebar-title">Menu</li>
 
-    <li class="sidebar-item {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
-        <a href="{{ route('admin.dashboard') }}" wire:navigate wire:click='$refresh' class='sidebar-link'>
+    <li wire:click='$refresh' class="sidebar-item {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
+        <a href="{{ route('admin.dashboard') }}" class='sidebar-link'>
             <i class="bi bi-grid-fill"></i>
             <span>Dashboard</span>
         </a>

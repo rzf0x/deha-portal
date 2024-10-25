@@ -57,10 +57,10 @@
                                         <i class="bi bi-pencil-square"></i>
                                         Edit
                                     </a>
-                                    <button wire:confirm="Yakin ingin menghapus data {{ $item->nama }}"
-                                        wire:click="delete({{ $item->id }})" class="btn btn-sm btn-danger">
-                                        <i class="bi bi-trash-fill"></i>
-                                        Delete</button>
+                                    <button onclick="confirmDelete({{ $item->id }}, '{{ $item->nama }}')"
+                                        class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash-fill"></i> Delete
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -76,3 +76,30 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function confirmDelete(id, name) {
+        Swal.fire({
+            title: 'Yakin ingin menghapus data ' + name + '?',
+            text: "Data yang sudah dihapus tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('delete', {
+                    santriId: id
+                });
+                Swal.fire(
+                    'Terhapus!',
+                    'Data berhasil dihapus.',
+                    'success'
+                )
+            }
+        })
+    }
+</script>

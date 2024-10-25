@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\OrangTuaSantri;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -46,6 +47,8 @@ class ListWaliSantri extends Component
 
         return OrangTuaSantri::with('santri')->paginate(5);
     }
+
+    #[On('delete')]
     public function delete($santriId)
     {
         return OrangTuaSantri::find($santriId)->delete();

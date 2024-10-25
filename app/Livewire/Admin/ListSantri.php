@@ -12,6 +12,7 @@ use App\Models\Kamar;
 use App\Models\Kelas;
 use App\Models\OrangTuaSantri;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
@@ -179,11 +180,23 @@ class ListSantri extends Component
         return to_route('admin.master-santri.santri')->with(['message' => "Success updated " . Santri::where('id', $this->santriEditId)->value('nama') . " !"]);
     }
 
+    // public function confirmDelete($id)
+    // {
+    //     $this->dispatch('confirmDelete', [
+    //         'id' => $id,
+    //         'title' => 'Yakin ingin menghapus data?',
+    //         'text' => "Data ini akan dihapus secara permanen.",
+    //         'icon' => 'warning',
+    //         'showCancelButton' => true,
+    //         'confirmButtonText' => 'Ya, hapus!',
+    //         'cancelButtonText' => 'Batal',
+    //     ]);
+    // }
 
+    #[On('delete')]
     public function delete($santriId)
     {
-        Santri::findOrFail($santriId)->delete();
-        return session()->flash('message', "Data has been deleted!");
+        Santri::findOrFail($santriId)?->delete();
     }
 
     public function export()

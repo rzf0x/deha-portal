@@ -36,7 +36,7 @@
             <div class="d-flex justify-content-between">
                 <h4 class="mb-3">Tabel Santri</h4>
                 <a style="text-decoration: underline;" class="text-dark" wire:navigate
-                    href="{{ route('admin.master-santri.santri') }}">See all santri</a>
+                    href="{{ route('admin.master-santri.santri') }}">Lihat semua santri</a>
             </div>
             <div class="card">
                 <div class="card-body">
