@@ -11,7 +11,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between mb-4">
                 <div class="filter-option d-flex">
-                    <div style="background-color: #fafafa;" class="search px-4 border border-2 py-2 rounded-5">
+                    <div class="form search px-3 border border-2 py-2 rounded-3">
                         <input class="bg-transparent" style="border: none; outline: none;" type="text"
                             wire:model.live='search' placeholder="Cari santri...">
                         <a href="#" class="search_icon"><i class="fa fa-search" aria-hidden="true"></i></a>
@@ -20,7 +20,7 @@
                 <button wire:click="create()" type="button" class="btn btn-primary block" data-bs-toggle="modal"
                     data-bs-target="#default">
                     <i class="bi bi-plus-circle"></i>
-                    <span class="ms-1">Create Data</span>
+                    <span class="ms-1">Data Baru</span>
                 </button>
             </div>
             <div class="table-responsive">
@@ -34,7 +34,7 @@
                             <th>Kelas</th>
                             <th>Jenjang</th>
                             <th>Kamar</th>
-                            <th>Action</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,10 +79,10 @@
                                             data-bs-target="#default" class="btn btn-sm btn-warning">
                                             <i class="bi bi-pencil-square"></i>
                                             Edit</button>
-                                        <button wire:confirm="Yakin ingin menghapus data {{ $item->nama }}"
-                                            wire:click="delete({{ $item->id }})" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash-fill"></i>
-                                            Delete</button>
+                                        <button onclick="confirmDelete({{ $item->id }}, '{{ $item->nama }}')"
+                                            class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash-fill"></i> Hapus
+                                        </button>
                                         <a href="{{ route('admin.master-santri.detail-santri', ['id' => $item->nism]) }}"
                                             wire:navigate>
                                             <button class="btn btn-sm btn-success text-white">
@@ -94,7 +94,8 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">{{$search ? "Data tidak ditemukan!" : "Tidak ada data yang di tampilkan"}}</td>
+                                <td colspan="8" class="text-center">
+                                    {{ $search ? 'Data tidak ditemukan!' : 'Tidak ada data yang di tampilkan' }}</td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -110,12 +111,9 @@
             <div class="modal-content">
                 <div class="modal-header {{ $santriEditId ? 'bg-warning' : 'bg-primary' }}">
                     <h5 class="modal-title {{ $santriEditId ? 'text-dark' : 'text-white' }}">
-                        {{ $santriEditId ? 'Update' : 'Create' }}
+                        {{ $santriEditId ? 'Ubah' : 'Buat' }}
                         {{ $formPage == 1 ? 'Santri' : ($formPage == 2 ? 'Wali Santri' : 'Alamat Santri') }}
                     </h5>
-                    <button type="button" class="close rounded-pill" data-bs-dismiss="modal" aria-label="Close">
-                        <i data-feather="x"></i>
-                    </button>
                 </div>
                 <div class="modal-body ">
                     <form wire:submit.prevent={{ $santriEditId ? 'editStore' : 'createStore' }} class="row">
@@ -201,8 +199,8 @@
                                     <label for="status_kesantrian">Status Kesantrian</label>
                                     <select class="form-select" wire:model.defer="santriForm.status_kesantrian">
                                         <option value="">-- Status Kesantrian --</option>
-                                        <option value="aktif">aktif</option>
-                                        <option value="nonaktif">nonaktif</option>
+                                        <option value="aktif">Aktif</option>
+                                        <option value="nonaktif">Nonaktif</option>
                                     </select>
 
                                     @error('santriForm.status_kesantrian')
@@ -225,8 +223,8 @@
                                     <label for="riwayat_penyakit">Riwayat Penyakit</label>
                                     <select class="form-select" wire:model="santriForm.riwayat_penyakit">
                                         <option value="">-- Riwayat Penyakit --</option>
-                                        <option value="sehat">sehat</option>
-                                        <option value="kurang_sehat">kurang sehat</option>
+                                        <option value="sehat">Sehat</option>
+                                        <option value="kurang_sehat">Kurang Sehat</option>
                                     </select>
 
                                     @error('santriForm.riwayat_penyakit')
@@ -259,8 +257,8 @@
                                     <label for="jenis_kelamin">Jenis Kelamin</label>
                                     <select class="form-select" wire:model="santriForm.jenis_kelamin">
                                         <option value="">-- Pilih Jenis Kelamin --</option>
-                                        <option value="putera">laki-laki</option>
-                                        <option value="puteri">perempuan</option>
+                                        <option value="putera">Laki-laki</option>
+                                        <option value="puteri">Perempuan</option>
                                     </select>
                                     @error('santriForm.jenis_kelamin')
                                         <span class="text-danger error">{{ $message }}</span>
@@ -304,8 +302,8 @@
                                     <label for="aktivitas_pendidikan">Aktivitas Pendidikan</label>
                                     <select class="form-select" wire:model="santriForm.aktivitas_pendidikan">
                                         <option value="">-- Aktivitas Pendidikan --</option>
-                                        <option value="aktif">aktif</option>
-                                        <option value="nonaktif">nonaktif</option>
+                                        <option value="aktif">Aktif</option>
+                                        <option value="nonaktif">Nonaktif</option>
                                     </select>
                                     @error('santriForm.aktivitas_pendidikan')
                                         <span class="text-danger error">{{ $message }}</span>
@@ -337,9 +335,9 @@
                                     <label for="status_santri">Status Santri</label>
                                     <select class="form-select" wire:model="santriForm.status_santri">
                                         <option value="">-- Status Santri --</option>
-                                        <option value="reguler">reguler</option>
-                                        <option value="dhuafa">dhuafa</option>
-                                        <option value="yatim_piatu">yatim piatu</option>
+                                        <option value="reguler">Reguler</option>
+                                        <option value="dhuafa">Dhuafa</option>
+                                        <option value="yatim_piatu">Yatim Piatu</option>
                                     </select>
                                     @error('santriForm.status_santri')
                                         <span class="text-danger error">{{ $message }}</span>
@@ -457,8 +455,8 @@
                                     <label for="status_ayah">Status Ayah</label>
                                     <select class="form-select" wire:model="waliSantriForm.status_ayah">
                                         <option value="">-- Status --</option>
-                                        <option value="hidup">hidup</option>
-                                        <option value="meninggal">meninggal</option>
+                                        <option value="hidup">Hidup</option>
+                                        <option value="meninggal">Meninggal</option>
                                     </select>
                                     @error('waliSantriForm.status_ayah')
                                         <span class="text-danger error">{{ $message }}</span>
@@ -565,7 +563,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="nama_ibu">Nama Ibu</label>
                                     <input type="text" class="form-control" wire:model="waliSantriForm.nama_ibu"
-                                        id="nama_ibu" placeholder="Subarno">
+                                        id="nama_ibu" placeholder="Subarni">
                                     @error('waliSantriForm.nama_ibu')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -576,8 +574,8 @@
                                     <label for="status_ibu">Status Ibu</label>
                                     <select class="form-select" wire:model="waliSantriForm.status_ibu">
                                         <option value="">-- Status --</option>
-                                        <option value="hidup">hidup</option>
-                                        <option value="meninggal">meninggal</option>
+                                        <option value="hidup">Hidup</option>
+                                        <option value="meninggal">Meninggal</option>
                                     </select>
                                     @error('waliSantriForm.status_ibu')
                                         <span class="text-danger error">{{ $message }}</span>
@@ -757,16 +755,6 @@
                                     @enderror
                                 </div>
 
-                                {{-- Alamat --}}
-                                <div class="form-group col-lg-4">
-                                    <label for="alamat">Alamat</label>
-                                    <input type="text" class="form-control" wire:model="waliSantriForm.alamat"
-                                        id="alamat" placeholder="">
-                                    @error('waliSantriForm.alamat')
-                                        <span class="text-danger error">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
                                 {{-- Kode Pos --}}
                                 <div class="form-group col-lg-4">
                                     <label for="kode_pos">Kode Pos</label>
@@ -782,33 +770,44 @@
                                     <label for="status_orang_tua">Status Orang Tua</label>
                                     <select class="form-select" wire:model="waliSantriForm.status_orang_tua">
                                         <option value="">-- Status Orang Tua --</option>
-                                        <option value="kawin">kawin</option>
-                                        <option value="cerai hidup">cerai hidup</option>
-                                        <option value="cerai mati">cerai mati</option>
+                                        <option value="kawin">Kawin</option>
+                                        <option value="cerai hidup">Cerai Hidup</option>
+                                        <option value="cerai mati">Cerai Mati</option>
                                     </select>
                                     @error('waliSantriForm.status_orang_tua')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
                                 </div>
+
+                                {{-- Alamat --}}
+                                <div class="form-group col-lg-12">
+                                    <label for="alamat">Alamat Lengkap</label>
+                                    <textarea name="alamat_lengkap" id="alamat" class="form-control" wire:model="waliSantriForm.alamat"
+                                        cols="30" rows="2"></textarea>
+                                    @error('waliSantriForm.alamat')
+                                        <span class="text-danger error">{{ $message }}</span>
+                                    @enderror
+                                </div>
+
                             </div>
                         @endif
                         <div class="modal-footer d-flex justify-content-between">
                             <div class="form-paginate d-flex">
                                 <button {{ $formPage == 1 ? 'disabled' : '' }} type="button" wire:click='prevForm'
-                                    class="prev-form btn">Prev</button>
+                                    class="prev-form btn">Sebelumnya</button>
                                 <button {{ $formPage == 3 ? 'disabled' : '' }} type="button" wire:click='nextForm'
-                                    class="next-form btn text-primary">Next</button>
+                                    class="next-form btn text-primary">Selanjutnya</button>
                             </div>
                             <div class="cta-buttons">
                                 <button type="button" class="btn" data-bs-dismiss="modal">
                                     <i class="bx bx-x d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block">Close</span>
+                                    <span class="d-none d-sm-block">Tutup</span>
                                 </button>
                                 <button type="submit"
                                     class="btn ms-1 {{ $santriEditId ? 'bg-warning' : 'bg-primary' }}">
                                     <i class="bx bx-check d-block d-sm-none"></i>
                                     <span class="d-none d-sm-block {{ $santriEditId ? 'text-dark' : 'text-white' }}">
-                                        {{ $santriEditId ? 'Update Data' : 'Create Data' }}
+                                        {{ $santriEditId ? 'Ubah Data' : 'Buat Data Baru' }}
                                     </span>
                                 </button>
                             </div>
@@ -820,9 +819,32 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
     Livewire.on('showModal', function() {
         var modal = new bootstrap.Modal(document.getElementById('default'));
         modal.show();
     });
+
+    function confirmDelete(id, name) {
+        Swal.fire({
+            title: 'Yakin ingin menghapus data ' + name + '?',
+            text: "Data yang sudah dihapus tidak bisa dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Livewire.dispatch('delete', {santriId: id} );
+                Swal.fire(
+                    'Terhapus!',
+                    'Data berhasil dihapus.',
+                    'success'
+                )
+            }
+        })
+    }
 </script>

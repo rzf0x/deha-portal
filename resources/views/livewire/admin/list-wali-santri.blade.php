@@ -1,7 +1,7 @@
 <div class="card">
     <div class="card-body">
         <div class="filter-option d-flex mb-4">
-            <div style="background-color: #fafafa;" class="search px-4 border border-2 py-2 rounded-5">
+            <div class="form search px-3 border border-2 py-2 rounded-3">
                 <input class="bg-transparent" style="border: none; outline: none;" type="text" wire:model.live='search'
                     placeholder="Cari wali...">
                 <a href="#" class="search_icon"><i class="fa fa-search" aria-hidden="true"></i></a>
@@ -19,7 +19,7 @@
                         <th>Kelas</th>
                         <th>Jenjang</th>
                         <th>Kamar</th>
-                        <th>Action</th>
+                        <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -57,10 +57,6 @@
                                         <i class="bi bi-pencil-square"></i>
                                         Edit
                                     </a>
-                                    <button wire:confirm="Yakin ingin menghapus data {{ $item->nama }}"
-                                        wire:click="delete({{ $item->id }})" class="btn btn-sm btn-danger">
-                                        <i class="bi bi-trash-fill"></i>
-                                        Delete</button>
                                 </div>
                             </td>
                         </tr>

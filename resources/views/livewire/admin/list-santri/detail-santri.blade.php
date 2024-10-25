@@ -32,9 +32,9 @@
                     </div>
                     <div class="form-paginate d-flex">
                         <button {{ $formPage == 1 ? 'disabled' : '' }} type="button" wire:click='prevForm'
-                            class="prev-form btn">Prev</button>
+                            class="prev-form btn">Sebelumnya</button>
                         <button {{ $formPage == 2 ? 'disabled' : '' }} type="button" wire:click='nextForm'
-                            class="next-form btn text-primary">Next</button>
+                            class="next-form btn text-primary">Selanjutnya</button>
                     </div>
                 </div>
                 <div class="col-lg-8 row mb-2">
