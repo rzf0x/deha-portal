@@ -43,9 +43,15 @@
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama }}</td>
                                 <td style="width: 120px;">
-                                    <img src="{{ Storage::url('images/santri/' . basename($item?->foto)) }}"
-                                        class="img-fluid mx-auto"
-                                        style="width: 100px; height: 100px; object-fit: cover;" alt="">
+                                    @if ($item->foto)
+                                        <img src="{{ Storage::url('images/santri/' . basename($item?->foto)) }}"
+                                            class="img-fluid mx-auto"
+                                            style="width: 100px; height: 100px; object-fit: cover;" alt="">
+                                    @else
+                                        <img src="{{ asset('dist/assets/compiled/jpg/1.jpg') }}"
+                                            class="img-fluid mx-auto"
+                                            style="width: 100px; height: 100px; object-fit: cover;" alt="">
+                                    @endif
                                 </td>
                                 <td>
                                     <span class="badge bg-success">
@@ -113,11 +119,14 @@
                     <form wire:submit.prevent={{ $santriEditId ? 'editStore' : 'createStore' }} class="row">
                         @if ($formPage == 1)
                             <div class="steppers santri row">
-                                {{-- Preview image yang baru diupload --}}
                                 {{-- Foto --}}
-                                <div class="form-group col-lg-4">
+                                {{-- Preview image --}}
+                                <div wire.ignore class="form-group col-lg-4">
                                     <label for="foto">Foto</label>
                                     <input type="file" class="form-control" wire:model="foto" id="foto" />
+                                    @error('foto')
+                                        <span class="text-danger error">{{ $message }}</span>
+                                    @enderror
                                 </div>
 
                                 {{-- Nama --}}
