@@ -43,15 +43,9 @@
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $item->nama }}</td>
                                 <td style="width: 120px;">
-                                    @if ($item->foto)
-                                        <img src="{{ Storage::url('images/santri/' . basename($item->foto)) }}"
-                                            class="img-fluid mx-auto"
-                                            style="width: 100px; height: 100px; object-fit: cover;" alt="">
-                                    @else
-                                        <img src="{{ asset('dist/assets/compiled/jpg/1.jpg') }}"
-                                            class="img-fluid mx-auto"
-                                            style="width: 100px; height: 100px; object-fit: cover;" alt="">
-                                    @endif
+                                    <img src="{{ Storage::url('images/santri/' . basename($item?->foto)) }}"
+                                        class="img-fluid mx-auto"
+                                        style="width: 100px; height: 100px; object-fit: cover;" alt="">
                                 </td>
                                 <td>
                                     <span class="badge bg-success">
@@ -124,6 +118,15 @@
                                     <label for="foto">Foto</label>
                                     <input type="file" class="form-control" wire:model="santriForm.foto"
                                         id="foto" />
+                                    {{-- Preview image yang baru diupload --}}
+                                    @if ($santriForm->foto && is_object($santriForm->foto))
+                                        <img src="{{ $santriForm->foto->temporaryUrl() }}" class="mt-2"
+                                            style="max-width: 200px; height: auto;" alt="Preview">
+                                        {{-- Preview image yang sudah ada --}}
+                                    @elseif ($santriForm->foto)
+                                        <img src="{{ Storage::url($santriForm->foto) }}" class="mt-2"
+                                            style="max-width: 200px; height: auto;" alt="Current photo">
+                                    @endif
                                     @error('santriForm.foto')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -838,7 +841,9 @@
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                Livewire.dispatch('delete', {santriId: id} );
+                Livewire.dispatch('delete', {
+                    santriId: id
+                });
                 Swal.fire(
                     'Terhapus!',
                     'Data berhasil dihapus.',
