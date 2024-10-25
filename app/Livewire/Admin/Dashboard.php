@@ -9,7 +9,6 @@ use App\Models\Kelas;
 use App\Models\Santri;
 use App\Models\WaliKamar;
 use App\Models\WaliKelas;
-use Asantibanez\LivewireCharts\Models\PieChartModel;
 use Livewire\Component;
 use Livewire\attributes\Title;
 use Detection\MobileDetect;
@@ -17,7 +16,6 @@ use Livewire\WithPagination;
 
 class Dashboard extends Component
 {
-    use WithPagination;
     // Integer
     public $waliKamar, $totalSemester, $kelasSantriTotalPutra, $kelasSantriTotalPutri, $santri, $totalJenjang, $totalKelas, $totalKamar, $waliKelas, $totalSantri, $kelas;
 

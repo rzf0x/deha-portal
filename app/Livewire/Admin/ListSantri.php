@@ -41,7 +41,7 @@ class ListSantri extends Component
     public function mount()
     {
         // get url params edit has id wali santri
-        if(request()->has('wali')) {
+        if (request()->has('wali')) {
             // parse argument of edit function parameter
             $this->edit(request()->wali);
             // trigger livewire javascript dispatch
@@ -75,10 +75,11 @@ class ListSantri extends Component
         $this->waliSantriForm->validate();
 
         if ($this->santriForm->foto) {
-            $imgFile = $this->santriForm->foto;
-            $imgUrl = $imgFile->store('images/santri', 'public');
+            $fileName = time() . '-' . $this->santriForm->foto->getClientOriginalName();
+            $imgUrl = $this->santriForm->foto->storeAs('images/santri', $fileName, 'public');
             $this->santriForm->foto = $imgUrl;
         }
+
         $santri = Santri::create($this->santriForm->all());
 
         $waliSantriData = $this->waliSantriForm->all();
@@ -96,6 +97,7 @@ class ListSantri extends Component
 
         // Data Wali dan Data Alamat
         $waliData = OrangTuaSantri::where('santri_id', $santriId)->first();
+
         $this->santriForm->foto = $santriData->foto;
         $this->santriForm->nama = $santriData->nama;
         $this->santriForm->nisn = $santriData->nisn;
@@ -165,33 +167,28 @@ class ListSantri extends Component
 
     public function editStore()
     {
-        if (is_object($this->santriForm->foto) && method_exists($this->santriForm->foto, 'store')) {
-            $imgFile = $this->santriForm->foto;
-            $imgUrl = $imgFile->store('images/santri', 'public');
-            $this->santriForm->foto = $imgUrl;
+        $santriData = $this->santriForm->all();
+    
+        // Handle foto secara terpisah
+        if ($this->santriForm->foto && $this->santriForm->foto instanceof \Illuminate\Http\UploadedFile) {
+            $fileName = time() . '-' . ($this->santriForm->foto)->getClientOriginalName();
+            // dd($fileName);
+            $imgUrl = $this->santriForm->foto->storeAs('images/santri', $fileName, 'public');
+            $santriData['foto'] = $imgUrl;
         } else {
             $oldImg = Santri::where('id', $this->santriEditId)->value('foto');
             $this->santriForm->foto = $oldImg;
         }
-
-        Santri::where('id', $this->santriEditId)->update($this->santriForm->all());
+    
+        // Update santri dengan data yang sudah diproses
+        Santri::where('id', $this->santriEditId)->update($santriData);
+        
+        // Update wali santri seperti biasa
         OrangTuaSantri::where('santri_id', $this->santriEditId)->update($this->waliSantriForm->all());
 
         return to_route('admin.master-santri.santri')->with(['message' => "Success updated " . Santri::where('id', $this->santriEditId)->value('nama') . " !"]);
     }
 
-    // public function confirmDelete($id)
-    // {
-    //     $this->dispatch('confirmDelete', [
-    //         'id' => $id,
-    //         'title' => 'Yakin ingin menghapus data?',
-    //         'text' => "Data ini akan dihapus secara permanen.",
-    //         'icon' => 'warning',
-    //         'showCancelButton' => true,
-    //         'confirmButtonText' => 'Ya, hapus!',
-    //         'cancelButtonText' => 'Batal',
-    //     ]);
-    // }
 
     #[On('delete')]
     public function delete($santriId)
@@ -227,10 +224,10 @@ class ListSantri extends Component
                 ->orWhereHas('kamar', function ($query) {
                     $query->where('nama', 'LIKE', "%{$this->search}%");
                 })
-                ->paginate(5);
+                ->paginate(10);
         }
 
-        return Santri::with(['kelas', 'kamar'])->paginate(5);
+        return Santri::with(['kelas', 'kamar'])->paginate(10);
     }
 
     // private function resetField()

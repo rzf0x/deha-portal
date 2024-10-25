@@ -8,9 +8,11 @@ use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class ListWaliSantri extends Component
 {
+    use WithPagination;
     #[Title('Halaman List Wali Santri')]
 
     #[Url(except: '', as: 'q-wali')]
@@ -42,17 +44,12 @@ class ListWaliSantri extends Component
                 ->orWhereHas('santri.kamar', function ($query) {
                     $query->where('nama', 'LIKE', "%{$this->search}%");
                 })
-                ->paginate(5);
+                ->paginate(10);
         }
 
-        return OrangTuaSantri::with('santri')->paginate(5);
+        return OrangTuaSantri::with('santri')->paginate(10);
     }
 
-    #[On('delete')]
-    public function delete($santriId)
-    {
-        return OrangTuaSantri::find($santriId)->delete();
-    }
     public function render()
     {
         return view('livewire.admin.list-wali-santri');

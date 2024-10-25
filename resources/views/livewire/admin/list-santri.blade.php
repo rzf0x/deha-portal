@@ -11,7 +11,7 @@
         <div class="card-body">
             <div class="d-flex justify-content-between mb-4">
                 <div class="filter-option d-flex">
-                    <div class="form search px-4 border border-2 py-2 rounded-3">
+                    <div class="form search px-3 border border-2 py-2 rounded-3">
                         <input class="bg-transparent" style="border: none; outline: none;" type="text"
                             wire:model.live='search' placeholder="Cari santri...">
                         <a href="#" class="search_icon"><i class="fa fa-search" aria-hidden="true"></i></a>
@@ -34,7 +34,7 @@
                             <th>Kelas</th>
                             <th>Jenjang</th>
                             <th>Kamar</th>
-                            <th>Action</th>
+                            <th>Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,7 +81,7 @@
                                             Edit</button>
                                         <button onclick="confirmDelete({{ $item->id }}, '{{ $item->nama }}')"
                                             class="btn btn-sm btn-danger">
-                                            <i class="bi bi-trash-fill"></i> Delete
+                                            <i class="bi bi-trash-fill"></i> Hapus
                                         </button>
                                         <a href="{{ route('admin.master-santri.detail-santri', ['id' => $item->nism]) }}"
                                             wire:navigate>
