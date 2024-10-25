@@ -46,10 +46,6 @@ class ListWaliSantri extends Component
 
         return OrangTuaSantri::with('santri')->paginate(5);
     }
-    public function edit($santriId)
-    {
-        $this->dispatch('editWaliSantri', $santriId);
-    }
     public function delete($santriId)
     {
         return OrangTuaSantri::find($santriId)->delete();

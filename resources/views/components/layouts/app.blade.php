@@ -21,7 +21,6 @@
     {{-- <script src="{{ asset('dist/assets/static/js/initTheme.js') }}"></script> --}}
     <div id="app">
 
-
         @include('components.layouts.partials.sidebar')
 
         <div id="main">
@@ -54,12 +53,12 @@
 
     {{-- <script src="{{ asset('dist/assets/static/js/components/dark.js') }}"></script> --}}
     <script src="{{ asset('dist/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
-
     <script src="{{ asset('dist/assets/compiled/js/app.js') }}"></script>
 
     <!-- Need: Apexcharts -->
     {{-- <script src="assets/extensions/apexcharts/apexcharts.min.js"></script> --}}
     <script src="assets/static/js/pages/dashboard.js"></script>
+    
 </body>
 
 </html>

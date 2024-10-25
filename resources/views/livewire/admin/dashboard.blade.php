@@ -24,11 +24,11 @@
         <div class="row" wire:ignore>
             <div class="col-lg-8">
                 <h4 class="mb-3">Overview Total Santri</h4>
-                <div id="santriChart" class="bg-white rounded-4 p-4 h-100 w-100"></div>
+                <div id="santriChart" class="card rounded-4 p-4 h-100 w-100"></div>
             </div>
             <div class="col-lg-4">
-                <h4 class="mb-3">Total Wali</h4>
-                <div id="waliChart" class="bg-white rounded-4 p-4 h-100 w-100"></div>
+                <h4 class="mb-3">Total Semesteran</h4>
+                <div id="waliChart" class="card rounded-4 p-4 h-100 w-100"></div>
             </div>
         </div>
 
@@ -158,13 +158,13 @@
             height: 400
         },
         labels: xValues,
-        colors: ['#f7b7a3', '#57167e', '#fff1c9'],
+        colors: ['#f7b7a3', '#57167e', '#fff1a4'],
         legend: {
             position: 'bottom',
             fontSize: '14px',
         },
         title: {
-            text: 'Jumlah Keseluruhan Wali Pondok',
+            text: 'Jumlah Semesteran',
             align: 'center',
             style: {
                 fontSize: '16px'
