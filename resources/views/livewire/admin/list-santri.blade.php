@@ -804,7 +804,7 @@
                                     class="btn ms-1 {{ $santriEditId ? 'bg-warning' : 'bg-primary' }}">
                                     <i class="bx bx-check d-block d-sm-none"></i>
                                     <span class="d-none d-sm-block {{ $santriEditId ? 'text-dark' : 'text-white' }}">
-                                        {{ $santriEditId ? 'Update Data' : 'Create Data' }}
+                                        {{ $santriEditId ? 'Ubah Data' : 'Buat Data Baru' }}
                                     </span>
                                 </button>
                             </div>
