@@ -1,5 +1,5 @@
 <div>
-@if ($errors->any())
+    @if ($errors->any())
         <div class="alert alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
@@ -108,7 +108,10 @@
                 <form wire:submit="createStore">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="santri" class="form-label">Pilih Santri</label>
+                            <label for="santri" class="form-label">
+                                <span wire:loading.class.remove='d-none'
+                                    class="d-none spinner-border spinner-border-sm"></span></label>
+                                Pilih Santri
                             <div class="dropdown">
                                 <input type="text" class="form-control @error('santri_id') is-invalid @enderror"
                                     wire:model.live="searchSantri"
@@ -119,7 +122,7 @@
                                     style="max-height: 200px; overflow-y: auto;">
                                     @forelse($this->filteredSantris as $santri)
                                         <li>
-                                            <a class="dropdown-item" href="#"
+                                            <a class="dropdown-item" href="#" data-bs-toggle="dropdown"
                                                 wire:click.prevent="selectSantri('{{ $santri->id }}', '{{ $santri->nama }}')">
                                                 {{ $santri->nama }}
                                                 <small class="text-muted">

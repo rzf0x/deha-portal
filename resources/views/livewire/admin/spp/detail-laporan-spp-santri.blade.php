@@ -68,8 +68,8 @@
                     <select wire:model.live="filter.status" class="form-select">
                         <option value="">Semua Status</option>
                         <option value="lunas">Lunas</option>
-                        <option value="pending">Pending</option>
-                        <option value="belum-bayar">Belum Bayar</option>
+                        <option value="belum bayar">belum bayar</option>
+                        <option value="cicilan">cicilan</option>
                     </select>
                 </div>
             </div>
@@ -82,6 +82,7 @@
                             <th>Tanggal</th>
                             <th>Bulan</th>
                             <th>Nominal</th>
+                            <th>Tipe</th>
                             <th>Metode</th>
                             <th>Status</th>
                         </tr>
@@ -93,6 +94,11 @@
                                 <td>{{ $bayar->created_at->format('d/m/Y') }}</td>
                                 <td>{{ $bayar->pembayaranTimeline->nama_bulan }}</td>
                                 <td>Rp {{ number_format($bayar->nominal) }}</td>
+                                <td>
+                                    <span class="badge bg-info">
+                                        {{ str($bayar->pembayaranTipe->nama) }}
+                                    </span>
+                                </td>
                                 <td>
                                     <span class="badge bg-info">
                                         {{ str($bayar->metode_pembayaran)->title() }}
@@ -110,12 +116,11 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">Tidak ada data pembayaran</td>
+                                <td colspan="7" class="text-center">Tidak ada data pembayaran</td>
                             </tr>
                         @endforelse
                     </tbody>
                 </table>
-                {{ $pembayaran->links() }}
             </div>
         </div>
     </div>

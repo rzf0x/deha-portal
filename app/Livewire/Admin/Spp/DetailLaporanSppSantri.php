@@ -1,70 +1,81 @@
 <?php
+
 namespace App\Livewire\Admin\Spp;
 
 use App\Models\Santri;
-use App\Models\Spp\Pembayaran; // Pastikan model ini diimpor
+use App\Models\Spp\Pembayaran;
 use Livewire\Attributes\Title;
 use Livewire\Component;
-use Livewire\WithPagination;
 
+#[Title('Halaman Detail Spp Santri')]
 class DetailLaporanSppSantri extends Component
 {
-    use WithPagination;
-    #[Title('Halaman Detail Spp Santri')]
-
-    protected $paginationTheme = 'bootstrap';
-    
     public $santriId;
     public $santri;
     public $filter = [
         'tahun' => '',
         'status' => ''
     ];
-    
+
     public function mount($id)
     {
         $this->santriId = $id;
-        $this->santri = Santri::with(['kelas', 'kamar','pembayaran'])->findOrFail($id);
+        // Memuat hanya field yang diperlukan
+        $this->santri = Santri::select('id', 'nama', 'kelas_id', 'kamar_id')
+            ->with([
+                'kelas:id,nama',
+                'kamar:id,nama'
+            ])
+            ->findOrFail($id);
+
         $this->filter['tahun'] = date('Y');
     }
-    
-    public function getPaymentSummaryProperty()
+
+    protected function getPembayaran()
     {
-        return $this->santri->pembayaran()
-            ->when($this->filter['tahun'], function($query) {
-                return $query->whereYear('created_at', $this->filter['tahun']);
+        return Pembayaran::query()
+            ->select([
+                'id',
+                'santri_id',
+                'pembayaran_timeline_id',
+                'pembayaran_tipe_id',
+                'nominal',
+                'metode_pembayaran',
+                'status',
+                'created_at'
+            ])
+            ->with([
+                'pembayaranTimeline:id,nama_bulan',
+                'pembayaranTipe:id,nama'
+            ])
+            ->where('santri_id', $this->santriId)
+            ->when($this->filter['tahun'], function ($query) {
+                $query->whereYear('created_at', $this->filter['tahun']);
             })
-            ->when($this->filter['status'], function($query) {
-                return $query->where('status', $this->filter['status']);
-            })->get();
+            ->when($this->filter['status'], function ($query) {
+                $query->where('status', $this->filter['status']);
+            })
+            ->orderBy('created_at')
+            ->get();
     }
-    
+
+    protected function getTahunList()
+    {
+        return Pembayaran::query()
+            ->where('santri_id', $this->santriId)
+            ->selectRaw('DISTINCT YEAR(created_at) as tahun')
+            ->orderByDesc('tahun')
+            ->pluck('tahun');
+    }
+
     public function render()
     {
-        $pembayaran = $this->santri->pembayaran()
-            ->with('pembayaranTimeline') // Menggunakan relasi yang benar
-            ->when($this->filter['tahun'], function($query) {
-                return $query->whereYear('created_at', $this->filter['tahun']);
-            })
-            ->when($this->filter['status'], function($query) {
-                return $query->where('status', $this->filter['status']);
-            })
-            ->latest()
-            ->paginate(10);
-        
-        // Menggunakan model Pembayaran dengan namespace yang benar
-        $tahunList = Pembayaran::selectRaw('YEAR(created_at) as tahun')
-            ->where('santri_id', $this->santriId)
-            ->distinct()
-            ->orderBy('tahun', 'desc')
-            ->pluck('tahun');
-        
+        $pembayaran = $this->getPembayaran();
+
         return view('livewire.admin.spp.detail-laporan-spp-santri', [
             'pembayaran' => $pembayaran,
-            'tahunList' => $tahunList,
+            'tahunList' => $this->getTahunList(),
             'total_pembayaran' => $pembayaran->count(),
-            'total_lunas' => $pembayaran->where('status', 'lunas')->count(),
-            'total_pending' => $pembayaran->where('status', 'pending')->count(),
             'total_nominal' => $pembayaran->sum('nominal'),
         ]);
     }
