@@ -80,7 +80,7 @@ class TambahSantri extends Component
                     'pembayaran_timeline_id' => $timeline->id,
                     'pembayaran_tipe_id' => 1, // Menggunakan ID tipe yang dipilih
                     'nominal' => 0, // Pastikan nominal sudah diisi dengan benar
-                    'metode_pembayaran' => 1, // Pastikan metode pembayaran sudah diisi dengan benar
+                    'metode_pembayaran' => 'cash', // Pastikan metode pembayaran sudah diisi dengan benar
                     'status' => 'belum bayar'
                 ]);
             };
