@@ -16,19 +16,9 @@ class PembayaranSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            'lunas', 'belum lunas', 'cicilan'
+            'lunas', 'belum bayar', 'cicilan'
         ];
 
-        // foreach (PembayaranTimeline::all() as $timeline) {
-        //     $timeline->pembayarans()->create([
-        //         'status' => $data[rand(0, 2)],
-        //         'nominal' => '12',
-        //         'metode_pembayaran' => 'cash',
-        //         'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
-        //         'santri_id' => 1, // Sesuaikan dengan ID santri yang ada
-        //         'pembayaran_timeline_id' => $timeline->id, // Sesuaikan dengan ID pembayaran_timeline yang ada
-        //     ]);
-        // }
 
         $testing = [
             [
@@ -54,6 +44,22 @@ class PembayaranSeeder extends Seeder
                 'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
                 'santri_id' => 3, // Sesuaikan dengan ID santri yang ada
                 'pembayaran_timeline_id' => 10,
+            ],
+            [
+                'status' => $data[rand(0, 2)],
+                'nominal' => 12000,
+                'metode_pembayaran' => 'cash',
+                'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
+                'santri_id' => 3, // Sesuaikan dengan ID santri yang ada
+                'pembayaran_timeline_id' => 9,
+            ],
+            [
+                'status' => $data[rand(0, 2)],
+                'nominal' => 12000,
+                'metode_pembayaran' => 'cash',
+                'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
+                'santri_id' => 3, // Sesuaikan dengan ID santri yang ada
+                'pembayaran_timeline_id' => 8,
             ],
             [
                 'status' => $data[rand(0, 2)],

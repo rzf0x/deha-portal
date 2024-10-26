@@ -96,10 +96,10 @@
                             </div>
                             <div class="">
                                 <label for="jenjang">Jenjang</label>
-                                <select class="form-select" wire:model="ItemPembayaranForm.jenjang_id" required>
+                                <select class="selectpicker" data-live-search="true" wire:model="ItemPembayaranForm.jenjang_id" required>
                                     <option value='' selected>-- Jenjang --</option>
                                     @foreach ($this->getAllJenjang() as $item)
-                                    <option value="{{ $item->id }}" {{ $item->id == $ItemPembayaranForm->jenjang_id ? 'selected' : '' }}>
+                                    <option data-tokens="{{ $item->nama }} " value="{{ $item->id }}" {{ $item->id == $ItemPembayaranForm->jenjang_id ? 'selected' : '' }}>
                                         {{ $item->nama }} 
                                     </option>
                                     @endforeach

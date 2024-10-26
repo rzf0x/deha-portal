@@ -24,7 +24,7 @@ class Pembayaran extends Component
     public $selectedStatus;
     public $updatedPembayaran;
     public $detailPembayaran;
-    public $showCicilanModal = false;
+    public $showModalTipe = ''; // lunas, belum bayar, cicilan
     public $keteranganCicilan;
     public $jumlahCicilan;
     public $cicilan;
@@ -44,6 +44,7 @@ class Pembayaran extends Component
         } else {
             $this->errorMessage = '';
         }
+        $this->santriSelected = '';
     }
 
     public function selectSantri($santriId)
@@ -69,7 +70,7 @@ class Pembayaran extends Component
         $this->Clickpembayaran->status = $this->selectedStatus;
         $this->Clickpembayaran->save();
         $this->dispatch('pembayaranUpdated');
-        $this->updatedSelectedStatus($this->selectedStatus);
+        $this->showModalTipe = $this->selectedStatus;
     }
 
     public function closeModal()
@@ -86,15 +87,6 @@ class Pembayaran extends Component
             if ($item) {
                 $this->totalAmount += $item->nominal;
             }
-        }
-    }
-
-    public function updatedSelectedStatus($value)
-    {
-        if ($value === 'cicilan') {
-            $this->showCicilanModal = true;
-        } else {
-            $this->showCicilanModal = false;
         }
     }
 
