@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\admin\Angkatan;
+use App\Models\admin\Semester;
 use App\Models\Spp\Pembayaran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,8 +12,36 @@ class Santri extends Model
 {
     use HasFactory;
 
+    protected $table = 'santris';
     protected $fillable = [
-        'nama', 'user_id', 'kelas_id', 'kamar_id', 'tahun_akademik_id', 'foto', 'tempat_lahir', 'tanggal_lahir', 'riwayat_penyakit', 'status_kesantrian', 'status_santri', 'semester_id', 'angkatan_id', 'jenis_kelamin'
+        'foto',
+        'nama',
+        'nisn',
+        'nism',
+        'kewarganegaraan',
+        'nik',
+        'tempat_lahir',
+        'tanggal_lahir',
+        'jenis_kelamin',
+        'jumlah_saudara_kandung',
+        'anak_ke',
+        'agama',
+        'hobi',
+        'aktivitas_pendidikan',
+        'npsn',
+        'no_kip',
+        'no_kk',
+        'nama_kepala_keluarga',
+        'riwayat_penyakit',
+        'status_kesantrian',
+        'status_santri',
+        'asal_sekolah',
+        'yang_membiayai_sekolah',
+
+        'kelas_id',
+        'kamar_id',
+        'semester_id',
+        'angkatan_id',
     ];
 
     public function user()
@@ -26,23 +56,23 @@ class Santri extends Model
 
     public function kamar()
     {
-        return $this->belongsTo(Kamar::class);
+        return $this->belongsTo(Kamar::class, 'kamar_id');
     }
 
-    // public function semester()
-    // {
-    //     return $this->belongsTo(Semester::class);
-    // }
+    public function semester()
+    {
+        return $this->belongsTo(Semester::class);
+    }
 
     public function angkatan()
     {
         return $this->belongsTo(Angkatan::class);
     }
 
-    // public function orangTuaSantri()
-    // {
-    //     return $this->hasOne(OrangTuaSantri::class);
-    // }
+    public function orangTuaSantri()
+    {
+        return $this->hasOne(OrangTuaSantri::class);
+    }
 
     public function Pembayaran()
     {

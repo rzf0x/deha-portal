@@ -1,12 +1,10 @@
 <?php
-
 namespace App\Livewire\Admin\Spp;
 
 use App\Models\Santri;
 use App\Models\Spp\Pembayaran;
 use App\Models\Spp\PembayaranTimeline;
 use App\Models\Spp\TipePembayaran;
-use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -119,7 +117,6 @@ class TambahSantri extends Component
             'filteredSantris' => $this->filteredSantris
         ]);
     }
-
     public function resetForm()
     {
         $this->reset();

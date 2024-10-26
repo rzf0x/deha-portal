@@ -83,58 +83,60 @@ return new class extends Migration
             $table->string('nama');
             $table->string('nisn');
             $table->string('nism');
-            $table->string('kewarganegaraan')->default('Indonesia');
+            $table->enum('kewarganegaraan', ['wni', 'wna'])->default('wni');
             $table->bigInteger('nik');
             $table->string('tempat_lahir');
             $table->string('tanggal_lahir');
-            $table->enum('jenis_kelamin', ['perempuan', 'laki-laki']);
+            $table->enum('jenis_kelamin', ['puteri', 'putera']);
             $table->string('jumlah_saudara_kandung');
             $table->string('anak_ke');
             $table->string('agama')->default('islam');
             $table->string('hobi');
-            $table->string('aktivitas_pendidikan');
+            $table->enum('aktivitas_pendidikan', ['aktif', 'nonaktif'])->default('aktif');
             $table->string('npsn');
             $table->string('no_kip')->nullable();
             $table->string('no_kk');
             $table->string('nama_kepala_keluarga');
 
-            // $table->string('nama_sekolah');
-            // $table->string('yang_membiyayai_sekolah');
-            $table->foreignId('kelas_id')->constrained('kelas')->onDelete('cascade');
-            $table->foreignId('kamar_id')->constrained('kamars')->onDelete('cascade');
+            $table->enum('riwayat_penyakit', ['sehat', 'kurang_sehat']);
+            $table->enum('status_kesantrian', ['aktif', 'nonaktif'])->default('aktif');
+            $table->enum('status_santri', ['reguler', 'dhuafa', 'yatim_piatu']);
 
-            $table->enum('riwayat_penyakit', ['santri sehat', 'kurang sehat'])->default('santri sehat');
-            $table->enum('status_kesantrian', ['aktif', 'nonaktif']);
-            $table->enum('status_santri', ['reguler', 'dhuafa', 'yatim-piatu']);
-            // $table->foreignId('semester_id')->constrained('semesters')->onDelete('cascade');
-            // $table->foreignId('angkatan_id')->constrained('angkatans')->onDelete('cascade');
+            $table->string('asal_sekolah')->default('Sekolah');
+            $table->string('yang_membiayai_sekolah')->default('Ayah');
+
+            $table->foreignId('kelas_id')->nullable()->constrained('kelas')->onUpdate('cascade')->onDelete('cascade')->default(1);
+            $table->foreignId('kamar_id')->nullable()->constrained('kamars')->onUpdate('cascade')->onDelete('cascade')->default(1);
+            $table->foreignId('semester_id')->nullable()->constrained('semesters')->onUpdate('cascade')->onDelete('cascade')->default(1);
+            $table->foreignId('angkatan_id')->nullable()->constrained('angkatans')->onUpdate('cascade')->onDelete('cascade')->default(1);
+
             $table->timestamps();
         });
 
         Schema::create('orang_tua_santris', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('santri_id')->constrained('santris')->onDelete('cascade');
+            $table->foreignId('santri_id')->nullable()->constrained('santris')->onDelete('cascade')->onUpdate('cascade');
 
             // Data Ayah
             $table->string('nama_ayah');
-            $table->enum('status_ayah', ['hidup', 'meniggal']);
-            $table->enum('kewarganegaraan_ayah', ['WNI', 'WNA'])->default('WNI');
-            $table->string('nik_ayah');
+            $table->enum('status_ayah', ['hidup', 'meninggal']);
+            $table->enum('kewarganegaraan_ayah', ['wni', 'wna'])->default('wni');
+            $table->string('nik_ayah')->default("0081921827873");
             $table->string('tempat_lahir_ayah');
-            $table->string('tanggal_lahir_ayah');
-            $table->string('pendidikan_terakhir_ayah');
+            $table->date('tanggal_lahir_ayah')->default(date(now()));
+            $table->enum('pendidikan_terakhir_ayah', ['sd', 'smp', 'sma', 'slta', 'diploma', 'sarjana'])->default("sarjana");
             $table->string('pekerjaan_ayah');
             $table->string('penghasilan_ayah');
             $table->string('no_telp_ayah');
 
             // Data Ibu
             $table->string('nama_ibu');
-            $table->enum('status_ibu', ['hidup', 'meniggal']);
-            $table->enum('kewarganegaraan_ibu', ['WNI', 'WNA'])->default('WNI');
+            $table->enum('status_ibu', ['hidup', 'meninggal'])->default("hidup");
+            $table->enum('kewarganegaraan_ibu', ['wni', 'wna'])->default('wni');
             $table->string('nik_ibu');
             $table->string('tempat_lahir_ibu');
             $table->string('tanggal_lahir_ibu');
-            $table->string('pendidikan_terakhir_ibu');
+            $table->enum('pendidikan_terakhir_ibu', ['sd', 'smp', 'sma', 'slta', 'diploma', 'sarjana'])->default("sarjana");
             $table->string('pekerjaan_ibu');
             $table->string('penghasilan_ibu');
             $table->string('no_telp_ibu');
@@ -149,8 +151,8 @@ return new class extends Migration
             $table->string('rw');
             $table->string('alamat');
             $table->string('kode_pos');
+            $table->enum('status_orang_tua', ['kawin', 'cerai hidup', 'cerai mati'])->default("kawin");
 
-            $table->enum('status_orang_tua', ['yatim', 'piatu', 'yatim-piatu']);
             $table->timestamps();
         });
     }
