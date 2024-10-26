@@ -92,8 +92,8 @@ class ListSantri extends Component
 
         $waliSantriData = $this->waliSantriForm->all();
         $waliSantriData['santri_id'] = $santri->id;
-
         OrangTuaSantri::create($waliSantriData);
+        
         return to_route('admin.master-santri.santri')->with(['message' => "Success created " . $this->santriForm->nama . " !"]);
     }
 
@@ -182,7 +182,6 @@ class ListSantri extends Component
         $santriData = $this->santriForm->all();
 
         if ($this->foto && is_object($this->foto)) {
-            $this->foto = $this->foto;
             if ($santri->foto && Storage::disk('public')->exists($santri->foto)) {
                 $this->validate();
                 Storage::disk('public')->delete($santri->foto);
