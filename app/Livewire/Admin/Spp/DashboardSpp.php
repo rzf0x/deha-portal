@@ -16,7 +16,7 @@ class DashboardSpp extends Component
 
     public $bulanSekarang;
     public $lunas;
-    public $belum_lunas;
+    public $belum_bayar;
     public $cicilan;
     public $totalSantri;
     public $totalNominal;
@@ -50,8 +50,8 @@ class DashboardSpp extends Component
             return $item->Pembayaran->contains('status', 'lunas');
         })->count();
 
-        $this->belum_lunas = $santri->filter(function ($item) {
-            return $item->Pembayaran->contains('status', 'belum lunas');
+        $this->belum_bayar = $santri->filter(function ($item) {
+            return $item->Pembayaran->contains('status', 'belum bayar');
         })->count();
 
         $this->cicilan = $santri->filter(function ($item) {
@@ -67,7 +67,7 @@ class DashboardSpp extends Component
         $this->totalNominal = $this->formatRupiah($totalNominalPembayaran);
 
         if ($this->totalNominalDiterima > 0) {
-            $this->persentasePembayaran = ($totalNominalTerbayar / $totalNominalPembayaran) * 100;
+            $this->persentasePembayaran = round(($totalNominalTerbayar / $totalNominalPembayaran) * 100, 1);
         } else {
             $this->persentasePembayaran = 0;
         }
