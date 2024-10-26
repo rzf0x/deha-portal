@@ -1,4 +1,13 @@
 <div>
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
     @if (session()->has('message'))
         <div class="d-flex justify-content-end">
             <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 2500)" class="alert alert-success w-25">
@@ -29,7 +38,7 @@
                 </div>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formModal">
                     <i class="bi bi-plus-circle"></i>
-                    <span class="ms-1">Tambah Pembayaran</span>
+                    <span class="ms-1">Tambah Spp</span>
                 </button>
             </div>
 
@@ -41,7 +50,7 @@
                             <th>Nama Santri</th>
                             <th>Kelas</th>
                             <th>Kamar</th>
-                            <th>Status Pembayaran</th>
+                            <th>Status Spp</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -66,8 +75,7 @@
                                             class="btn btn-sm btn-info">
                                             <i class="bi bi-eye-fill"></i> Detail
                                         </a>
-                                        <button
-                                            wire:confirm="Yakin ingin menghapus data pembayaran {{ $santri->nama }}?"
+                                        <button wire:confirm="Yakin ingin menghapus data spp {{ $santri->nama }}?"
                                             wire:click="delete({{ $santri->id }})" class="btn btn-sm btn-danger">
                                             <i class="bi bi-trash-fill"></i> Delete
                                         </button>
@@ -88,13 +96,13 @@
         </div>
     </div>
 
-    <!-- Modal Form Pembayaran -->
+    <!-- Modal Form Spp -->
     <div wire:ignore.self class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="formModalLabel" wire:click="resetForm">Tambah Pembayaran SPP</h5>
+                    <h5 class="modal-title" id="formModalLabel" wire:click="resetForm">Tambah Spp SPP</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" wire:click="resetForm"
                         aria-label="Close"></button>
                 </div>
@@ -131,66 +139,16 @@
 
                             @if ($selectedSantri)
                                 <div class="mt-2 p-2 border rounded">
-                                    <p class="mb-1"><strong>Santri Terpilih:</strong></p>
+                                    <p class="mb-1 fw-bold">Santri Terpilih:</p>
                                     <p class="mb-1">Nama: {{ $selectedSantri->nama }}</p>
                                     <p class="mb-1">Kelas: {{ $selectedSantri->kelas?->nama ?? 'Belum ada kelas' }}
                                     </p>
-                                    <p class="mb-0">Kamar: {{ $selectedSantri->kamar?->nama ?? 'Belum ada kamar' }}
+                                    <p class="mb-1">Kamar: {{ $selectedSantri->kamar?->nama ?? 'Belum ada kamar' }}
                                     </p>
                                 </div>
+                                <p class="fw-bold">anda akan menambahkan timeline spp santri dari january hingga
+                                    december</p>
                             @endif
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="tipe" class="form-label">Pilih Tipe Pembayaran</label>
-                            <select class="form-select @error('pembayaran_tipe_id') is-invalid @enderror"
-                                wire:model="pembayaran_tipe_id" id="tipe">
-                                <option value="">Pilih Tipe Pembayaran...</option>
-                                @foreach ($tipeList as $tipe)
-                                    <option value="{{ $tipe->id }}">{{ $tipe->nama }}</option>
-                                @endforeach
-                            </select>
-                            @error('pembayaran_tipe_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-                        <div class="mb-3">
-                            <label for="timeline" class="form-label">Pilih Bulan</label>
-                            <select class="form-select @error('pembayaran_timeline_id') is-invalid @enderror"
-                                wire:model="pembayaran_timeline_id" id="timeline">
-                                <option value="">Pilih Bulan...</option>
-                                @foreach ($timelineList as $timeline)
-                                    <option value="{{ $timeline->id }}">{{ $timeline->nama_bulan }}</option>
-                                @endforeach
-                            </select>
-                            @error('pembayaran_timeline_id')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="nominal" class="form-label">Nominal Pembayaran</label>
-                            <div class="input-group">
-                                <span class="input-group-text">Rp</span>
-                                <input type="number" class="form-control @error('nominal') is-invalid @enderror"
-                                    id="nominal" wire:model="nominal">
-                            </div>
-                            @error('nominal')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="metode" class="form-label">Metode Pembayaran</label>
-                            <select class="form-select @error('metode_pembayaran') is-invalid @enderror"
-                                wire:model="metode_pembayaran" id="metode">
-                                <option value="">Pilih Metode...</option>
-                                <option value="cash">Cash</option>
-                                <option value="transfer">Transfer Bank</option>
-                            </select>
-                            @error('metode_pembayaran')
-                                <div class="invalid-feedback">{{ $message }}</div>
-                            @enderror
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -199,7 +157,7 @@
                         <button type="submit" class="btn btn-primary" wire:loading.attr="disabled">
                             <span wire:loading.class.remove='d-none'
                                 class="d-none spinner-border spinner-border-sm"></span>
-                            Simpan Pembayaran
+                            Simpan Spp
                         </button>
                     </div>
                 </form>

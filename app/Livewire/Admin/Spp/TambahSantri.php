@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Livewire\Admin\Spp;
 
 use App\Models\Santri;
 use App\Models\Spp\Pembayaran;
 use App\Models\Spp\PembayaranTimeline;
 use App\Models\Spp\TipePembayaran;
+use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -15,34 +17,22 @@ use Livewire\WithPagination;
 class TambahSantri extends Component
 {
     use WithPagination;
-    
+
     protected $paginationTheme = 'bootstrap';
-    
+
     // Search Properties
     public $search = '';
     public $searchSantri = '';
-    
+
     // Form Properties
     public $isCreating = true;
     public $selectedSantri = null;
 
     public $isDropdownVisible = false;
-    
+
     #[Validate('required')]
     public $santri_id = '';
-    
-    #[Validate('required')]
-    public $pembayaran_tipe_id = '';
-    
-    #[Validate('required')]
-    public $pembayaran_timeline_id = '';
-    
-    #[Validate('required')]
-    public $nominal = '';
-    
-    #[Validate('required')]
-    public $metode_pembayaran = '';
-    
+
     public function showDropdown()
     {
         $this->isDropdownVisible = true; // Menampilkan dropdown
@@ -58,12 +48,12 @@ class TambahSantri extends Component
     public function getFilteredSantrisProperty()
     {
         return Santri::where('nama', 'like', '%' . $this->searchSantri . '%')
-            ->with(['kelas', 'kamar'])
-            ->orderBy('nama')
-            ->take(10)
-            ->get();
+        ->with(['kelas', 'kamar'])
+        ->orderBy('nama')
+        ->take(10)
+        ->get();
     }
-    
+
     // Actions
     public function selectSantri($id, $nama)
     {
@@ -71,56 +61,65 @@ class TambahSantri extends Component
         $this->searchSantri = $nama;
         $this->selectedSantri = Santri::with(['kelas', 'kamar'])->find($id);
     }
-    
+
     public function createStore()
     {
         $this->validate();
-        
+
+        $existingPembayaran = Pembayaran::where('santri_id', $this->santri_id)->exists();
+
+        if ($existingPembayaran) {
+            session()->flash('error', 'Santri sudah ada di pembayaran');
+            $this->dispatch('close-modal');
+            return;
+        }
+
         try {
-            Pembayaran::create([
-                'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
-                'santri_id' => $this->santri_id,
-                'pembayaran_timeline_id' => $this->pembayaran_timeline_id,
-                'nominal' => $this->nominal,
-                'metode_pembayaran' => $this->metode_pembayaran,
-                'status' => 'belum bayar'
-            ]);
-            
-            // $this->reset();
-            
+            $timelines = PembayaranTimeline::all();
+            foreach ($timelines as $timeline) {
+                Pembayaran::create([
+                    'santri_id' => $this->santri_id,
+                    'pembayaran_timeline_id' => $timeline->id,
+                    'pembayaran_tipe_id' => 1, // Menggunakan ID tipe yang dipilih
+                    'nominal' => 0, // Pastikan nominal sudah diisi dengan benar
+                    'metode_pembayaran' => 1, // Pastikan metode pembayaran sudah diisi dengan benar
+                    'status' => 'belum bayar'
+                ]);
+            };
+
+            $this->resetForm(); // Reset form setelah sukses
             session()->flash('message', 'Pembayaran berhasil ditambahkan!');
             $this->dispatch('close-modal');
-            
         } catch (\Exception $e) {
-            dd($e,$this);
-            // session()->flash('error', $e . 'Terjadi kesalahan saat menyimpan pembayaran!');
+            session()->flash('error', 'Terjadi kesalahan saat menyimpan pembayaran: ' . $e->getMessage());
         }
     }
-    
-    public function delete($id)
+
+
+    public function delete($santriId)
     {
         try {
-            $pembayaran = Pembayaran::findOrFail($id);
-            $pembayaran->delete();
+            Pembayaran::where('santri_id', $santriId)->delete();
             session()->flash('message', 'Pembayaran berhasil dihapus!');
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan saat menghapus pembayaran!');
         }
     }
-    
+
     public function render()
     {
         return view('livewire.admin.spp.tambah-santri', [
-            'santris' => Santri::where('nama', 'like', '%' . $this->search . '%')
-                ->with(['kelas', 'kamar', 'pembayaran'])
-                ->orderBy('created_at', 'desc')
+            'santris' => Santri::with(['pembayaran', 'kelas', 'kamar'])
+                ->has('pembayaran')
+                ->where('nama', 'like', '%' . $this->search . '%')
+                ->orderBy('nama')
                 ->paginate(10),
             'timelineList' => PembayaranTimeline::all(),
             'tipeList' => TipePembayaran::all(),
             'filteredSantris' => $this->filteredSantris
         ]);
     }
-    
+
     public function resetForm()
     {
         $this->reset();
