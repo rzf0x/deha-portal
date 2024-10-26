@@ -50,7 +50,6 @@
                             <th>Nama Santri</th>
                             <th>Kelas</th>
                             <th>Kamar</th>
-                            <th>Status Spp</th>
                             <th>Action</th>
                         </tr>
                     </thead>
