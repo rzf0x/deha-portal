@@ -5,7 +5,7 @@
                 iconClass="bi bi-people-fill" textColor="orange" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Santri yang belum lunas bulan ini" value="{{ $belum_lunas }}" subValue="Santri"
+            <x-card.card-basic title="Santri yang belum bayar bulan ini" value="{{ $belum_bayar }}" subValue="Santri"
                 iconClass="bi bi-info-circle-fill" textColor="red" />
         </div>
         <div class="col-lg-3 col-12">
@@ -55,76 +55,81 @@
     </div>
 
     <!-- Chart -->
-    <div class="row">
-        <div class="col-lg-8 col-12" wire:ignore>
-            <canvas class="card p-4" id="pembayaranChart"></canvas>
+    <div class="row" wire:ignore>
+        <div class="col-lg-8">
+            <h4 class="mb-3">Overview Pembayaran</h4>
+            <div id="pembayaranChart" class="card rounded-4 p-4 h-100 w-100"></div>
         </div>
-        <div class="col-lg-4 col-12" wire:ignore>
-            <canvas class="card p-4" id="kelunasanSantriChart"></canvas>
+        <div class="col-lg-4">
+            <h4 class="mb-3">Overview Kelunasan</h4>
+            <div id="kelunasanSantriChart" class="card rounded-4 p-4 h-100 w-100"></div>
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <script>
+    // Data untuk grafik batang (Pembayaran Harian)
     const labels = @json($pembayaranHarian->pluck('tanggal'));
     const data = @json($pembayaranHarian->pluck('total'));
 
-    var ctx = document.getElementById('pembayaranChart').getContext('2d');
-    var pembayaranChart = new Chart(ctx, {
-        type: 'bar', // Bisa juga 'line', 'pie', dll.
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'statistik pembayaran di bulan ini',
-                data: data,
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)', // Warna untuk Belum Lunas
-                    'rgba(75, 192, 192, 0.2)', // Warna untuk Sudah Lunas
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(75, 192, 192, 1)',
-                ],
-                borderWidth: 1
-            }]
+    var pembayaranChartOptions = {
+        chart: {
+            type: 'bar',
+            height: 350
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
+        series: [{
+            name: 'Statistik Pembayaran di Bulan Ini',
+            data: data
+        }],
+        xaxis: {
+            categories: labels
+        },
+        plotOptions: {
+            bar: {
+                horizontal: false,
+                columnWidth: '50%',
+                endingShape: 'rounded'
+            },
+        },
+        fill: {
+            opacity: 1
+        },
+        colors: ['#FF6384', '#4BC0C0'],
+        dataLabels: {
+            enabled: false
+        },
+        yaxis: {
+            title: {
+                text: 'Jumlah Pembayaran'
             }
+        },
+        title: {
+            text: 'Statistik Pembayaran Bulanan',
+            align: 'left'
         }
-    });
+    };
 
-    var ctx = document.getElementById('kelunasanSantriChart').getContext('2d');
-    var kelunasanSantriChart = new Chart(ctx, {
-        type: 'pie', // Bisa juga 'line', 'pie', dll.
-        data: {
-            labels: ['Belum Lunas', 'Sudah Lunas', 'Cicilan'],
-            datasets: [{
-                label: 'Jumlah Santri',
-                data: [{{ $belum_lunas }}, {{ $lunas }}, {{ $cicilan }}],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)', // Warna untuk Belum Lunas
-                    'rgba(75, 192, 192, 0.2)', // Warna untuk Sudah Lunas
-                    'rgba(243, 245, 39, 0.2)' // Warna untuk Cicilan
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(243, 245, 39, 1)' // Warna untuk Cicilan
-                ],
-                borderWidth: 1
-            }]
+    var pembayaranChart = new ApexCharts(document.querySelector("#pembayaranChart"), pembayaranChartOptions);
+    pembayaranChart.render();
+
+    // Data untuk grafik pai (Kelunasan Santri)
+    var kelunasanSantriChartOptions = {
+        chart: {
+            type: 'pie',
+            height: 350
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            }
+        series: [{{ $belum_bayar }}, {{ $lunas }}, {{ $cicilan }}],
+        labels: ['Belum Bayar', 'Sudah Lunas', 'Cicilan'],
+        colors: ['#FF6384', '#4BC0C0', '#F3F527'],
+        title: {
+            text: 'Jumlah Santri Berdasarkan Kelunasan',
+            align: 'left'
         }
-    });
+    };
+
+    var kelunasanSantriChart = new ApexCharts(document.querySelector("#kelunasanSantriChart"),
+        kelunasanSantriChartOptions);
+    kelunasanSantriChart.render();
 </script>
