@@ -121,9 +121,11 @@
                             <div class="steppers santri row">
                                 {{-- Foto --}}
                                 {{-- Preview image --}}
-                                <div wire.ignore class="form-group col-lg-4">
-                                    <label for="foto">Foto</label>
-                                    <input type="file" class="form-control" wire:model="foto" id="foto" />
+                                <div class="form-group col-lg-4">
+                                    <label for="foto">Foto -
+                                        {{ $foto ? Str::limit(basename($foto), 28, '...') : '*optional' }}</label>
+                                    <input wire.ignore type="file" class="form-control" wire:model.live="foto"
+                                        id="foto" />
                                     @error('foto')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -793,9 +795,11 @@
                         @endif
                         <div class="modal-footer d-flex justify-content-between">
                             <div class="form-paginate d-flex">
-                                <button {{ $formPage == 1 ? 'disabled' : '' }} type="button" wire:click='prevForm'
+                                <button wire:loading.attr="disabled" wire:target="foto" wire:target="formCount"
+                                    {{ $formPage == 1 ? 'disabled' : '' }} type="button" wire:click='prevForm'
                                     class="prev-form btn">Sebelumnya</button>
-                                <button {{ $formPage == 3 ? 'disabled' : '' }} type="button" wire:click='nextForm'
+                                <button wire:loading.attr="disabled" wire:target="foto" wire:target="formCount"
+                                    {{ $formPage == 3 ? 'disabled' : '' }} type="button" wire:click='nextForm'
                                     class="next-form btn text-primary">Selanjutnya</button>
                             </div>
                             <div class="cta-buttons">

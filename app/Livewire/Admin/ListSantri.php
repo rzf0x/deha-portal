@@ -78,7 +78,7 @@ class ListSantri extends Component
     {
         $this->santriForm->validate();
         $this->waliSantriForm->validate();
-        
+
         $this->validate();
         if ($this->foto) {
             $originalFileName = time() . "-" . $this->foto->hashname();
@@ -86,7 +86,9 @@ class ListSantri extends Component
             $this->foto = $imgUrl;
         }
 
-        $santri = Santri::create($this->santriForm->all());
+        $data = $this->santriForm->all();
+        $data['foto'] = $this->foto;
+        $santri = Santri::create($data);
 
         $waliSantriData = $this->waliSantriForm->all();
         $waliSantriData['santri_id'] = $santri->id;
@@ -175,11 +177,12 @@ class ListSantri extends Component
     public function editStore()
     {
         $this->santriForm->validate();
-        
+
         $santri = Santri::findOrFail($this->santriEditId);
         $santriData = $this->santriForm->all();
-        
+
         if ($this->foto && is_object($this->foto)) {
+            $this->foto = $this->foto;
             if ($santri->foto && Storage::disk('public')->exists($santri->foto)) {
                 $this->validate();
                 Storage::disk('public')->delete($santri->foto);
@@ -192,7 +195,6 @@ class ListSantri extends Component
         }
 
         $santri->update($santriData);
-
         OrangTuaSantri::where('santri_id', $this->santriEditId)
             ->update($this->waliSantriForm->all());
 
@@ -239,27 +241,6 @@ class ListSantri extends Component
 
         return Santri::with(['kelas', 'kamar'])->paginate(10);
     }
-
-    // private function resetField()
-    // {
-    //     $this->nama = '';
-    //     $this->nisn = '';
-    //     $this->nism = '';
-    //     $this->kewarganegaraan = '';
-    //     $this->nik = '';
-    //     $this->tempat_lahir = '';
-    //     $this->tanggal_lahir = '';
-    //     $this->jenis_kelamin = '';
-    //     $this->jumlah_saudara_kandung = '';
-    //     $this->anak_ke = '';
-    //     $this->agama = '';
-    //     $this->hobi = '';
-    //     $this->aktivitas_pendidikan = '';
-    //     $this->npsn = '';
-    //     $this->no_kip = '';
-    //     $this->no_kk = '';
-    //     $this->nama_kepala_keluarga = '';
-    // }
 
     public function render()
     {
