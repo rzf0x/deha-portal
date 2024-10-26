@@ -35,7 +35,7 @@ return new class extends Migration
 
         Schema::create('pembayaran', function (Blueprint $table) {
             $table->id();
-            $table->enum('status', ['belum lunas', 'lunas', 'cicilan'])->default('belum lunas');
+            $table->enum('status', ['belum bayar', 'lunas', 'cicilan'])->default('belum bayar');
             $table->string('nominal')->nullable();
             $table->enum('metode_pembayaran', ['transfer', 'cash'])->default('cash');
 
