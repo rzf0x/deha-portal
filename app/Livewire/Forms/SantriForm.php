@@ -7,8 +7,6 @@ use Livewire\Form;
 
 class SantriForm extends Form
 {
-    #[Validate('nullable|image|mimes:jpeg,png,jpg,gif,webp|max:6144')]
-    public $foto;
     #[Validate('required')]
     public $nama;
     #[Validate('required')]

@@ -44,7 +44,7 @@
                                 <td>{{ $item->nama }}</td>
                                 <td style="width: 120px;">
                                     @if ($item->foto)
-                                        <img src="{{ Storage::url('images/santri/' . basename($item->foto)) }}"
+                                        <img src="{{ Storage::url('images/santri/' . basename($item?->foto)) }}"
                                             class="img-fluid mx-auto"
                                             style="width: 100px; height: 100px; object-fit: cover;" alt="">
                                     @else
@@ -120,11 +120,11 @@
                         @if ($formPage == 1)
                             <div class="steppers santri row">
                                 {{-- Foto --}}
-                                <div class="form-group col-lg-4">
+                                {{-- Preview image --}}
+                                <div wire.ignore class="form-group col-lg-4">
                                     <label for="foto">Foto</label>
-                                    <input type="file" class="form-control" wire:model="santriForm.foto"
-                                        id="foto" />
-                                    @error('santriForm.foto')
+                                    <input type="file" class="form-control" wire:model="foto" id="foto" />
+                                    @error('foto')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -804,10 +804,21 @@
                                     <span class="d-none d-sm-block">Tutup</span>
                                 </button>
                                 <button type="submit"
-                                    class="btn ms-1 {{ $santriEditId ? 'bg-warning' : 'bg-primary' }}">
-                                    <i class="bx bx-check d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block {{ $santriEditId ? 'text-dark' : 'text-white' }}">
-                                        {{ $santriEditId ? 'Ubah Data' : 'Buat Data Baru' }}
+                                    class="btn ms-1 {{ $santriEditId ? 'bg-warning' : 'bg-primary' }}"
+                                    wire:loading.attr="disabled" wire:target="foto">
+                                    <span wire:loading.remove wire:target="foto">
+                                        <i class="bx bx-check d-block d-sm-none"></i>
+                                        <span
+                                            class="d-none d-sm-block {{ $santriEditId ? 'text-dark' : 'text-white' }}">
+                                            {{ $santriEditId ? 'Ubah Data' : 'Buat Data Baru' }}
+                                        </span>
+                                    </span>
+                                    <span wire:loading wire:target="foto">
+                                        <i class="bx bx-loader bx-spin d-block d-sm-none"></i>
+                                        <span
+                                            class="d-none d-sm-block {{ $santriEditId ? 'text-dark' : 'text-white' }}">
+                                            Mengupload Foto...
+                                        </span>
                                     </span>
                                 </button>
                             </div>
@@ -838,7 +849,9 @@
             cancelButtonText: 'Batal'
         }).then((result) => {
             if (result.isConfirmed) {
-                Livewire.dispatch('delete', {santriId: id} );
+                Livewire.dispatch('delete', {
+                    santriId: id
+                });
                 Swal.fire(
                     'Terhapus!',
                     'Data berhasil dihapus.',

@@ -15,6 +15,8 @@
     <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/app.css') }}">
     {{-- <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/app-dark.css') }}"> --}}
     <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/iconly.css') }}">
+
+    @livewireStyles
 </head>
 
 <body>
@@ -39,15 +41,15 @@
 
             {{-- @include('components.layouts.partials.footer') --}}
 
-            <!-- Livewire Scripts -->
-            @livewireScripts
-
+            
             <!-- Include ApexCharts library -->
             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
+            
             <!-- Livewire Charts Scripts -->
             @livewireChartsScripts
-
+            
+            <!-- Livewire Scripts -->
+            @livewireScripts
         </div>
     </div>
 

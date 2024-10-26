@@ -11,10 +11,12 @@ use App\Models\Santri;
 use App\Models\Kamar;
 use App\Models\Kelas;
 use App\Models\OrangTuaSantri;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
@@ -24,12 +26,12 @@ class ListSantri extends Component
 {
     use WithPagination;
     use WithFileUploads;
+
     #[Title('Halaman List Santri')]
     protected $paginationTheme = 'bootstrap';
 
     public SantriForm $santriForm;
     public WaliSantriForm $waliSantriForm;
-
     public $npsn = '70005521';
 
     // data
@@ -37,6 +39,9 @@ class ListSantri extends Component
 
     #[Url(except: '', as: 'q-santri')]
     public $search;
+
+    #[Validate('nullable|image|mimes:jpeg,png,jpg|max:4084')]
+    public $foto;
 
     public function mount()
     {
@@ -73,17 +78,19 @@ class ListSantri extends Component
     {
         $this->santriForm->validate();
         $this->waliSantriForm->validate();
-
-        if ($this->santriForm->foto) {
-            $fileName = time() . '-' . $this->santriForm->foto->getClientOriginalName();
-            $imgUrl = $this->santriForm->foto->storeAs('images/santri', $fileName, 'public');
-            $this->santriForm->foto = $imgUrl;
+        
+        $this->validate();
+        if ($this->foto) {
+            $originalFileName = time() . "-" . $this->foto->hashname();
+            $imgUrl = $this->foto->storeAs('images/santri', $originalFileName, 'public');
+            $this->foto = $imgUrl;
         }
 
         $santri = Santri::create($this->santriForm->all());
 
         $waliSantriData = $this->waliSantriForm->all();
         $waliSantriData['santri_id'] = $santri->id;
+
         OrangTuaSantri::create($waliSantriData);
         return to_route('admin.master-santri.santri')->with(['message' => "Success created " . $this->santriForm->nama . " !"]);
     }
@@ -98,7 +105,7 @@ class ListSantri extends Component
         // Data Wali dan Data Alamat
         $waliData = OrangTuaSantri::where('santri_id', $santriId)->first();
 
-        $this->santriForm->foto = $santriData->foto;
+        $this->foto = $santriData->foto;
         $this->santriForm->nama = $santriData->nama;
         $this->santriForm->nisn = $santriData->nisn;
         $this->santriForm->nism = $santriData->nism;
@@ -167,28 +174,31 @@ class ListSantri extends Component
 
     public function editStore()
     {
+        $this->santriForm->validate();
+        
+        $santri = Santri::findOrFail($this->santriEditId);
         $santriData = $this->santriForm->all();
-    
-        // Handle foto secara terpisah
-        if ($this->santriForm->foto && $this->santriForm->foto instanceof \Illuminate\Http\UploadedFile) {
-            $fileName = time() . '-' . ($this->santriForm->foto)->getClientOriginalName();
-            // dd($fileName);
-            $imgUrl = $this->santriForm->foto->storeAs('images/santri', $fileName, 'public');
+        
+        if ($this->foto && is_object($this->foto)) {
+            if ($santri->foto && Storage::disk('public')->exists($santri->foto)) {
+                $this->validate();
+                Storage::disk('public')->delete($santri->foto);
+            }
+            $fileName = time() . '-' . $this->foto->hashname();
+            $imgUrl = $this->foto->storeAs('images/santri', $fileName, 'public');
             $santriData['foto'] = $imgUrl;
         } else {
-            $oldImg = Santri::where('id', $this->santriEditId)->value('foto');
-            $this->santriForm->foto = $oldImg;
+            $santriData['foto'] = $santri->foto;
         }
-    
-        // Update santri dengan data yang sudah diproses
-        Santri::where('id', $this->santriEditId)->update($santriData);
-        
-        // Update wali santri seperti biasa
-        OrangTuaSantri::where('santri_id', $this->santriEditId)->update($this->waliSantriForm->all());
 
-        return to_route('admin.master-santri.santri')->with(['message' => "Success updated " . Santri::where('id', $this->santriEditId)->value('nama') . " !"]);
+        $santri->update($santriData);
+
+        OrangTuaSantri::where('santri_id', $this->santriEditId)
+            ->update($this->waliSantriForm->all());
+
+        return to_route('admin.master-santri.santri')
+            ->with(['message' => "Success updated " . $santri->nama . " !"]);
     }
-
 
     #[On('delete')]
     public function delete($santriId)
