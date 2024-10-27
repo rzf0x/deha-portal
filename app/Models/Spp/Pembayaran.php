@@ -37,6 +37,6 @@ class Pembayaran extends Model
 
     public function cicilans()
     {
-        return $this->hasMany(PembayaranCicilan::class);
+        return $this->hasMany(Cicilan::class);
     }
 }
