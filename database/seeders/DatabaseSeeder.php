@@ -21,12 +21,14 @@ class DatabaseSeeder extends Seeder
             KamarTableSeeder::class,
             SantriSeeder::class,
             AngkatanSeeder::class,
+            SemesterSeeder::class,
             RoleSeeder::class,
             AdminSeeder::class,
             PembayaranDetailSeeder::class,
             PembayaranTimelineSeeder::class,
             PembayaranTipeSeeder::class,
             PembayaranSeeder::class,
+            OrangTuaSeeder::class
         ]);
     }
 }

@@ -16,31 +16,23 @@ class PembayaranSeeder extends Seeder
     public function run(): void
     {
         $data = [
-            'lunas', 'belum lunas', 'cicilan'
+            'lunas', 'belum bayar', 'cicilan'
         ];
 
-        // foreach (PembayaranTimeline::all() as $timeline) {
-        //     $timeline->pembayarans()->create([
-        //         'status' => $data[rand(0, 2)],
-        //         'nominal' => '12',
-        //         'metode_pembayaran' => 'cash',
-        //         'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
-        //         'santri_id' => 1, // Sesuaikan dengan ID santri yang ada
-        //         'pembayaran_timeline_id' => $timeline->id, // Sesuaikan dengan ID pembayaran_timeline yang ada
-        //     ]);
-        // }
 
         $testing = [
             [
                 'status' => $data[rand(0, 2)],
-                'nominal' => '12',
+                'nominal' => 12000,
                 'metode_pembayaran' => 'cash',
                 'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
                 'santri_id' => 1, // Sesuaikan dengan ID santri yang ada
-                'pembayaran_timeline_id' => 1,
+                'pembayaran_timeline_id' => 10,
             ],
         ];
 
-        Pembayaran::insert($testing);
+        foreach ($testing as $item) {
+            Pembayaran::create($item);
+        }
     }
 }

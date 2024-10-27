@@ -1,21 +1,23 @@
 <div>
-    <div class="form-group">
+    <!-- Search Form -->
+    <div class="form-group" style="position:sticky; top:1rem; z-index:99;">
         <form wire:submit.prevent="searchSantri" class="d-flex gap-3">
             <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri...">
             <button type="submit" class="btn btn-primary ml-4 w-25">Cari</button>
         </form>
     </div>
 
+    <!-- Error Message -->
     @if ($errorMessage)
         <div class="alert alert-danger">
             {{ $errorMessage }}
         </div>
     @endif
 
-
+    <!-- Search Results -->
     <div class="d-flex">
         @foreach ($searchResults as $santri)
-            <div wire:click="selectSantri({{ $santri->id }})" class="mx-2 card w-25">
+            <div wire:click="selectSantri({{ $santri->id }})" class="mx-2 card w-25" role="button">
                 <div class="card-body text-center">
                     <span class="d-block mb-3">
                         <img src="{{ $santri->foto }}" class="w-50" alt="">
@@ -29,14 +31,15 @@
         @endforeach
     </div>
 
-
+    <!-- Santri Biodata and Payment Timeline -->
     @if ($santriSelected && $santriSelected->id)
-        <div class="card">
-            <div class="row">
-                {{-- Biodata Santri --}}
-                <div class="col-md-4">
-                    <div class="card-title">
-                        <h3 class="mt-3 ml-4">Biodata Santri</h3>
+        <div class="row">
+            <div class="col-12">
+
+                <!-- Biodata Santri -->
+                <div class="card p-4">
+                    <div class="card-header">
+                        <h3 class="card-title">Biodata Santri</h3>
                     </div>
                     <div class="row card-body">
                         <div class="col-lg-6">
@@ -61,22 +64,20 @@
                         </div>
                     </div>
                 </div>
-                {{-- #Biodata Santri --}}
+                <!-- End of Biodata Santri -->
 
-                {{-- Pembayaran --}}
-                <div class="col-md-4">
+                <!-- Pembayaran Timeline -->
+                <div class="card p-4">
                     <div>
-                        <div class="card-title ">
+                        <div class="card-title">
                             <h3 class="mt-3">Timeline Pembayaran</h3>
                         </div>
                         @foreach ($pembayaran as $item)
                             <button wire:click="selectPembayaran({{ $item->id }})"
                                 class="mx-1 my-1 btn
-                                                @if ($item->status === 'lunas') btn-success
-                                                @elseif ($item->status === 'belum lunas')
-                                                    btn-danger
-                                                @else
-                                                    btn-warning @endif">
+                                @if ($item->status === 'lunas') btn-success
+                                @elseif ($item->status === 'belum bayar') btn-danger
+                                @else btn-warning @endif">
                                 {{ $item->pembayaranTimeline->nama_bulan }}
                             </button>
                         @endforeach
@@ -100,7 +101,7 @@
                         </div>
                     </div>
 
-                    {{-- Modal Pembayaran --}}
+                    <!-- Modal Pembayaran -->
                     @if ($isModalOpen)
                         <div class="card mt-3">
                             <div class="card-header d-flex justify-content-between align-content-center">
@@ -116,104 +117,61 @@
                                 <label for="status">Ubah status pembayaran :</label>
                                 <select wire:model="selectedStatus" class="form-control">
                                     <option value="lunas">lunas</option>
-                                    <option value="belum lunas">belum lunas</option>
+                                    <option value="belum bayar">belum bayar</option>
                                     <option value="cicilan">cicilan</option>
                                 </select>
                             </div>
                             <div class="d-flex justify-content-end mb-3 mr-3">
                                 <button wire:click="updatePembayaran" class="btn btn-primary">Update Data</button>
                             </div>
+
+                            @if ($showModalTipe === 'lunas')
+                                <div class="card-title">
+                                    <h3 class="mt-3">Pilih Metode Pembayaran:</h3>
+                                </div>
+                                @foreach ($detailPembayaran as $item)
+                                    <div class="form-check">
+                                        <input type="checkbox" class="form-check-input" id="method-{{ $item->id }}"
+                                            wire:model="selectedMethods" value="{{ $item->id }}">
+                                        <label class="form-check-label" for="method-{{ $item->id }}">
+                                            {{ $item->nama }} - {{ number_format($item->nominal, 0, ',', '.') }}
+                                        </label>
+                                    </div>
+                                @endforeach
+                                <hr>
+                                <div class="d-flex justify-content-between">
+                                    <p><strong>Total Pembayaran:</strong></p>
+                                    <p class="pr-4">{{ number_format($totalAmount, 0, ',', '.') }}</p>
+                                </div>
+                                <button class="btn btn-primary" wire:click="calculateTotalAmount">
+                                    Kalkulasi Nilai
+                                </button>
+                            @elseif ($showModalTipe === 'cicilan')
+                                <div class="card-title">
+                                    <h3 class="mt-3">Rincian Cicilan</h3>
+                                </div>
+                                <div class="card-body">
+                                    <form wire:submit.prevent="storeCicilan" method="post">
+                                        <div class="form-group">
+                                            <label>Keterangan</label>
+                                            <input type="text" class="form-control" wire:model="keteranganCicilan">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Jumlah</label>
+                                            <input type="number" class="form-control" wire:model="jumlahCicilan">
+                                        </div>
+                                        <div class="d-flex justify-content-end">
+                                            <button class="btn btn-primary">Simpan</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            @endif
                         </div>
                     @endif
+                    <!-- End of Modal Pembayaran -->
 
-                    {{-- #Modal Pembayaran --}}
                 </div>
-                {{-- #Pembayaran --}}
-
-                {{-- Detail Pembayaran --}}
-                @if ($showCicilanModal === false)
-                <div class="col-md-4">
-                    <div>
-                        <div class="card-title ">
-                            <h3 class="mt-3">Pilih Metode Pembayaran:</h3>
-                        </div>
-                        @foreach ($detailPembayaran as $item)
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="method-{{ $item->id }}"
-                                    wire:model="selectedMethods" value="{{ $item->id }}">
-                                <label class="form-check-label" for="method-{{ $item->id }}">
-                                    {{ $item->nama }} - {{ number_format($item->nominal, 0, ',', '.') }}
-                                </label>
-                            </div>
-                        @endforeach
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                        <p><strong>Total Pembayaran:</strong></p>
-                        <p class="pr-4">{{ number_format($totalAmount, 0, ',', '.') }}</p>
-                    </div>
-
-                    <button class="btn btn-primary" wire:click="calculateTotalAmount">
-                        Kalkulasi Nilai
-                    </button>
-                </div>
-                @elseif ($showCicilanModal === true)
-
-                <div class="col-md-4">
-                    <div class="card">
-                        <div class="card-title">
-                            <h3 class="mt-3">Rincian Cicilan</h3>
-                        </div>
-                        <div class="card-body">
-                            <form wire:submit.prevent="storeCicilan" method="post">
-                                <div class="form-group">
-                                    <label>Keterangan</label>
-                                    <input type="text" class="form-control" wire:model="keteranganCicilan">
-                                </div>
-                                <div class="form-group">
-                                    <label>Jumlah</label>
-                                    <input type="number" class="form-control" wire:model="jumlahCicilan">
-                                </div>
-                                <div class="d-flex justify-content-end">
-                                    <button class="btn btn-primary">Simpan</button>
-                                </div>
-                            </form>
-
-                            <hr>
-
-                            {{-- @foreach ($cicilan as $item)
-                                <div class="d-flex justify-content-between">
-                                    <p><strong>{{ $item->pembayaranTimeline->nama_bulan }}</strong></p>
-                                    <p class="pr-4">{{ Str::currency($item->nominal) }}</p>
-                                </div>
-                            @endforeach --}}
-
-                        </div>
-                    </div>
-                </div>
-
-                {{-- <div class="modal-footer"> --}}
-
-                {{-- </div> --}}
-                {{-- <div class="modal" style="display: block;">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Rincian Cicilan</h5>
-                                <button wire:click="$set('showCicilanModal', false)" class="btn-close" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <p>Masukkan rincian cicilan di sini (formulir, dll.)</p>
-                            </div>
-                            <div class="modal-footer">
-                                <button wire:click="$set('showCicilanModal', false)" class="btn btn-secondary">Tutup</button>
-                                <button class="btn btn-primary">Simpan Perubahan</button>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
-                @endif
-                {{-- #Detail Pembayaran --}}
+                <!-- End of Pembayaran Timeline -->
             </div>
         </div>
     @endif
