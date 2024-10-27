@@ -24,7 +24,6 @@ class Pembayaran extends Component
     public $selectedStatus;
     public $updatedPembayaran;
     public $detailPembayaran;
-    public $showModalTipe = ''; // lunas, belum bayar, cicilan
     public $keteranganCicilan;
     public $jumlahCicilan;
     public $cicilan;
@@ -69,8 +68,7 @@ class Pembayaran extends Component
     {
         $this->Clickpembayaran->status = $this->selectedStatus;
         $this->Clickpembayaran->save();
-        $this->dispatch('pembayaranUpdated');
-        $this->showModalTipe = $this->selectedStatus;
+        $this->pembayaran = SppPembayaran::where('santri_id', $this->santriSelected->id)->get();
     }
 
     public function closeModal()
