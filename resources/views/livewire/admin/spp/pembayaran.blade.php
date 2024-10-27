@@ -104,72 +104,91 @@
                     <!-- Modal Pembayaran -->
                     @if ($isModalOpen)
                         <div class="card mt-3">
-                            <div class="card-header d-flex justify-content-between align-content-center">
-                                <h6>Detail Pembayaran : bulan <span
-                                        class="text-primary">{{ $Clickpembayaran->pembayaranTimeline->nama_bulan }}</span>
-                                </h6>
-                                <div wire:click="closeModal">
-                                    <a data-dismiss="#mycard-dimiss" class="btn btn-icon btn-danger" href="#"><i
-                                            class="fas fa-times"></i></a>
-                                </div>
-                            </div>
-                            <div class="card-body form-group">
-                                <label for="status">Ubah status pembayaran :</label>
-                                <select wire:model="selectedStatus" class="form-control">
-                                    <option value="lunas">lunas</option>
-                                    <option value="belum bayar">belum bayar</option>
-                                    <option value="cicilan">cicilan</option>
-                                </select>
-                            </div>
-                            <div class="d-flex justify-content-end mb-3 mr-3">
-                                <button wire:click="updatePembayaran" class="btn btn-primary">Update Data</button>
-                            </div>
-
-                            @if ($showModalTipe === 'lunas')
-                                <div class="card-title">
-                                    <h3 class="mt-3">Pilih Metode Pembayaran:</h3>
-                                </div>
-                                @foreach ($detailPembayaran as $item)
-                                    <div class="form-check">
-                                        <input type="checkbox" class="form-check-input" id="method-{{ $item->id }}"
-                                            wire:model="selectedMethods" value="{{ $item->id }}">
-                                        <label class="form-check-label" for="method-{{ $item->id }}">
-                                            {{ $item->nama }} - {{ number_format($item->nominal, 0, ',', '.') }}
-                                        </label>
+                            <div class="row">
+                                <div
+                                    class="@if ($selectedStatus == 'cicilan') ) col-12 col-lg-6 @else col-12 @endif d-flex flex-column">
+                                    <div class="card-header d-flex justify-content-between align-items-center">
+                                        <h6>Detail Pembayaran: bulan <span
+                                                class="text-primary">{{ $Clickpembayaran->pembayaranTimeline->nama_bulan }}</span>
+                                        </h6>
+                                        <div wire:click="closeModal">
+                                            <a class="btn btn-icon btn-danger" href="#"><i
+                                                    class="fas fa-times"></i></a>
+                                        </div>
                                     </div>
-                                @endforeach
-                                <hr>
-                                <div class="d-flex justify-content-between">
-                                    <p><strong>Total Pembayaran:</strong></p>
-                                    <p class="pr-4">{{ number_format($totalAmount, 0, ',', '.') }}</p>
+                                    <div class="card-body form-group">
+                                        <label for="status">Ubah status pembayaran:</label>
+                                        <select wire:model="selectedStatus" class="form-control">
+                                            <option value="lunas">Lunas</option>
+                                            <option value="belum bayar">Belum Bayar</option>
+                                            <option value="cicilan">Cicilan</option>
+                                        </select>
+                                    </div>
+                                    <div class="d-flex justify-content-end mb-3 mr-3">
+                                        <button wire:click="updatePembayaran"class="btn btn-primary">Update
+                                            Data</button>
+                                    </div>
                                 </div>
-                                <button class="btn btn-primary" wire:click="calculateTotalAmount">
-                                    Kalkulasi Nilai
-                                </button>
-                            @elseif ($showModalTipe === 'cicilan')
-                                <div class="card-title">
-                                    <h3 class="mt-3">Rincian Cicilan</h3>
-                                </div>
-                                <div class="card-body">
-                                    <form wire:submit.prevent="storeCicilan" method="post">
-                                        <div class="form-group">
-                                            <label>Keterangan</label>
-                                            <input type="text" class="form-control" wire:model="keteranganCicilan">
+                                @if ($selectedStatus == 'cicilan')
+                                    <div class="col-12 col-lg-6 d-flex flex-column">
+                                        <div class="card-title">
+                                            <h5>Rincian Cicilan</h5>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Jumlah</label>
-                                            <input type="number" class="form-control" wire:model="jumlahCicilan">
+                                        <div class="card-body">
+                                            <form wire:submit.prevent="storeCicilan" method="post">
+                                                <div class="form-group">
+                                                    <label>Keterangan</label>
+                                                    <input type="text" class="form-control"
+                                                        wire:model="keteranganCicilan">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Jumlah</label>
+                                                    <input type="number" class="form-control"
+                                                        wire:model="jumlahCicilan">
+                                                </div>
+                                                <div class="d-flex justify-content-end">
+                                                    <button class="btn btn-primary"
+                                                        wire:click='$refresh'>Simpan</button>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <div class="d-flex justify-content-end">
-                                            <button class="btn btn-primary">Simpan</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            @endif
+                                    </div>
+                                @endif
+                            </div>
                         </div>
                     @endif
+
+
+
+
+
+
+
                     <!-- End of Modal Pembayaran -->
 
+                </div>
+
+                <div class="card p-4">
+                    <div class="card-title">
+                        <h3 class="mt-3">Pilih Metode Pembayaran:</h3>
+                    </div>
+                    @foreach ($detailPembayaran as $item)
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="method-{{ $item->id }}"
+                                wire:model="selectedMethods" value="{{ $item->id }}">
+                            <label class="form-check-label" for="method-{{ $item->id }}">
+                                {{ $item->nama }} - {{ number_format($item->nominal, 0, ',', '.') }}
+                            </label>
+                        </div>
+                    @endforeach
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <p><strong>Total Pembayaran:</strong></p>
+                        <p class="pr-4">{{ number_format($totalAmount, 0, ',', '.') }}</p>
+                    </div>
+                    <button class="btn btn-primary" wire:click="calculateTotalAmount">
+                        Kalkulasi Nilai
+                    </button>
                 </div>
                 <!-- End of Pembayaran Timeline -->
             </div>
