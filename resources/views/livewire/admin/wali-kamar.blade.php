@@ -114,8 +114,8 @@
                                     <label for="role" class="form-label">Tipe Wali Kamar</label>
                                     <select wire:model='role' id="role" class="form-select">
                                         <option value="">Pilih Tipe</option>
-                                        <option value="ikhwan">Ikhwan</option>
-                                        <option value="akhwat">Akhwat</option>
+                                        <option value="putera">Putera</option>
+                                        <option value="puteri">Puteri</option>
                                     </select>
                                     @error('role')
                                         <span class="error">{{ $message }}</span>
