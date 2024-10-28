@@ -1,6 +1,6 @@
 <div>
     <!-- Search Form -->
-    <div class="form-group sticky-top bg-white p-3 shadow-sm" style="top: 1rem; z-index: 99;">
+    <div class="form-group sticky-top bg-white p-3 shadow-sm cursor-pointer" style="top: 1rem; z-index: 99;">
         <form wire:submit.prevent="searchSantri" class="d-flex gap-3">
             <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri..." required>
             <button type="submit" class="btn btn-primary w-25">Cari</button>
@@ -15,7 +15,7 @@
     <!-- Search Results -->
     <div class="d-flex flex-wrap mt-3">
         @foreach ($searchResults as $santri)
-            <div wire:click="selectSantri({{ $santri->id }})" class="mx-2 card w-25 cursor-pointer">
+            <div wire:click="selectSantri({{ $santri->id }})" class="mx-2 card w-25" style="cursor: pointer;">
                 <img src="{{ $santri->foto }}" class="card-img-top" alt="">
                 <div class="card-body text-center">
                     <h5 class="card-title">{{ $santri->nama }}</h5>
@@ -137,24 +137,24 @@
 
                     <!-- End of Modal Pembayaran -->
 
-                    <!-- Pilih Metode Pembayaran -->
-                    <div class="card p-4">
-                        <div class="card-title">
-                            <h3 class="mt-3">Pilih Metode Pembayaran:</h3>
-                        </div>
-                        @foreach ($detailPembayaran as $item)
-                            <div class="form-check">
-                                <input type="checkbox" class="form-check-input" id="method-{{ $item->id }}" wire:model="selectedMethods" value="{{ $item->id }}">
-                                <label class="form-check-label" for="method-{{ $item->id }}">{{ $item->nama }} - {{ number_format($item->nominal, 0, ',', '.') }}</label>
-                            </div>
-                        @endforeach
-                        <hr>
-                        <div class="d-flex justify-content-between">
-                            <p><strong>Total Pembayaran:</strong></p>
-                            <p class="pr-4">{{ number_format($totalAmount, 0, ',', '.') }}</p>
-                        </div>
-                        <button class="btn btn-primary" wire:click="calculateTotalAmount">Kalkulasi Nilai</button>
+                </div>
+                <!-- Pilih Metode Pembayaran -->
+                <div class="card p-4">
+                    <div class="card-title">
+                        <h3 class="mt-3">Pilih Metode Pembayaran:</h3>
                     </div>
+                    @foreach ($detailPembayaran as $item)
+                        <div class="form-check">
+                            <input type="checkbox" class="form-check-input" id="method-{{ $item->id }}" wire:model="selectedMethods" value="{{ $item->id }}">
+                            <label class="form-check-label" for="method-{{ $item->id }}">{{ $item->nama }} - {{ number_format($item->nominal, 0, ',', '.') }}</label>
+                        </div>
+                    @endforeach
+                    <hr>
+                    <div class="d-flex justify-content-between">
+                        <p><strong>Total Pembayaran:</strong></p>
+                        <p class="pr-4">{{ number_format($totalAmount, 0, ',', '.') }}</p>
+                    </div>
+                    <button class="btn btn-primary" wire:click="calculateTotalAmount">Kalkulasi Nilai</button>
                 </div>
             </div>
         </div>

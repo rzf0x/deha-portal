@@ -36,7 +36,7 @@
                             <div class="card bg-primary text-white">
                                 <div class="card-body">
                                     <h6 class="card-title">Total Pembayaran</h6>
-                                    <h3>{{ number_format($total_pembayaran) }}</h3>
+                                    <h3 class="text-white">{{ number_format($total_pembayaran) }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                             <div class="card bg-success text-white">
                                 <div class="card-body">
                                     <h6 class="card-title">Total Nominal</h6>
-                                    <h3>Rp {{ number_format($total_nominal) }}</h3>
+                                    <h3 class="text-white">Rp {{ number_format($total_nominal) }}</h3>
                                 </div>
                             </div>
                         </div>

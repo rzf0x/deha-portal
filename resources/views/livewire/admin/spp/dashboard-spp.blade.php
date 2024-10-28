@@ -29,7 +29,7 @@
                 subValue="Rp" iconClass="bi bi-cash-stack" textColor="green" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Total Nominal Pembayaran Tertunda" value="- {{ $totalNominalTertunda }}"
+            <x-card.card-basic title="Total Nominal Pembayaran Tertunda" value=" {{ $totalNominalTertunda }}"
                 subValue="Rp" iconClass="bi bi-clock-history" textColor="red" />
         </div>
         <div class="col-lg-3 col-12">
