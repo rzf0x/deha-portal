@@ -10,7 +10,7 @@ body {
     background-color: #435ebe;
 }
 #auth #auth-left {
-    height: 100vh;
+    min-height: 100vh;
     padding: 5rem;
     background-color: #eeeeee;
 }
