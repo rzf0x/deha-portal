@@ -63,7 +63,7 @@ class DashboardSpp extends Component
         $totalNominalPembayaran = DetailItemPembayaran::sum('nominal') * $this->totalSantri;
 
         $this->totalNominalDiterima = $this->formatRupiah($totalNominalTerbayar);
-        $this->totalNominalTertunda = $this->formatRupiah($totalNominalPembayaran - $totalNominalTerbayar);
+        $this->totalNominalTertunda = $this->formatRupiah($totalNominalTerbayar - $totalNominalPembayaran);
         $this->totalNominal = $this->formatRupiah($totalNominalPembayaran);
 
         if ($this->totalNominalDiterima > 0) {

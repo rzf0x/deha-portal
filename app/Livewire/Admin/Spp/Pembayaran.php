@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Livewire\Admin\Spp;
 
 use App\Models\Admin\Spp\PembayaranCicilan;
@@ -34,7 +35,7 @@ class Pembayaran extends Component
             return;
         }
 
-        $this-> searchResults = Santri::where('nama', 'like', '%' . $this->search . '%')->get();
+        $this->searchResults = Santri::where('nama', 'like', '%' . $this->search . '%')->get();
 
         if ($this->searchResults->isEmpty()) {
             $this->errorMessage = 'Santri tidak ditemukan';
@@ -47,7 +48,7 @@ class Pembayaran extends Component
     public function selectSantri($santriId)
     {
         $this->santriSelected = Santri::with('kelas.jenjang', 'kamar')->find($santriId);
-        $this->pembayaran = SppPembayaran::where('santri_id', $santriId)->get();
+        $this->pembayaran = SppPembayaran::with('pembayaranTimeline')->where('santri_id', $santriId)->get();
         $this->detailPembayaran();
         $this->searchResults = [];
         $this->search = '';
@@ -55,14 +56,7 @@ class Pembayaran extends Component
 
     public function selectPembayaran($pembayaranId)
     {
-        $this->Clickpembayaran = SppPembayaran::with('cicilans')->where('id', $pembayaranId)->first();
-        $cicilan = PembayaranCicilan::where('pembayaran_id', $pembayaranId)->first();
-        if ($cicilan) {
-            $this->jumlahCicilan = $cicilan->nominal;
-            $this->keteranganCicilan = $cicilan->keterangan;
-        } else {
-            $this->reset(['jumlahCicilan', 'keteranganCicilan']);
-        }
+        $this->Clickpembayaran = SppPembayaran::with('pembayaranTimeline', 'cicilans')->where('id', $pembayaranId)->first();
         $this->isModalOpen = true;
         $this->selectedStatus = $this->Clickpembayaran->status;
     }
@@ -71,7 +65,7 @@ class Pembayaran extends Component
     {
         $this->Clickpembayaran->status = $this->selectedStatus;
         $this->Clickpembayaran->save();
-        $this->pembayaran = SppPembayaran::where('santri_id', $this->santriSelected->id)->get();
+        $this->pembayaran = SppPembayaran::with('pembayaranTimeline')->where('santri_id', $this->santriSelected->id)->get();
     }
 
     public function closeModal()
@@ -100,11 +94,15 @@ class Pembayaran extends Component
         ]);
 
         try {
-            PembayaranCicilan::updateOrCreate(['pembayaran_id' => $this->Clickpembayaran->id],[
+
+            PembayaranCicilan::create([
                 'pembayaran_id' => $this->Clickpembayaran->id,
                 'keterangan' => $this->keteranganCicilan,
                 'nominal' => $this->jumlahCicilan
             ]);
+
+            $this->Clickpembayaran->nominal += $this->jumlahCicilan;
+            $this->Clickpembayaran->save();
 
             // Reset form
             $this->reset(['jumlahCicilan', 'keteranganCicilan']);
