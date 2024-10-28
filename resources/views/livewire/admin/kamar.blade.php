@@ -97,8 +97,8 @@
                                     <label for="kamar_tipe" class="form-label">Tipe Kamar</label>
                                     <select wire:model='kamar_tipe' id="kamar_tipe" class="form-select">
                                         <option value="">-- Pilih Tipe --</option>
-                                        <option value="ikhwan">Ikhwan</option>
-                                        <option value="akhwat">Akhwat</option>
+                                        <option value="putera">Putera</option>
+                                        <option value="puteri">Puteri</option>
                                     </select>
                                     @error('kamar_tipe')
                                         <span class="error">{{ $message }}</span>
