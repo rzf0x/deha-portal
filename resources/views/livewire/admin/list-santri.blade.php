@@ -7,6 +7,16 @@
         </div>
     @endif
 
+    <div class="d-flex justify-content-end">
+        <div class="form-group">
+            <button wire:click="create()" type="button" class="btn btn-primary block" data-bs-toggle="modal"
+                data-bs-target="#default">
+                <i class="bi bi-plus-circle"></i>
+                <span class="ms-1">Data Baru</span>
+            </button>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-between mb-4">
@@ -47,13 +57,6 @@
                             <option value="puteri">Perempuan</option>
                         </select>
                     </div>
-                </div>
-                <div class="form-group">
-                    <button wire:click="create()" type="button" class="btn btn-primary block" data-bs-toggle="modal"
-                        data-bs-target="#default">
-                        <i class="bi bi-plus-circle"></i>
-                        <span class="ms-1">Data Baru</span>
-                    </button>
                 </div>
             </div>
             <div class="table-responsive">
