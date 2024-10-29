@@ -1,14 +1,12 @@
 <div class="card">
     <div class="card-body">
-        <div class="filter-option d-flex mb-4">
-            <div class="filter-option d-flex gap-3">
+        <div class="d-flex justify-content-between mb-4">
+            <div class="filter-option align-items-center d-flex gap-3">
                 <div class="form-group search rounded-3">
-                    <label for="search">Cari santri</label>
                     <input id="search" class="bg-transparent border form-control" style="border: none; outline: none;"
-                        type="text" wire:model.live='search' placeholder="Muhammad Rajo">
+                        type="text" wire:model.live='search' placeholder="Car nama santri...">
                 </div>
                 <div class="form-group">
-                    <label for="kelas">Filter Kelas</label>
                     <select id="kelas" class="form-select" wire:model.live="kelasFilter">
                         <option value="">Kelas</option>
                         @foreach ($kelas as $kelasFilter)
@@ -17,7 +15,6 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="jenjang">Filter Jenjang</label>
                     <select id="jenjang" class="form-select" wire:model.live="jenjangFilter">
                         <option value="">Jenjang</option>
                         @foreach ($jenjang as $jenjangFilter)
@@ -26,7 +23,6 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="kamar">Filter Kamar</label>
                     <select id="kamar" class="form-select" wire:model.live="kamarFilter">
                         <option value="">Kamar</option>
                         @foreach ($kamar as $kamarFilter)
@@ -35,7 +31,6 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="jenis_kelamin">Filter Jenis Kelamin</label>
                     <select id="jenis_kelamin" class="form-select" wire:model.live="jenisKelaminFilter">
                         <option value="">Jenis Kelamin</option>
                         <option value="putera">Laki-laki</option>
