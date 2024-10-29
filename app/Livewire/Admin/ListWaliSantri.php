@@ -23,6 +23,9 @@ class ListWaliSantri extends Component
 
     #[Title('Halaman List Wali Santri')]
 
+    #[Url(except: "")]
+    public $perPage = 5;
+
     #[Url(except: '', as: 'q-wali')]
     public $search;
 
@@ -85,10 +88,10 @@ class ListWaliSantri extends Component
                         $query->where('jenis_kelamin', $this->jenisKelaminFilter);
                     });
                 })
-                ->paginate(10);
+                ->paginate($this->perPage);
         }
 
-        return OrangTuaSantri::with('santri')->paginate(10);
+        return OrangTuaSantri::with('santri')->paginate($this->perPage);
     }
 
     public function render()
