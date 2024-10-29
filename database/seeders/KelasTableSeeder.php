@@ -22,12 +22,12 @@ class KelasTableSeeder extends Seeder
             [
                 'nama' => 'Kelas X B',
                 'wali_kelas' => 1,
-                'jenjang_id' => 1,
+                'jenjang_id' => 2,
             ],
             [
                 'nama' => 'Kelas XI A',
                 'wali_kelas' => 1,
-                'jenjang_id' => 1,
+                'jenjang_id' => 3,
             ],
             [
                 'nama' => 'Kelas XI B',
@@ -37,12 +37,12 @@ class KelasTableSeeder extends Seeder
             [
                 'nama' => 'Kelas XII A',
                 'wali_kelas' => 1,
-                'jenjang_id' => 1,
+                'jenjang_id' => 4,
             ],
             [
                 'nama' => 'Kelas XII B',
                 'wali_kelas' => 1,
-                'jenjang_id' => 1,
+                'jenjang_id' => 5,
             ],
         ];
 
