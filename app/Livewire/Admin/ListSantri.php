@@ -35,6 +35,10 @@ class ListSantri extends Component
     public WaliSantriForm $waliSantriForm;
     public $npsn = '70005521';
 
+    #[Url(except: "")]
+    public $perPage = 5;
+
+
     // data
     public $kelas, $kamar, $semester, $angkatan, $santri_id, $jenjang, $santriEditId, $formPage = 1;
     public $kelasFilter, $jenjangFilter, $kamarFilter, $jenisKelaminFilter;
@@ -44,6 +48,11 @@ class ListSantri extends Component
 
     #[Validate('nullable|image|mimes:jpeg,png,jpg|max:4084')]
     public $foto;
+
+    public function updatedPerPage()
+    {
+        $this->resetPage(); 
+    }
 
     public function mount()
     {
@@ -256,10 +265,10 @@ class ListSantri extends Component
                 ->when($this->jenisKelaminFilter, function ($query) {
                     $query->where('jenis_kelamin', 'LIKE', "%{$this->jenisKelaminFilter}%");
                 })
-                ->paginate(10);
+                ->paginate($this->perPage);
         }
 
-        return Santri::with(['kelas', 'kamar'])->paginate(10);
+        return Santri::with(['kelas', 'kamar'])->paginate($this->perPage);
     }
 
     public function render()
