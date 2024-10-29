@@ -196,10 +196,12 @@
                                 value="{{ $wali->kelurahan }}" readonly="true" />
                             <x-more-components.form-input-basic label="RT/RW" name="rt_rw"
                                 value="{{ $wali->rt }}/{{ $wali->rw }}" readonly="true" />
-                            <x-more-components.form-input-basic label="Alamat Lengkap" name="alamat"
-                                value="{{ $wali->alamat }}" readonly="true" />
                             <x-more-components.form-input-basic label="Status Pernikahan" name="status_orang_tua"
                                 value="{{ ucfirst($wali->status_orang_tua) }}" readonly="true" />
+                        </div>
+                        <div class="col-lg-12 mb-2">
+                            <x-more-components.form-input-basic label="Alamat Lengkap" name="alamat"
+                                value="{{ $wali->alamat }}" readonly="true" />
                         </div>
                     @endif
                 </div>

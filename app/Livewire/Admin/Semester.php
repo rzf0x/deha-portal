@@ -10,6 +10,7 @@ use Livewire\WithPagination;
 class Semester extends Component
 {
     use WithPagination;
+    protected $paginationTheme = 'bootstrap';
 
     public $semester_id, $nama;
 
