@@ -1,10 +1,47 @@
 <div class="card">
     <div class="card-body">
         <div class="filter-option d-flex mb-4">
-            <div class="form search px-3 border border-2 py-2 rounded-3">
-                <input class="bg-transparent" style="border: none; outline: none;" type="text" wire:model.live='search'
-                    placeholder="Cari wali...">
-                <a href="#" class="search_icon"><i class="fa fa-search" aria-hidden="true"></i></a>
+            <div class="filter-option d-flex gap-3">
+                <div class="form-group search rounded-3">
+                    <label for="search">Cari santri</label>
+                    <input id="search" class="bg-transparent border form-control" style="border: none; outline: none;"
+                        type="text" wire:model.live='search' placeholder="Muhammad Rajo">
+                </div>
+                <div class="form-group">
+                    <label for="kelas">Filter Kelas</label>
+                    <select id="kelas" class="form-select" wire:model.live="kelasFilter">
+                        <option value="">Kelas</option>
+                        @foreach ($kelas as $kelasFilter)
+                            <option value="{{ $kelasFilter->nama }}">{{ $kelasFilter->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="jenjang">Filter Jenjang</label>
+                    <select id="jenjang" class="form-select" wire:model.live="jenjangFilter">
+                        <option value="">Jenjang</option>
+                        @foreach ($jenjang as $jenjangFilter)
+                            <option value="{{ $jenjangFilter->nama }}">{{ $jenjangFilter->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="kamar">Filter Kamar</label>
+                    <select id="kamar" class="form-select" wire:model.live="kamarFilter">
+                        <option value="">Kamar</option>
+                        @foreach ($kamar as $kamarFilter)
+                            <option value="{{ $kamarFilter->nama }}">{{ $kamarFilter->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="jenis_kelamin">Filter Jenis Kelamin</label>
+                    <select id="jenis_kelamin" class="form-select" wire:model.live="jenisKelaminFilter">
+                        <option value="">Jenis Kelamin</option>
+                        <option value="putera">Laki-laki</option>
+                        <option value="puteri">Perempuan</option>
+                    </select>
+                </div>
             </div>
         </div>
         <div class="table-responsive">
@@ -51,7 +88,7 @@
                             </td>
                             <td>
                                 <div class="d-flex gap-2">
-                                    {{-- parse santri_id of wali santri on edit url params --}}
+                                    {{-- parsing santri_id of wali santri on edit url params --}}
                                     <a href="{{ route('admin.master-santri.santri') }}?wali={{ $item->santri_id }}"
                                         class="btn btn-sm btn-warning" wire:navigate>
                                         <i class="bi bi-pencil-square"></i>

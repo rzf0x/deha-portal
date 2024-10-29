@@ -12,11 +12,9 @@ use App\Models\WaliKelas;
 use Livewire\Component;
 use Livewire\attributes\Title;
 use Detection\MobileDetect;
-use Livewire\WithPagination;
 
 class Dashboard extends Component
 {
-    // Integer
     public $waliKamar, $totalSemester, $kelasSantriTotalPutra, $kelasSantriTotalPutri, $santri, $totalJenjang, $totalKelas, $totalKamar, $waliKelas, $totalSantri, $kelas;
 
     // Bool

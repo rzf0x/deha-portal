@@ -7,6 +7,7 @@ use App\Livewire\Forms\SantriForm;
 use App\Livewire\Forms\WaliSantriForm;
 use App\Models\admin\Semester;
 use App\Models\admin\Angkatan;
+use App\Models\Jenjang;
 use App\Models\Santri;
 use App\Models\Kamar;
 use App\Models\Kelas;
@@ -35,7 +36,8 @@ class ListSantri extends Component
     public $npsn = '70005521';
 
     // data
-    public $kelas, $kamar, $semester, $angkatan, $santri_id, $santriEditId, $formPage = 1;
+    public $kelas, $kamar, $semester, $angkatan, $santri_id, $jenjang, $santriEditId, $formPage = 1;
+    public $kelasFilter, $jenjangFilter, $kamarFilter, $jenisKelaminFilter;
 
     #[Url(except: '', as: 'q-santri')]
     public $search;
@@ -57,6 +59,7 @@ class ListSantri extends Component
         $this->kamar = Kamar::with('waliKamar')->get();
         $this->semester = Semester::all();
         $this->angkatan = Angkatan::all();
+        $this->jenjang = Jenjang::all();
     }
 
     public function prevForm()
@@ -182,9 +185,8 @@ class ListSantri extends Component
         $santriData = $this->santriForm->all();
 
         if ($this->foto && is_object($this->foto)) {
-            $this->foto = $this->foto;
+            $this->validate();
             if ($santri->foto && Storage::disk('public')->exists($santri->foto)) {
-                $this->validate();
                 Storage::disk('public')->delete($santri->foto);
             }
             $fileName = time() . '-' . $this->foto->hashname();
@@ -216,25 +218,44 @@ class ListSantri extends Component
     #[Computed]
     public function getData()
     {
-        if ($this->search) {
+        if ($this->search || $this->kelasFilter || $this->jenjangFilter || $this->kamarFilter || $this->jenisKelaminFilter) {
             return Santri::with(['kelas', 'kamar'])
                 ->where(function ($query) {
-                    $query->whereRaw('nama LIKE ? OR CASE 
-                        WHEN jenis_kelamin = "putera" THEN "laki-laki"
-                        WHEN jenis_kelamin = "puteri" THEN "perempuan"
-                        END LIKE ?', [
-                        "%{$this->search}%",
-                        "%{$this->search}%"
-                    ]);
+                    $query->where(function ($query) {
+                        $query->whereRaw('nama LIKE ?', ["%{$this->search}%"])
+                            ->orWhereRaw('CASE 
+                                WHEN jenis_kelamin = "putera" THEN "laki-laki"
+                                WHEN jenis_kelamin = "puteri" THEN "perempuan"
+                                END LIKE ?', ["%{$this->search}%"])
+                            ->orWhere('jenis_kelamin', 'LIKE', "%{$this->search}%");
+                    })
+                        ->orWhereHas('kelas', function ($query) {
+                            $query->where('nama', 'LIKE', "%{$this->search}%");
+                        })
+                        ->orWhereHas('kelas.jenjang', function ($query) {
+                            $query->where('nama', 'LIKE', "%{$this->search}%");
+                        })
+                        ->orWhereHas('kamar', function ($query) {
+                            $query->where('nama', 'LIKE', "%{$this->search}%");
+                        });
                 })
-                ->orWhereHas('kelas', function ($query) {
-                    $query->where('nama', 'LIKE', "%{$this->search}%");
+                ->when($this->kelasFilter, function ($query) {
+                    $query->whereHas('kelas', function ($query) {
+                        $query->where('nama', 'LIKE', "%{$this->kelasFilter}%");
+                    });
                 })
-                ->orWhereHas('kelas.jenjang', function ($query) {
-                    $query->where('nama', 'LIKE', "%{$this->search}%");
+                ->when($this->jenjangFilter, function ($query) {
+                    $query->whereHas('kelas.jenjang', function ($query) {
+                        $query->where('nama', 'LIKE', "%{$this->jenjangFilter}%");
+                    });
                 })
-                ->orWhereHas('kamar', function ($query) {
-                    $query->where('nama', 'LIKE', "%{$this->search}%");
+                ->when($this->kamarFilter, function ($query) {
+                    $query->whereHas('kamar', function ($query) {
+                        $query->where('nama', 'LIKE', "%{$this->kamarFilter}%");
+                    });
+                })
+                ->when($this->jenisKelaminFilter, function ($query) {
+                    $query->where('jenis_kelamin', 'LIKE', "%{$this->jenisKelaminFilter}%");
                 })
                 ->paginate(10);
         }
