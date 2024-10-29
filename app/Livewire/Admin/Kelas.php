@@ -7,6 +7,7 @@ use App\Models\Kelas as ModelsKelas;
 use App\Models\WaliKelas;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 

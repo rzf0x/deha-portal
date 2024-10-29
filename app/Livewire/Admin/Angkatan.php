@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\admin\Angkatan as AdminAngkatan;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -12,6 +13,14 @@ class Angkatan extends Component
     use WithPagination;
 
     public $angkatan_id, $nama;
+
+    #[Url(except: "")]
+    public $perPage = 5;
+
+    public function updatedPerPage()
+    {
+        $this->resetPage(); 
+    }
 
     #[Title('Halaman Angkatan')]
 
@@ -51,7 +60,7 @@ class Angkatan extends Component
     public function render()
     {
         return view('livewire.admin.angkatan', [
-            'listAngkatan' => AdminAngkatan::paginate(5),
+            'listAngkatan' => AdminAngkatan::paginate($this->perPage),
         ]);
     }
 
