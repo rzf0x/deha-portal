@@ -221,14 +221,13 @@ class ListSantri extends Component
         if ($this->search || $this->kelasFilter || $this->jenjangFilter || $this->kamarFilter || $this->jenisKelaminFilter) {
             return Santri::with(['kelas', 'kamar'])
                 ->where(function ($query) {
-                    $query->where(function ($query) {
-                        $query->whereRaw('nama LIKE ?', ["%{$this->search}%"])
-                            ->orWhereRaw('CASE 
+                    $query->whereRaw('nama LIKE ?', ["%{$this->search}%"])
+                        ->orWhereRaw('CASE 
                                 WHEN jenis_kelamin = "putera" THEN "laki-laki"
                                 WHEN jenis_kelamin = "puteri" THEN "perempuan"
                                 END LIKE ?', ["%{$this->search}%"])
-                            ->orWhere('jenis_kelamin', 'LIKE', "%{$this->search}%");
-                    })
+                        ->orWhere('jenis_kelamin', 'LIKE', "%{$this->search}%")
+
                         ->orWhereHas('kelas', function ($query) {
                             $query->where('nama', 'LIKE', "%{$this->search}%");
                         })

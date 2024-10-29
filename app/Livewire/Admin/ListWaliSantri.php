@@ -44,28 +44,26 @@ class ListWaliSantri extends Component
         if ($this->search || $this->kelasFilter || $this->jenjangFilter || $this->kamarFilter || $this->jenisKelaminFilter) {
             return OrangTuaSantri::with('santri')
                 ->where(function ($query) {
-                    $query->where(function ($query) {
-                        $query->whereRaw('nama_ayah LIKE ? OR nama_ibu LIKE ?', [
-                            "%{$this->search}%",
-                            "%{$this->search}%",
-                        ])
-                            ->orWhereHas('santri', function ($query) {
-                                $query->whereRaw('nama LIKE ? OR CASE 
-                            WHEN jenis_kelamin = "putera" THEN "laki-laki"
-                            WHEN jenis_kelamin = "puteri" THEN "perempuan"
-                            END LIKE ?', ["%{$this->search}%", "%{$this->search}%"])
-                                    ->orWhere('jenis_kelamin', 'LIKE', "%{$this->search}%");
-                            })
-                            ->orWhereHas('santri.kelas', function ($query) {
-                                $query->where('nama', 'LIKE', "%{$this->search}%");
-                            })
-                            ->orWhereHas('santri.kelas.jenjang', function ($query) {
-                                $query->where('nama', 'LIKE', "%{$this->search}%");
-                            })
-                            ->orWhereHas('santri.kamar', function ($query) {
-                                $query->where('nama', 'LIKE', "%{$this->search}%");
-                            });
-                    });
+                    $query->whereRaw('nama_ayah LIKE ? OR nama_ibu LIKE ?', [
+                        "%{$this->search}%",
+                        "%{$this->search}%",
+                    ])
+                        ->orWhereHas('santri', function ($query) {
+                            $query->whereRaw('nama LIKE ? OR CASE 
+                        WHEN jenis_kelamin = "putera" THEN "laki-laki"
+                        WHEN jenis_kelamin = "puteri" THEN "perempuan"
+                        END LIKE ?', ["%{$this->search}%", "%{$this->search}%"])
+                                ->orWhere('jenis_kelamin', 'LIKE', "%{$this->search}%");
+                        })
+                        ->orWhereHas('santri.kelas', function ($query) {
+                            $query->where('nama', 'LIKE', "%{$this->search}%");
+                        })
+                        ->orWhereHas('santri.kelas.jenjang', function ($query) {
+                            $query->where('nama', 'LIKE', "%{$this->search}%");
+                        })
+                        ->orWhereHas('santri.kamar', function ($query) {
+                            $query->where('nama', 'LIKE', "%{$this->search}%");
+                        });
                 })
                 ->when($this->kelasFilter, function ($query) {
                     $query->whereHas('santri.kelas', function ($query) {
