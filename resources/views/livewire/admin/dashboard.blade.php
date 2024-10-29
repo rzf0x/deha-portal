@@ -61,12 +61,12 @@
                                         <td>
                                             @if ($santri->foto)
                                                 <img src="{{ Storage::url('images/santri/' . basename($santri->foto)) }}"
-                                                    class="img-fluid mx-auto"
+                                                    class=""
                                                     style="width: 4rem; height: 4rem; border-radius: 50%; object-fit: cover; background-size: cover;"
                                                     alt="">
                                             @else
                                                 <img src="{{ asset('dist/assets/compiled/jpg/1.jpg') }}"
-                                                    class="img-fluid mx-auto"
+                                                    class=""
                                                     style="width: 4rem; height: 4rem; border-radius: 50%; object-fit: cover;"
                                                     alt="">
                                             @endif
