@@ -185,8 +185,8 @@ class ListSantri extends Component
         $santriData = $this->santriForm->all();
 
         if ($this->foto && is_object($this->foto)) {
-            $this->validate();
             if ($santri->foto && Storage::disk('public')->exists($santri->foto)) {
+                $this->validate();
                 Storage::disk('public')->delete($santri->foto);
             }
             $fileName = time() . '-' . $this->foto->hashname();
