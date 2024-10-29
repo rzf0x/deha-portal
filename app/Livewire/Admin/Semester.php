@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\admin\Semester as AdminSemester;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -13,6 +14,14 @@ class Semester extends Component
     protected $paginationTheme = 'bootstrap';
 
     public $semester_id, $nama;
+
+    #[Url(except: "")]
+    public $perPage = 5;
+
+    public function updatedPerPage()
+    {
+        $this->resetPage(); 
+    }
 
     #[Title('Halaman Semester')]
 
@@ -52,7 +61,7 @@ class Semester extends Component
     public function render()
     {
         return view('livewire.admin.semester', [
-            'listAngkatan' => AdminSemester::paginate(5),
+            'listAngkatan' => AdminSemester::paginate($this->perPage),
         ]);
     }
 }

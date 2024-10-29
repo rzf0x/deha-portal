@@ -32,6 +32,11 @@ class ListWaliSantri extends Component
     public $kelasFilter, $jenjangFilter, $kamarFilter, $jenisKelaminFilter;
     public $kelas, $jenjang, $kamar, $semester, $angkatan;
 
+    public function updatedPerPage()
+    {
+        $this->resetPage(); 
+    }
+
     public function mount()
     {
         $this->kelas = Kelas::with('jenjang')->get();

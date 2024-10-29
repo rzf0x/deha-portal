@@ -6,6 +6,7 @@ use App\Models\WaliKelas as ModelsWaliKelas;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\WithPagination;
@@ -21,12 +22,20 @@ class WaliKelas extends Component
     // Integer
     public $waliKelasId, $nama, $alamat, $foto, $no_whatsapp, $existingFoto;
 
+    #[Url(except: "")]
+    public $perPage = 5;
+
+    public function updatedPerPage()
+    {
+        $this->resetPage(); 
+    }
+
     #[Title('Halaman Wali Kelas ')]
 
     #[Computed]
     public function getData()
     {
-        return ModelsWaliKelas::paginate(5);
+        return ModelsWaliKelas::paginate($this->perPage);
     }
 
     public function create()

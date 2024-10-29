@@ -9,6 +9,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Detection\MobileDetect;
+use Livewire\Attributes\Url;
 
 class Jenjang extends Component
 {
@@ -28,6 +29,14 @@ class Jenjang extends Component
 
     public $isMobile = false;
 
+    #[Url(except: "")]
+    public $perPage = 5;
+
+    public function updatedPerPage()
+    {
+        $this->resetPage(); 
+    }
+
     public function mount(MobileDetect $mobileDetect)
     {
         $this->isMobile = $mobileDetect->isMobile();
@@ -36,7 +45,7 @@ class Jenjang extends Component
     #[Computed()]
     public function listJenjang()
     {
-        return ModelsJenjang::paginate(5);
+        return ModelsJenjang::paginate($this->perPage);
     }
 
     public function render()
