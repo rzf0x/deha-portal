@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\WithPagination;
 use Detection\MobileDetect;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Url;
 
 class WaliKamar extends Component
 {
@@ -40,6 +41,14 @@ class WaliKamar extends Component
     ];
 
     #[Title('Halaman Wali Kamar')]
+
+    #[Url(except: "")]
+    public $perPage = 5;
+
+    public function updatedPerPage()
+    {
+        $this->resetPage(); 
+    }
 
     public function import()
     {
@@ -135,7 +144,7 @@ class WaliKamar extends Component
     #[Computed()]
     public function listWaliKamar()
     {
-        return ModelsWaliKamar::paginate(5);
+        return ModelsWaliKamar::paginate($this->perPage);
     }
 
     public function render()
