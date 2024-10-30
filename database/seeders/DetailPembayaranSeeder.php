@@ -17,27 +17,32 @@ class DetailPembayaranSeeder extends Seeder
             [
                 'nama' => 'Pembayaran SPP bulanan',
                 'harga' => '200000',
-                'jenjang_id' => 1
+                'jenjang_id' => 1,
+                'pembayaran_tipe_id' => 1
             ],
             [
                 'nama' => 'Pembayaran Uang Makan bulanan',
                 'harga' => '100000',
-                'jenjang_id' => 1
+                'jenjang_id' => 1,
+                'pembayaran_tipe_id' => 1
             ],
             [
                 'nama' => 'Pembayaran Laundry bulanan',
                 'harga' => '50000',
-                'jenjang_id' => 1
+                'jenjang_id' => 1,
+                'pembayaran_tipe_id' => 1
             ],
             [
                 'nama' => 'Pembayaran 1 bulanan',
                 'harga' => '200000',
-                'jenjang_id' => 1
+                'jenjang_id' => 1,
+                'pembayaran_tipe_id' => 1
             ],
             [
                 'nama' => 'Pembayaran 2 bulanan',
                 'harga' => '200000',
-                'jenjang_id' => 1
+                'jenjang_id' => 1,
+                'pembayaran_tipe_id' => 1
             ],
         ];
 

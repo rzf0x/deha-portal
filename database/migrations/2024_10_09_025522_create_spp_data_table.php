@@ -13,7 +13,13 @@ return new class extends Migration
     {
         Schema::create('pembayaran_timeline', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_bulan',50);
+            $table->string('nama_bulan', 50);
+            $table->timestamps();
+        });
+
+        Schema::create('pembayaran_tipe', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
             $table->timestamps();
         });
 
@@ -24,12 +30,10 @@ return new class extends Migration
 
             $table->bigInteger('jenjang_id')->unsigned()->comment('relation with jenjang');
             $table->foreign('jenjang_id')->references('id')->on('jenjangs')->onDelete('cascade');
-            $table->timestamps();
-        });
 
-        Schema::create('pembayaran_tipe', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
+            $table->bigInteger('pembayaran_tipe_id')->unsigned()->comment('relation with pembayaran_tipe');
+            $table->foreign('pembayaran_tipe_id')->references('id')->on('pembayaran_tipe')->onDelete('cascade');
+
             $table->timestamps();
         });
 
@@ -50,6 +54,14 @@ return new class extends Migration
             // Relation with pembayaran_timeline
             $table->bigInteger('pembayaran_timeline_id')->unsigned()->comment('relation with pembayaran_timeline');
             $table->foreign('pembayaran_timeline_id')->references('id')->on('pembayaran_timeline')->onDelete('cascade');
+
+            // Relation with semester
+            $table->bigInteger('semester_id')->unsigned()->comment('relation with semester')->default(1);
+            $table->foreign('semester_id')->references('id')->on('semesters')->onDelete('cascade');
+
+            // Relation with angkatan
+            $table->bigInteger('angkatan_id')->unsigned()->comment('relation with angkatan')->default(1);
+            $table->foreign('angkatan_id')->references('id')->on('angkatans')->onDelete('cascade');
 
             $table->timestamps();
         });

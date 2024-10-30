@@ -7,9 +7,10 @@ use App\Models\Spp\Pembayaran;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-#[Title('Halaman Detail Spp Santri')]
 class DetailLaporanSppSantri extends Component
 {
+    #[Title('Halaman Detail Spp Santri')]
+    
     public $santriId;
     public $santri;
     public $filter = [

@@ -5,18 +5,20 @@ namespace App\Livewire\Admin\Spp;
 use App\Livewire\Forms\ItemPembayaranForm;
 use App\Models\Jenjang;
 use App\Models\Spp\DetailItemPembayaran;
+use App\Models\Spp\TipePembayaran;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
 class ListItemPembayaran extends Component
 {
-    
     #[Title('Halaman Item Pembayaran')]
-    
     public ItemPembayaranForm $ItemPembayaranForm;
-    
+
     public $itemPembayaranId;
+    public $jenjangFilter = '';
+    public $tipePembayaranFilter = '';
+    public $tipePembayaranOptions = [];
 
     #[Computed]
     public function getAllJenjang()
@@ -25,18 +27,35 @@ class ListItemPembayaran extends Component
     }
 
     #[Computed]
-    public function getData()
+    public function getTipePembayaranOptions()
     {
-        return DetailItemPembayaran::with(['jenjang'])->get();
+        return TipePembayaran::pluck('nama', 'id')->toArray();
+    }
+
+    #[Computed]
+    public function getFilteredData()
+    {
+        $query = DetailItemPembayaran::query()->with(['pembayaranTipe', 'jenjang']);
+
+        if ($this->jenjangFilter) {
+            $query->where('jenjang_id', $this->jenjangFilter);
+        }
+
+        if ($this->tipePembayaranFilter) {
+            $query->where('pembayaran_tipe_id', $this->tipePembayaranFilter);
+        }
+
+        return $query->get();
     }
 
     public function edit($id)
     {
-        $itemPembayaran = DetailItemPembayaran::findOrFail($id);
+        $detail = DetailItemPembayaran::findOrFail($id);
         $this->itemPembayaranId = $id;
-        $this->ItemPembayaranForm->nama = $itemPembayaran->nama;
-        $this->ItemPembayaranForm->nominal = $itemPembayaran->nominal;
-        $this->ItemPembayaranForm->jenjang_id = $itemPembayaran->jenjang_id;
+        $this->ItemPembayaranForm->nama = $detail->nama;
+        $this->ItemPembayaranForm->nominal = $detail->nominal;
+        $this->ItemPembayaranForm->jenjang_id = $detail->jenjang_id;
+        $this->ItemPembayaranForm->pembayaran_tipe_id = $detail->pembayaran_tipe_id;
     }
 
     public function create()
@@ -49,20 +68,28 @@ class ListItemPembayaran extends Component
     {
         $this->ItemPembayaranForm->validate();
 
-        DetailItemPembayaran::updateOrCreate(['id' => $this->itemPembayaranId], $this->ItemPembayaranForm->all());
+        DetailItemPembayaran::updateOrCreate(
+            ['id' => $this->itemPembayaranId],
+            $this->ItemPembayaranForm->all()
+        );
 
-        return session()->flash('message', "Success created " . $this->ItemPembayaranForm->nama . " !");
+        session()->flash('message', "Success created payment with ID {$this->itemPembayaranId}!");
+
+        return to_route('spp.list-item-pembayaran');
+        // Emit an event to close the modal
+        $this->dispatch('closeModal');
     }
+
 
     public function delete($id)
     {
         DetailItemPembayaran::findOrFail($id)->delete();
-        return session()->flash('message', "Data has been deleted!");
+        session()->flash('message', "Payment detail has been deleted!");
     }
-    
 
     public function render()
     {
+        $this->tipePembayaranOptions = $this->getTipePembayaranOptions();
         return view('livewire.admin.spp.list-item-pembayaran');
     }
 }
