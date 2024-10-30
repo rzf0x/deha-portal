@@ -65,6 +65,12 @@
                             <option value="{{ $tahun }}">{{ $tahun }}</option>
                         @endforeach
                     </select>
+                    <select wire:model.live="filter.bulan" class="form-select">
+                        <option value="">Semua Bulan</option>
+                        @foreach($bulanList as $bulan)
+                            <option value="{{ $bulan }}">{{ $bulan }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
 
@@ -76,15 +82,40 @@
                             <th>Tanggal</th>
                             <th>Nominal</th>
                             <th>Keterangan</th>
+                            <th>Bulan</th>
+                            <th>Tipe</th>
+                            <th>Metode</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse ($cicilan as $item)
+                        {{-- @dd($item) --}}
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->created_at->format('d/m/Y') }}</td>
                                 <td>Rp {{ number_format($item->nominal) }}</td>
                                 <td>{{ $item->keterangan }}</td>
+                                <td>{{ $item->pembayaran->pembayaranTimeline->nama_bulan }}</td>
+                                <td>
+                                    <span class="badge bg-info">
+                                        {{ str($item->pembayaran->pembayaranTipe->nama) }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">
+                                        {{ str($item->pembayaran->metode_pembayaran)->title() }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge {{ match($item->pembayaran->status) {
+                                        'lunas' => 'bg-success',
+                                        'cicilan' => 'bg-warning text-dark',
+                                        default => 'bg-danger'
+                                    } }}">
+                                        {{ str($item->pembayaran->status)->title() }}
+                                    </span>
+                                </td>
                             </tr>
                         @empty
                             <tr>

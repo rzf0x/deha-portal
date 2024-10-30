@@ -107,7 +107,7 @@
                                 <td>
                                     <span class="badge {{ match($bayar->status) {
                                         'lunas' => 'bg-success',
-                                        'cicilan' => 'bg-warning text-dark',
+                                        'pending' => 'bg-warning text-dark',
                                         default => 'bg-danger'
                                     } }}">
                                         {{ str($bayar->status)->title() }}
