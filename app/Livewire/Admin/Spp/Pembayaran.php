@@ -4,13 +4,16 @@ namespace App\Livewire\Admin\Spp;
 
 use App\Models\Admin\Spp\PembayaranCicilan;
 use App\Models\Santri;
+use App\Models\Spp\Cicilan;
 use App\Models\Spp\DetailItemPembayaran;
 use App\Models\Spp\Pembayaran as SppPembayaran;
+use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 class Pembayaran extends Component
 {
+    #[Title('Halaman Pembayaran Spp')]
     public $search = '';
     public $searchResults = [];
     public $santriSelected = null;
@@ -47,7 +50,14 @@ class Pembayaran extends Component
 
     public function selectSantri($santriId)
     {
-        $this->santriSelected = Santri::with('kelas.jenjang', 'kamar')->find($santriId);
+        $this->santriSelected = Santri::with([
+            'pembayaran' => function ($query) {
+                $query->with('cicilans');
+            },
+            'kelas.jenjang',
+            'kamar'
+        ])->find($santriId);
+
         $this->pembayaran = SppPembayaran::with('pembayaranTimeline')->where('santri_id', $santriId)->get();
         $this->detailPembayaran();
         $this->searchResults = [];
@@ -64,7 +74,18 @@ class Pembayaran extends Component
     public function updatePembayaran()
     {
         $this->Clickpembayaran->status = $this->selectedStatus;
+
+        if ($this->Clickpembayaran->status == 'lunas') {
+            $this->Clickpembayaran->nominal = $this->detailPembayaran->sum('nominal');
+            $this->isModalOpen = false;
+        } else if ($this->Clickpembayaran->status == 'cicilan') {
+            $this->Clickpembayaran->nominal = $this->santriSelected->pembayaran->where('pembayaran_timeline_id', $this->Clickpembayaran->pembayaran_timeline_id)->flatMap->cicilans->sum('nominal');
+        } else if ($this->Clickpembayaran->status == 'belum bayar') {
+            $this->Clickpembayaran->nominal = 0;
+            $this->isModalOpen = false;
+        }
         $this->Clickpembayaran->save();
+
         $this->pembayaran = SppPembayaran::with('pembayaranTimeline')->where('santri_id', $this->santriSelected->id)->get();
     }
 
@@ -94,20 +115,30 @@ class Pembayaran extends Component
         ]);
 
         try {
-
             PembayaranCicilan::create([
                 'pembayaran_id' => $this->Clickpembayaran->id,
                 'keterangan' => $this->keteranganCicilan,
                 'nominal' => $this->jumlahCicilan
             ]);
 
-            $this->Clickpembayaran->nominal += $this->jumlahCicilan;
+
+            $total_nominal_cicilan = Cicilan::query()->select(['nominal'])
+                ->with(['pembayaran.cicilans' . 'pembayaran.pembayaranTimeline'])
+                ->whereHas('pembayaran.cicilans', function ($query) {
+                    $query
+                        ->where('santri_id', $this->santriSelected->id)
+                        ->where('pembayaran_timeline_id', $this->Clickpembayaran->pembayaran_timeline_id);
+                })
+                ->sum('nominal');
+
+            $this->Clickpembayaran->nominal = $total_nominal_cicilan;
             $this->Clickpembayaran->save();
 
             // Reset form
             $this->reset(['jumlahCicilan', 'keteranganCicilan']);
             $this->isModalOpen = false;
         } catch (\Exception $e) {
+            dd($e);
             session()->flash('error', 'Gagal menyimpan cicilan');
         }
     }

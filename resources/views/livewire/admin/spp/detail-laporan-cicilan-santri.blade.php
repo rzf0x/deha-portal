@@ -35,8 +35,8 @@
                         <div class="col-md-6">
                             <div class="card bg-primary text-white">
                                 <div class="card-body">
-                                    <h6 class="card-title">Total Pembayaran</h6>
-                                    <h3 class="text-white">{{ number_format($total_pembayaran) }}</h3>
+                                    <h6 class="card-title">Total Cicilan</h6>
+                                    <h3 class="text-white">{{ number_format($total_cicilan) }}</h3>
                                 </div>
                             </div>
                         </div>
@@ -57,19 +57,13 @@
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h5 class="card-title">Riwayat Pembayaran</h5>
+                <h5 class="card-title">Riwayat Cicilan</h5>
                 <div class="d-flex gap-2">
                     <select wire:model.live="filter.tahun" class="form-select">
                         <option value="">Semua Tahun</option>
                         @foreach($tahunList as $tahun)
                             <option value="{{ $tahun }}">{{ $tahun }}</option>
                         @endforeach
-                    </select>
-                    <select wire:model.live="filter.status" class="form-select">
-                        <option value="">Semua Status</option>
-                        <option value="lunas">Lunas</option>
-                        <option value="belum bayar">belum bayar</option>
-                        <option value="cicilan">cicilan</option>
                     </select>
                 </div>
             </div>
@@ -80,43 +74,21 @@
                         <tr>
                             <th>No</th>
                             <th>Tanggal</th>
-                            <th>Bulan</th>
                             <th>Nominal</th>
-                            <th>Tipe</th>
-                            <th>Metode</th>
-                            <th>Status</th>
+                            <th>Keterangan</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($pembayaran as $bayar)
+                        @forelse ($cicilan as $item)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
-                                <td>{{ $bayar->created_at->format('d/m/Y') }}</td>
-                                <td>{{ $bayar->pembayaranTimeline->nama_bulan }}</td>
-                                <td>Rp {{ number_format($bayar->nominal) }}</td>
-                                <td>
-                                    <span class="badge bg-info">
-                                        {{ str($bayar->pembayaranTipe->nama) }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-info">
-                                        {{ str($bayar->metode_pembayaran)->title() }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <span class="badge {{ match($bayar->status) {
-                                        'lunas' => 'bg-success',
-                                        'cicilan' => 'bg-warning text-dark',
-                                        default => 'bg-danger'
-                                    } }}">
-                                        {{ str($bayar->status)->title() }}
-                                    </span>
-                                </td>
+                                <td>{{ $item->created_at->format('d/m/Y') }}</td>
+                                <td>Rp {{ number_format($item->nominal) }}</td>
+                                <td>{{ $item->keterangan }}</td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">Tidak ada data pembayaran</td>
+                                <td colspan="4" class="text-center">Tidak ada data cicilan</td>
                             </tr>
                         @endforelse
                     </tbody>

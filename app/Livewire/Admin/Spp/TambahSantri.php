@@ -11,10 +11,11 @@ use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-#[Title('Manajemen SPP Santri')]
 class TambahSantri extends Component
 {
     use WithPagination;
+    
+    #[Title('Manajemen SPP Santri')]
 
     protected $paginationTheme = 'bootstrap';
 

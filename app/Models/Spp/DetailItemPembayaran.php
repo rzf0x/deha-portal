@@ -12,10 +12,14 @@ class DetailItemPembayaran extends Model
 
     protected $table = 'pembayaran_detail';
 
-    protected $fillable = ['nama', 'nominal', 'jenjang_id'];
+    protected $fillable = ['nama', 'nominal', 'jenjang_id', 'pembayaran_tipe_id'];
 
     public function jenjang()
     {
         return $this->belongsTo(Jenjang::class, 'jenjang_id');
+    }
+    public function pembayaranTipe()
+    {
+        return $this->belongsTo(TipePembayaran::class);
     }
 }
