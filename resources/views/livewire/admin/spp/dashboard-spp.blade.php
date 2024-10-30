@@ -1,5 +1,6 @@
 <div>
     <div class="row">
+        <h4 class="mb-3">Overview Pembayaran</h4>
         <div class="col-lg-3 col-12">
             <x-card.card-basic title="Total Santri" value="{{ $totalSantri }}" subValue="Santri"
                 iconClass="bi bi-people-fill" textColor="orange" />
@@ -9,11 +10,11 @@
                 iconClass="bi bi-info-circle-fill" textColor="red" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Santri yang sudah lunas" value="{{ $lunas }}" subValue="Santri"
+            <x-card.card-basic title="Santri yang sudah lunas bulan ini" value="{{ $lunas }}" subValue="Santri"
                 iconClass="bi bi-circle-fill" textColor="green" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Santri yang cicilan" value="{{ $cicilan }}" subValue="Santri"
+            <x-card.card-basic title="Santri yang cicilan bulan ini" value="{{ $cicilan }}" subValue="Santri"
                 iconClass="bi bi-circle-fill" textColor="blue" />
         </div>
         <div class="col-lg-3 col-12">
@@ -21,16 +22,16 @@
                 iconClass="bi bi-hourglass-split" textColor="yellow" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Total Nominal Pembayaran" value="{{ $totalNominal }}" subValue="Rp"
+            <x-card.card-basic title="Total Nominal Pembayaran" value="Rp" subValue="{{ $totalNominal }}"
                 iconClass="bi bi-cash-stack" textColor="green" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Total Nominal Pembayaran Diterima" value="{{ $totalNominalDiterima }}"
-                subValue="Rp" iconClass="bi bi-cash-stack" textColor="green" />
+            <x-card.card-basic title="Total Nominal Pembayaran Diterima" value="Rp"
+                subValue="{{ $totalNominalDiterima }}" iconClass="bi bi-cash-stack" textColor="green" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Total Nominal Pembayaran Tertunda" value=" {{ $totalNominalTertunda }}"
-                subValue="Rp" iconClass="bi bi-clock-history" textColor="red" />
+            <x-card.card-basic title="Total Nominal Belum Terbayar " value=" Rp"
+                subValue="{{ $totalNominalTertunda }} {{ $totalNominalTertunda >= 0 ? 'lunas melebihi total' : '' }}" iconClass="bi bi-clock-history" textColor="red" />
         </div>
         <div class="col-lg-3 col-12">
             <x-card.card-basic title="Persentase Nominal Pembayaran" value="{{ $persentasePembayaran }}" subValue="%"
@@ -57,11 +58,11 @@
     <!-- Chart -->
     <div class="row" wire:ignore>
         <div class="col-lg-8">
-            <h4 class="mb-3">Overview Pembayaran</h4>
+            <h4 class="mb-3">Overview Nominal Pembayaran</h4>
             <div id="pembayaranChart" class="card rounded-4 p-4 h-100 w-100"></div>
         </div>
         <div class="col-lg-4">
-            <h4 class="mb-3">Overview Kelunasan</h4>
+            <h4 class="mb-3">Overview Pembayaran Santri</h4>
             <div id="kelunasanSantriChart" class="card rounded-4 p-4 h-100 w-100"></div>
         </div>
     </div>
@@ -70,21 +71,17 @@
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
 <script>
-    // Data untuk grafik batang (Pembayaran Harian)
-    const labels = @json($pembayaranHarian->pluck('tanggal'));
-    const data = @json($pembayaranHarian->pluck('total'));
-
     var pembayaranChartOptions = {
         chart: {
-            type: 'bar',
+            type: 'line',
             height: 350
         },
-        series: [{
-            name: 'Statistik Pembayaran di Bulan Ini',
-            data: data
+        series: [{ 
+            name: 'total pembayaran',
+            data: @json($monthlyTotals)
         }],
         xaxis: {
-            categories: labels
+            categories: @json($bulanNames)
         },
         plotOptions: {
             bar: {
@@ -106,7 +103,7 @@
             }
         },
         title: {
-            text: 'Statistik Pembayaran Bulanan',
+            text: 'Statistik Pembayaran tahun ini',
             align: 'left'
         }
     };

@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Spp;
 use App\Models\Santri;
 use App\Models\Spp\DetailItemPembayaran;
 use App\Models\Spp\Pembayaran;
+use App\Models\Spp\PembayaranTimeline;
 use Carbon\Carbon;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
@@ -44,8 +45,6 @@ class DashboardSpp extends Component
             }])
             ->get();
 
-        // dd($this->bulanSekarang , Santri::where('status_kesantrian', 'aktif')->with(['Pembayaran.pembayaranTimeline'])->get());     
-
         $this->lunas = $santri->filter(function ($item) {
             return $item->Pembayaran->contains('status', 'lunas');
         })->count();
@@ -80,6 +79,29 @@ class DashboardSpp extends Component
             ->orderBy('tanggal')
             ->get();
     }
+
+    public function getMonthlyTotals()
+    {
+        // Inisialisasi array untuk menyimpan total pembayaran per bulan
+        $monthlyTotals = array_fill(0, 12, 0); // Array dengan 12 elemen, diisi dengan 0
+
+        // Ambil total pembayaran per bulan berdasarkan pembayaran_timeline
+        $results = Pembayaran::with('pembayaranTimeline')
+            ->selectRaw('pembayaran_timeline_id, SUM(nominal) as total')
+            ->groupBy('pembayaran_timeline_id')
+            ->get();
+
+        // Mengisi array monthlyTotals dengan hasil query
+        foreach ($results as $index => $result) {
+            // Ambil bulan dari pembayaranTimeline berdasarkan id
+            $bulan = PembayaranTimeline::find($result->pembayaran_timeline_id);
+            if ($bulan) {
+                $monthlyTotals[$index] = $result->total; // Menyimpan total untuk bulan yang sesuai
+            }
+        }
+        return $monthlyTotals;
+    }
+
     private function formatRupiah($angka)
     {
         return number_format($angka, 0, ',', '.');
@@ -87,21 +109,34 @@ class DashboardSpp extends Component
 
     protected function calculateDueDate()
     {
-        $currentDate = Carbon::now(); // Tanggal sekarang
-        $tanggal5BulanIni = Carbon::create($currentDate->year, $currentDate->month, 5); // Tanggal 5 bulan ini
-
-        // Jika tanggal sekarang sudah lewat tanggal 5 bulan ini, hitung dengan tanggal 5 bulan depan
-        if ($currentDate->greaterThan($tanggal5BulanIni)) {
-            $tanggal5BulanDepan = $tanggal5BulanIni->addMonth(); // Tanggal 5 bulan depan
-            return $currentDate->diffInDays($tanggal5BulanDepan); // Hanya kembalikan jumlah hari
-        }
-
-        // Jika belum lewat tanggal 5, hitung dengan tanggal 5 bulan ini
-        return $currentDate->diffInDays($tanggal5BulanIni); // Hanya kembalikan jumlah hari
+        $currentDate = Carbon::now();
+        $BulanIni = Carbon::create($currentDate->year, $currentDate->month);
+        return $currentDate->greaterThan($BulanIni) ? $currentDate->diffInDays($BulanIni->addMonth()) : $currentDate->diffInDays($BulanIni);
     }
 
     public function render()
     {
-        return view('livewire.admin.spp.dashboard-spp');
+        $monthlyTotals = $this->getMonthlyTotals();
+
+        // Menyiapkan nama bulan dari Januari hingga Desember
+        $bulanNames = [
+            'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember'
+        ];
+
+        return view('livewire.admin.spp.dashboard-spp', [
+            'monthlyTotals' => $monthlyTotals,
+            'bulanNames' => $bulanNames,
+        ]);
     }
 }
