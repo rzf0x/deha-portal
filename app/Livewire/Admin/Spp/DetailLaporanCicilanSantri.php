@@ -3,19 +3,18 @@
 namespace App\Livewire\Admin\Spp;
 
 use App\Models\Santri;
-use App\Models\Spp\Pembayaran;
+use App\Models\Spp\Cicilan; // Ganti Pembayaran menjadi Cicilan
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
-class DetailLaporanSppSantri extends Component
+class DetailLaporanCicilanSantri extends Component
 {
-    #[Title('Halaman Detail Spp Santri')]
+    #[Title('Halaman Detail Cicilan Santri')]
     
     public $santriId;
     public $santri;
     public $filter = [
-        'tahun' => '',
-        'status' => ''
+        'tahun' => ''
     ];
 
     public function mount($id)
@@ -32,29 +31,24 @@ class DetailLaporanSppSantri extends Component
         $this->filter['tahun'] = date('Y');
     }
 
-    protected function getPembayaran()
+    protected function getCicilan()
     {
-        return Pembayaran::query()
+        return Cicilan::query()
             ->select([
                 'id',
-                'santri_id',
-                'pembayaran_timeline_id',
-                'pembayaran_tipe_id',
                 'nominal',
-                'metode_pembayaran',
-                'status',
+                'keterangan',
+                'pembayaran_id',
                 'created_at'
             ])
             ->with([
-                'pembayaranTimeline:id,nama_bulan',
-                'pembayaranTipe:id,nama'
+                'pembayaran.cicilans' // Ambil data pembayaran yang terkait
             ])
-            ->where('santri_id', $this->santriId)
+            ->whereHas('pembayaran.cicilans', function($query) {
+                $query->where('santri_id', $this->santriId);
+            })
             ->when($this->filter['tahun'], function ($query) {
                 $query->whereYear('created_at', $this->filter['tahun']);
-            })
-            ->when($this->filter['status'], function ($query) {
-                $query->where('status', $this->filter['status']);
             })
             ->orderBy('created_at')
             ->get();
@@ -62,8 +56,10 @@ class DetailLaporanSppSantri extends Component
 
     protected function getTahunList()
     {
-        return Pembayaran::query()
-            ->where('santri_id', $this->santriId)
+        return Cicilan::query()
+            ->whereHas('pembayaran', function($query) {
+                $query->where('santri_id', $this->santriId);
+            })
             ->selectRaw('DISTINCT YEAR(created_at) as tahun')
             ->orderByDesc('tahun')
             ->pluck('tahun');
@@ -71,13 +67,13 @@ class DetailLaporanSppSantri extends Component
 
     public function render()
     {
-        $pembayaran = $this->getPembayaran();
+        $cicilan = $this->getCicilan();
 
-        return view('livewire.admin.spp.detail-laporan-spp-santri', [
-            'pembayaran' => $pembayaran,
+        return view('livewire.admin.spp.detail-laporan-cicilan-santri', [
+            'cicilan' => $cicilan,
             'tahunList' => $this->getTahunList(),
-            'total_pembayaran' => $pembayaran->count(),
-            'total_nominal' => $pembayaran->sum('nominal'),
+            'total_cicilan' => $cicilan->count(),
+            'total_nominal' => $cicilan->sum('nominal'),
         ]);
     }
 }

@@ -73,9 +73,9 @@ class DashboardSpp extends Component
         }
         $this->tagihanAkanJatuhTempo = $this->calculateDueDate();
 
-        $this->pembayaranHarian = Pembayaran::selectRaw('DATE(created_at) as tanggal, SUM(nominal) as total')
-            ->whereMonth('created_at', Carbon::now()->month)
-            ->whereYear('created_at', Carbon::now()->year)
+        $this->pembayaranHarian = Pembayaran::selectRaw('DATE(updated_at) as tanggal, SUM(nominal) as total')
+            ->whereMonth('updated_at', Carbon::now()->month)
+            ->whereYear('updated_at', Carbon::now()->year)
             ->groupBy('tanggal')
             ->orderBy('tanggal')
             ->get();

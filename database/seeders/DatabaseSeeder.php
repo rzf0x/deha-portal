@@ -24,9 +24,9 @@ class DatabaseSeeder extends Seeder
             SemesterSeeder::class,
             RoleSeeder::class,
             AdminSeeder::class,
-            PembayaranDetailSeeder::class,
             PembayaranTimelineSeeder::class,
             PembayaranTipeSeeder::class,
+            PembayaranDetailSeeder::class,
             PembayaranSeeder::class,
             OrangTuaSeeder::class
         ]);

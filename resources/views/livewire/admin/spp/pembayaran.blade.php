@@ -2,7 +2,7 @@
     <!-- Search Form -->
     <div class="form-group sticky-top bg-white p-3 shadow-sm cursor-pointer" style="top: 1rem; z-index: 99;">
         <form wire:submit.prevent="searchSantri" class="d-flex gap-3">
-            <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri..." required>
+            <input type="text" wire:keydown.debounce.50ms="searchSantri"  wire:model="search" class="form-control" placeholder="Cari Santri..." required>
             <button type="submit" class="btn btn-primary w-25">Cari</button>
         </form>
     </div>
