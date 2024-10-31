@@ -24,14 +24,14 @@ class DetailLaporanCicilanSantri extends Component
     {
         $this->santriId = $id;
         // Memuat hanya field yang diperlukan
-        $this->santri = Santri::select('id', 'nama', 'kelas_id', 'kamar_id')
+        $this->santri = Santri::select('id', 'nama', 'kelas_id', 'kamar_id',)
             ->with([
-                'kelas:id,nama',
+                'kelas',
                 'kamar:id,nama'
             ])
             ->findOrFail($id);
 
-            $this->filter['tahun'] = date('Y');
+        $this->filter['tahun'] = date('Y');
     }
 
     protected function getCicilan()
@@ -78,12 +78,15 @@ class DetailLaporanCicilanSantri extends Component
             ->unique()
             ->values()
             ->toArray();
-
     }
 
     public function render()
     {
         $cicilan = $this->getCicilan();
+        $totalPembayaran = DetailItemPembayaran::where('jenjang_id', $this->santri->kelas->jenjang->id)->sum('nominal');
+
+        $pembayaran_bulan_total = $totalPembayaran * $cicilan->count();
+        $total_cicilan_belum_bayar = $this->filter['bulan'] ? $totalPembayaran : $pembayaran_bulan_total;
 
         return view('livewire.admin.spp.detail-laporan-cicilan-santri', [
             'cicilan' => $cicilan,
@@ -91,7 +94,7 @@ class DetailLaporanCicilanSantri extends Component
             'bulanList' => $this->getBulanList(),
             'total_cicilan' => $cicilan->count(),
             'total_nominal' => $cicilan->sum('nominal'),
-            'total_cicilan_belum_bayar' => $cicilan->sum('nominal') - DetailItemPembayaran::sum('nominal'),
+            'total_cicilan_belum_bayar' => $total_cicilan_belum_bayar,
         ]);
     }
 }

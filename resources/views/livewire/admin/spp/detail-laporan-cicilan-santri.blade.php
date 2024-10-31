@@ -94,7 +94,6 @@
                             <th>Tipe</th>
                             <th>Metode</th>
                             <th>Status</th>
-                            <th>Total Cicilan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -124,7 +123,6 @@
                                         {{ str($item->pembayaran->status)->title() }}
                                     </span>
                                 </td>
-                                <td> {{ number_format($item->pembayaran->cicilans->count()) }}</td>
                             </tr>
                         @empty
                             <tr>
