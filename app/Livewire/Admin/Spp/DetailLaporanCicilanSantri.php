@@ -4,6 +4,8 @@ namespace App\Livewire\Admin\Spp;
 
 use App\Models\Santri;
 use App\Models\Spp\Cicilan; // Ganti Pembayaran menjadi Cicilan
+use App\Models\Spp\DetailItemPembayaran;
+use Carbon\Carbon;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -29,17 +31,16 @@ class DetailLaporanCicilanSantri extends Component
             ])
             ->findOrFail($id);
 
-        $this->filter['bulan'] = date('n');
-        $this->filter['tahun'] = date('Y');
+            $this->filter['tahun'] = date('Y');
     }
 
     protected function getCicilan()
     {
         return Cicilan::with([
-                'pembayaran.pembayaranTimeline:id,nama_bulan',
-                'pembayaran.pembayaranTipe:id,nama',
-                'pembayaran.cicilans' // Ambil data pembayaran yang terkait
-            ])
+            'pembayaran.pembayaranTimeline:id,nama_bulan',
+            'pembayaran.pembayaranTipe:id,nama',
+            'pembayaran.cicilans' // Ambil data pembayaran yang terkait
+        ])
             ->whereHas('pembayaran.cicilans', function ($query) {
                 $query->where('santri_id', $this->santriId);
             })
@@ -47,7 +48,9 @@ class DetailLaporanCicilanSantri extends Component
                 $query->whereYear('created_at', $this->filter['tahun']);
             })
             ->when($this->filter['bulan'], function ($query) {
-                $query->whereMonth('created_at', $this->filter['bulan']);
+                $query->whereHas('pembayaran.pembayaranTimeline', function ($q) {
+                    $q->where('nama_bulan', $this->filter['bulan']); // Mengambil berdasarkan nama bulan
+                });
             })
             ->orderBy('created_at')
             ->get();
@@ -65,13 +68,17 @@ class DetailLaporanCicilanSantri extends Component
     }
     protected function getBulanList()
     {
-        return Cicilan::query()
+        return Cicilan::with(['pembayaran.pembayaranTimeline'])
             ->whereHas('pembayaran', function ($query) {
                 $query->where('santri_id', $this->santriId);
             })
-            ->selectRaw('DISTINCT MONTH(created_at) as bulan')
-            ->orderByDesc('bulan')
-            ->pluck('bulan');
+            ->get()
+            ->pluck('pembayaran.pembayaranTimeline.nama_bulan')
+            ->filter()
+            ->unique()
+            ->values()
+            ->toArray();
+
     }
 
     public function render()
@@ -84,6 +91,7 @@ class DetailLaporanCicilanSantri extends Component
             'bulanList' => $this->getBulanList(),
             'total_cicilan' => $cicilan->count(),
             'total_nominal' => $cicilan->sum('nominal'),
+            'total_cicilan_belum_bayar' => $cicilan->sum('nominal') - DetailItemPembayaran::sum('nominal'),
         ]);
     }
 }
