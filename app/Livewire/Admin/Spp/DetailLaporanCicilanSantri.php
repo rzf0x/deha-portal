@@ -31,6 +31,7 @@ class DetailLaporanCicilanSantri extends Component
             ])
             ->findOrFail($id);
 
+        $this->filter['bulan'] = Carbon::now()->monthName;
         $this->filter['tahun'] = date('Y');
     }
 
