@@ -62,6 +62,8 @@ class ListItemPembayaran extends Component
     {
         $this->ItemPembayaranForm->reset();
         $this->itemPembayaranId = '';
+        $this->ItemPembayaranForm->pembayaran_tipe_id = TipePembayaran::where('nama', 'SPP')->value('id');
+    
     }
 
     public function store()

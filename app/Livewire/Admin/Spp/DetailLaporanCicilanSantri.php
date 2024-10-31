@@ -35,15 +35,7 @@ class DetailLaporanCicilanSantri extends Component
 
     protected function getCicilan()
     {
-        return Cicilan::query()
-            ->select([
-                'id',
-                'nominal',
-                'keterangan',
-                'pembayaran_id',
-                'created_at'
-            ])
-            ->with([
+        return Cicilan::with([
                 'pembayaran.pembayaranTimeline:id,nama_bulan',
                 'pembayaran.pembayaranTipe:id,nama',
                 'pembayaran.cicilans' // Ambil data pembayaran yang terkait

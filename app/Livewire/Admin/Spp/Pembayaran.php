@@ -24,6 +24,7 @@ class Pembayaran extends Component
     public $isModalOpen = false;
     public $Clickpembayaran;
     public $selectedStatus;
+    public $selectedMetodePembayaran;
     public $updatedPembayaran;
     public $detailPembayaran;
     public $cicilan;
@@ -69,24 +70,26 @@ class Pembayaran extends Component
         $this->Clickpembayaran = SppPembayaran::with('pembayaranTimeline', 'cicilans')->where('id', $pembayaranId)->first();
         $this->isModalOpen = true;
         $this->selectedStatus = $this->Clickpembayaran->status;
+        $this->selectedMetodePembayaran = $this->Clickpembayaran->metode_pembayaran;
     }
 
     public function updatePembayaran()
     {
         $this->Clickpembayaran->status = $this->selectedStatus;
-
+        
         if ($this->Clickpembayaran->status == 'lunas') {
             $this->Clickpembayaran->nominal = $this->detailPembayaran->sum('nominal');
-            $this->isModalOpen = false;
         } else if ($this->Clickpembayaran->status == 'cicilan') {
             $this->Clickpembayaran->nominal = $this->santriSelected->pembayaran->where('pembayaran_timeline_id', $this->Clickpembayaran->pembayaran_timeline_id)->flatMap->cicilans->sum('nominal');
         } else if ($this->Clickpembayaran->status == 'belum bayar') {
             $this->Clickpembayaran->nominal = 0;
-            $this->isModalOpen = false;
         }
+        
+        $this->Clickpembayaran->metode_pembayaran = $this->selectedMetodePembayaran;
         $this->Clickpembayaran->save();
-
+        
         $this->pembayaran = SppPembayaran::with('pembayaranTimeline')->where('santri_id', $this->santriSelected->id)->get();
+        $this->isModalOpen = false;
     }
 
     public function closeModal()
@@ -115,6 +118,7 @@ class Pembayaran extends Component
         ]);
 
         try {
+            $this->updatePembayaran();
             PembayaranCicilan::create([
                 'pembayaran_id' => $this->Clickpembayaran->id,
                 'keterangan' => $this->keteranganCicilan,
