@@ -142,7 +142,6 @@ class Pembayaran extends Component
             $this->reset(['jumlahCicilan', 'keteranganCicilan']);
             $this->isModalOpen = false;
         } catch (\Exception $e) {
-            dd($e);
             session()->flash('error', 'Gagal menyimpan cicilan');
         }
     }

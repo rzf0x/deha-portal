@@ -51,8 +51,6 @@ class DashboardSpp extends Component
             return $item->Pembayaran->contains('status', 'cicilan');
         })->count();
 
-        // dd($santri);
-
         $this->totalSantri = $santri->count();
         $totalNominalTerbayar = $santri->flatMap->Pembayaran->sum('nominal');
         $totalNominalPembayaran = DetailItemPembayaran::sum('nominal') * $this->totalSantri;

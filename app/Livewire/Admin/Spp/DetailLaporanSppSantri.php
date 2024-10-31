@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin\Spp;
 
 use App\Models\Santri;
+use App\Models\Spp\DetailItemPembayaran;
 use App\Models\Spp\Pembayaran;
 use Livewire\Attributes\Title;
 use Livewire\Component;
