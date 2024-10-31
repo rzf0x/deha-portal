@@ -126,7 +126,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center">Tidak ada data cicilan</td>
+                                <td colspan="8" class="text-center">Tidak ada data cicilan</td>
                             </tr>
                         @endforelse
                     </tbody>

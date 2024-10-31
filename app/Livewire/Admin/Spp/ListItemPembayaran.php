@@ -6,92 +6,70 @@ use App\Livewire\Forms\ItemPembayaranForm;
 use App\Models\Jenjang;
 use App\Models\Spp\DetailItemPembayaran;
 use App\Models\Spp\TipePembayaran;
-use Livewire\Attributes\Computed;
-use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\Attributes\{Title, Computed};
 
 class ListItemPembayaran extends Component
 {
-    #[Title('Halaman Item Pembayaran')]
+    #[Title('Item Pembayaran')]
     public ItemPembayaranForm $ItemPembayaranForm;
 
-    public $itemPembayaranId;
-    public $jenjangFilter = '';
-    public $tipePembayaranFilter = '';
-    public $tipePembayaranOptions = [];
-
-    #[Computed]
-    public function getAllJenjang()
-    {
-        return Jenjang::all();
-    }
-
-    #[Computed]
-    public function getTipePembayaranOptions()
-    {
-        return TipePembayaran::pluck('nama', 'id')->toArray();
-    }
+    public ?int $itemPembayaranId = null;
+    public string $jenjangFilter = '';
+    public string $tipePembayaranFilter = '';
 
     #[Computed]
     public function getFilteredData()
     {
-        $query = DetailItemPembayaran::query()->with(['pembayaranTipe', 'jenjang']);
-
-        if ($this->jenjangFilter) {
-            $query->where('jenjang_id', $this->jenjangFilter);
-        }
-
-        if ($this->tipePembayaranFilter) {
-            $query->where('pembayaran_tipe_id', $this->tipePembayaranFilter);
-        }
-
-        return $query->get();
+        return DetailItemPembayaran::query()
+            ->when($this->jenjangFilter, fn($q) => $q->where('jenjang_id', $this->jenjangFilter))
+            ->when($this->tipePembayaranFilter, fn($q) => $q->where('pembayaran_tipe_id', $this->tipePembayaranFilter))
+            ->with(['pembayaranTipe', 'jenjang'])
+            ->get();
     }
 
-    public function edit($id)
+    public function mount()
     {
-        $detail = DetailItemPembayaran::findOrFail($id);
-        $this->itemPembayaranId = $id;
-        $this->ItemPembayaranForm->nama = $detail->nama;
-        $this->ItemPembayaranForm->nominal = $detail->nominal;
-        $this->ItemPembayaranForm->jenjang_id = $detail->jenjang_id;
-        $this->ItemPembayaranForm->pembayaran_tipe_id = $detail->pembayaran_tipe_id;
+        $this->ItemPembayaranForm->pembayaran_tipe_id = TipePembayaran::where('nama', 'SPP')->value('id');
+    }
+
+    public function edit(DetailItemPembayaran $detail)
+    {
+        $this->itemPembayaranId = $detail->id;
+        $this->ItemPembayaranForm->fill($detail->toArray());
     }
 
     public function create()
     {
+        $this->reset('itemPembayaranId');
         $this->ItemPembayaranForm->reset();
-        $this->itemPembayaranId = '';
         $this->ItemPembayaranForm->pembayaran_tipe_id = TipePembayaran::where('nama', 'SPP')->value('id');
-    
     }
 
     public function store()
     {
         $this->ItemPembayaranForm->validate();
 
-        DetailItemPembayaran::updateOrCreate(
+        $detail = DetailItemPembayaran::updateOrCreate(
             ['id' => $this->itemPembayaranId],
             $this->ItemPembayaranForm->all()
         );
 
-        session()->flash('message', "Success created payment with ID {$this->itemPembayaranId}!");
-
-        return to_route('spp.list-item-pembayaran');
-        // Emit an event to close the modal
-        $this->dispatch('closeModal');
+        $this->dispatch('modal');
+        session()->flash('message', "Berhasil menambahkan pembayaran {$this->ItemPembayaranForm->nama}!");
     }
 
-
-    public function delete($id)
+    public function delete(DetailItemPembayaran $detail)
     {
-        DetailItemPembayaran::findOrFail($id)->delete();
-        session()->flash('message', "Payment detail has been deleted!");
+        $detail->delete();
+        session()->flash('message', "Pembayaran berhasil dihapus!");
     }
 
     public function render()
     {
-        $this->tipePembayaranOptions = $this->getTipePembayaranOptions();
-        return view('livewire.admin.spp.list-item-pembayaran');
+        return view('livewire.admin.spp.list-item-pembayaran', [
+            'jenjangOptions' => Jenjang::all(),
+            'tipePembayaranOptions' => TipePembayaran::pluck('nama', 'id')
+        ]);
     }
 }
