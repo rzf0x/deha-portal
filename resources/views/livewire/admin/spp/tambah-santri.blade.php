@@ -148,8 +148,8 @@
                                     <p class="mb-1">Kamar: {{ $selectedSantri->kamar?->nama ?? 'Belum ada kamar' }}
                                     </p>
                                 </div>
-                                <p class="fw-bold">anda akan menambahkan timeline spp santri dari january hingga
-                                    december</p>
+                                <p class="fw-bold">anda akan menambahkan timeline spp santri dari januar hingga
+                                    desember</p>
                             @endif
                         </div>
                     </div>

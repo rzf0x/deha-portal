@@ -25,7 +25,6 @@ class DashboardSpp extends Component
     public $totalNominalTertunda;
     public $persentasePembayaran;
     public $tagihanAkanJatuhTempo;
-    public $pembayaranHarian;
 
     public function mount()
     {
@@ -33,11 +32,6 @@ class DashboardSpp extends Component
         $this->bulanSekarang = Carbon::now()->monthName;
 
         $santri = Santri::where('status_kesantrian', 'aktif')
-            ->whereHas('Pembayaran', function ($query) {
-                $query->whereHas('pembayaranTimeline', function ($subQuery) {
-                    $subQuery->where('nama_bulan', $this->bulanSekarang);
-                });
-            })
             ->with(['Pembayaran' => function ($query) {
                 $query->whereHas('pembayaranTimeline', function ($subQuery) {
                     $subQuery->where('nama_bulan', $this->bulanSekarang);
@@ -57,8 +51,10 @@ class DashboardSpp extends Component
             return $item->Pembayaran->contains('status', 'cicilan');
         })->count();
 
-        $this->totalSantri = Santri::count();
-        $totalNominalTerbayar = Pembayaran::sum('nominal');
+        // dd($santri);
+
+        $this->totalSantri = $santri->count();
+        $totalNominalTerbayar = $santri->flatMap->Pembayaran->sum('nominal');
         $totalNominalPembayaran = DetailItemPembayaran::sum('nominal') * $this->totalSantri;
 
         $this->totalNominalDiterima = $this->formatRupiah($totalNominalTerbayar);
@@ -71,13 +67,14 @@ class DashboardSpp extends Component
             $this->persentasePembayaran = 0;
         }
         $this->tagihanAkanJatuhTempo = $this->calculateDueDate();
+    }
 
-        $this->pembayaranHarian = Pembayaran::selectRaw('DATE(updated_at) as tanggal, SUM(nominal) as total')
-            ->whereMonth('updated_at', Carbon::now()->month)
-            ->whereYear('updated_at', Carbon::now()->year)
-            ->groupBy('tanggal')
-            ->orderBy('tanggal')
-            ->get();
+    public function getMonthNames()
+    {
+        return [
+            'January', 'February', 'March', 'April', 'May', 'June', 
+            'July', 'August', 'September', 'October', 'November', 'December'
+        ];
     }
 
     public function getMonthlyTotals()
@@ -85,22 +82,36 @@ class DashboardSpp extends Component
         // Inisialisasi array untuk menyimpan total pembayaran per bulan
         $monthlyTotals = array_fill(0, 12, 0); // Array dengan 12 elemen, diisi dengan 0
 
+        // Daftar nama bulan dalam Bahasa Indonesia
+
         // Ambil total pembayaran per bulan berdasarkan pembayaran_timeline
         $results = Pembayaran::with('pembayaranTimeline')
             ->selectRaw('pembayaran_timeline_id, SUM(nominal) as total')
             ->groupBy('pembayaran_timeline_id')
             ->get();
 
+        // Mengambil seluruh timeline pembayaran dalam satu query
+        $timelines = PembayaranTimeline::whereIn('id', $results->pluck('pembayaran_timeline_id'))->get()->keyBy('id');
+
         // Mengisi array monthlyTotals dengan hasil query
-        foreach ($results as $index => $result) {
-            // Ambil bulan dari pembayaranTimeline berdasarkan id
-            $bulan = PembayaranTimeline::find($result->pembayaran_timeline_id);
-            if ($bulan) {
-                $monthlyTotals[$index] = $result->total; // Menyimpan total untuk bulan yang sesuai
+        foreach ($results as $result) {
+            $bulanTimeline = $timelines->get($result->pembayaran_timeline_id);
+
+            if ($bulanTimeline) {
+                // Temukan indeks bulan berdasarkan nama bulan di $bulanNames
+                $monthlyIndex = array_search($bulanTimeline->nama_bulan, $this->getMonthNames());
+
+                if ($monthlyIndex !== false) {
+                    // Isi total untuk bulan yang sesuai
+                    $monthlyTotals[$monthlyIndex] = $result->total;
+                }
             }
         }
+
         return $monthlyTotals;
     }
+
+
 
     private function formatRupiah($angka)
     {

@@ -59,7 +59,7 @@
                     </div>
                     <div class="d-flex flex-wrap">
                         @foreach ($pembayaran as $item)
-                            <button wire:click="selectPembayaran({{ $item->id }})" class="mx-1 my-1 btn 
+                            <button wire:loading.attr="disabled" wire:click="selectPembayaran({{ $item->id }})" class="mx-1 my-1 btn 
                                 @if ($item->status === 'lunas') btn-success 
                                 @elseif ($item->status === 'belum bayar') btn-danger 
                                 @else btn-warning @endif">
@@ -89,15 +89,28 @@
                                         </div>
                                     </div>
                                     <div class="card-body form-group">
-                                        <label for="status">Ubah status pembayaran:</label>
-                                        <select wire:model="selectedStatus" class="form-control">
+                                        <label for="status">Ubah status pembayaran: 
+                                            <span wire:target='selectedStatus' wire:loading.class.remove='d-none' class="d-none spinner-border spinner-border-sm"></span>
+                                        </label>
+                                        <select wire:model.live="selectedStatus" class="form-control">
                                             <option value="lunas">Lunas</option>
                                             <option value="belum bayar">Belum Bayar</option>
                                             <option value="cicilan">Cicilan</option>
                                         </select>
                                     </div>
+                                    @if ($selectedStatus != 'belum bayar')
+                                    <div class="card-body form-group">
+                                        <label for="Metode">Ubah Metode pembayaran:
+                                            <span wire:target='selectedMetodePembayaran' wire:loading.class.remove='d-none' class="d-none spinner-border spinner-border-sm"></span>
+                                        </label>
+                                        <select wire:model.live="selectedMetodePembayaran" class="form-control">
+                                            <option value="transfer">Transfer</option>
+                                            <option value="cash">Cash</option>
+                                        </select>
+                                    </div>
+                                    @endif
                                     <div class="d-flex justify-content-end mb-3 mr-3">
-                                        <button wire:click="updatePembayaran" class="btn btn-primary">Update Data</button>
+                                        <button wire:loading.attr="disabled" wire:click="updatePembayaran" class="btn btn-primary">Update Data</button>
                                     </div>
                                 </div>
                                 @if ($selectedStatus === 'cicilan')
@@ -116,7 +129,7 @@
                                                     <input type="number" class="form-control" wire:model="jumlahCicilan" required>
                                                 </div>
                                                 <div class="d-flex justify-content-end">
-                                                    <button class="btn btn-primary" wire:click='$refresh'>Simpan</button>
+                                                    <button wire:loading.attr="disabled" class="btn btn-primary" wire:click='$refresh'>Simpan</button>
                                                 </div>
                                             </form>
                                             @if ($errors->any())
@@ -145,7 +158,7 @@
                     </div>
                     @foreach ($detailPembayaran as $item)
                         <div class="form-check">
-                            <input type="checkbox" class="form-check-input" id="method-{{ $item->id }}" wire:model="selectedMethods" value="{{ $item->id }}">
+                            <input type="checkbox" class="form-check-input" id="method-{{ $item->id }}" wire:model.live="selectedMethods" value="{{ $item->id }}">
                             <label class="form-check-label" for="method-{{ $item->id }}">{{ $item->nama }} - {{ number_format($item->nominal, 0, ',', '.') }}</label>
                         </div>
                     @endforeach
@@ -154,7 +167,7 @@
                         <p><strong>Total Pembayaran:</strong></p>
                         <p class="pr-4">{{ number_format($totalAmount, 0, ',', '.') }}</p>
                     </div>
-                    <button class="btn btn-primary" wire:click="calculateTotalAmount">Kalkulasi Nilai</button>
+                    <button wire:loading.attr="disabled" class="btn btn-primary" wire:click="calculateTotalAmount">Kalkulasi Nilai</button>
                 </div>
             </div>
         </div>
