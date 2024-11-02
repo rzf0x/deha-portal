@@ -32,19 +32,27 @@
                 </div>
                 <div class="col-md-6">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="card bg-primary text-white">
+                        <div class="col-md-4">
+                            <div class="card bg-danger text-white">
                                 <div class="card-body">
-                                    <h6 class="card-title">Total Cicilan</h6>
-                                    <h3 class="text-white">{{ number_format($total_cicilan) }}</h3>
+                                    <h6 class="card-title">Total belum lunas</h6>
+                                    <h4 class="text-white">{{ number_format($total_cicilan_belum_bayar) }}</h4>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-4">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body">
+                                    <h6 class="card-title">Total Cicilan</h6>
+                                    <h4 class="text-white">{{ number_format($total_cicilan) }}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
                             <div class="card bg-success text-white">
                                 <div class="card-body">
                                     <h6 class="card-title">Total Nominal</h6>
-                                    <h3 class="text-white">Rp {{ number_format($total_nominal) }}</h3>
+                                    <h4 class="text-white">Rp {{ number_format($total_nominal) }}</h4>
                                 </div>
                             </div>
                         </div>
@@ -90,7 +98,6 @@
                     </thead>
                     <tbody>
                         @forelse ($cicilan as $item)
-                        {{-- @dd($item) --}}
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $item->created_at->format('d/m/Y') }}</td>
@@ -119,7 +126,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="4" class="text-center">Tidak ada data cicilan</td>
+                                <td colspan="8" class="text-center">Tidak ada data cicilan</td>
                             </tr>
                         @endforelse
                     </tbody>

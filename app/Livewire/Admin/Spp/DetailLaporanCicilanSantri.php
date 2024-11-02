@@ -4,6 +4,8 @@ namespace App\Livewire\Admin\Spp;
 
 use App\Models\Santri;
 use App\Models\Spp\Cicilan; // Ganti Pembayaran menjadi Cicilan
+use App\Models\Spp\DetailItemPembayaran;
+use Carbon\Carbon;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -22,32 +24,24 @@ class DetailLaporanCicilanSantri extends Component
     {
         $this->santriId = $id;
         // Memuat hanya field yang diperlukan
-        $this->santri = Santri::select('id', 'nama', 'kelas_id', 'kamar_id')
+        $this->santri = Santri::select('id', 'nama', 'kelas_id', 'kamar_id',)
             ->with([
-                'kelas:id,nama',
+                'kelas',
                 'kamar:id,nama'
             ])
             ->findOrFail($id);
 
-        $this->filter['bulan'] = date('n');
+        $this->filter['bulan'] = Carbon::now()->monthName;
         $this->filter['tahun'] = date('Y');
     }
 
     protected function getCicilan()
     {
-        return Cicilan::query()
-            ->select([
-                'id',
-                'nominal',
-                'keterangan',
-                'pembayaran_id',
-                'created_at'
-            ])
-            ->with([
-                'pembayaran.pembayaranTimeline:id,nama_bulan',
-                'pembayaran.pembayaranTipe:id,nama',
-                'pembayaran.cicilans' // Ambil data pembayaran yang terkait
-            ])
+        return Cicilan::with([
+            'pembayaran.pembayaranTimeline:id,nama_bulan',
+            'pembayaran.pembayaranTipe:id,nama',
+            'pembayaran.cicilans' // Ambil data pembayaran yang terkait
+        ])
             ->whereHas('pembayaran.cicilans', function ($query) {
                 $query->where('santri_id', $this->santriId);
             })
@@ -55,7 +49,9 @@ class DetailLaporanCicilanSantri extends Component
                 $query->whereYear('created_at', $this->filter['tahun']);
             })
             ->when($this->filter['bulan'], function ($query) {
-                $query->whereMonth('created_at', $this->filter['bulan']);
+                $query->whereHas('pembayaran.pembayaranTimeline', function ($q) {
+                    $q->where('nama_bulan', $this->filter['bulan']); // Mengambil berdasarkan nama bulan
+                });
             })
             ->orderBy('created_at')
             ->get();
@@ -73,18 +69,25 @@ class DetailLaporanCicilanSantri extends Component
     }
     protected function getBulanList()
     {
-        return Cicilan::query()
+        return Cicilan::with(['pembayaran.pembayaranTimeline'])
             ->whereHas('pembayaran', function ($query) {
                 $query->where('santri_id', $this->santriId);
             })
-            ->selectRaw('DISTINCT MONTH(created_at) as bulan')
-            ->orderByDesc('bulan')
-            ->pluck('bulan');
+            ->get()
+            ->pluck('pembayaran.pembayaranTimeline.nama_bulan')
+            ->filter()
+            ->unique()
+            ->values()
+            ->toArray();
     }
 
     public function render()
     {
         $cicilan = $this->getCicilan();
+        $totalPembayaran = DetailItemPembayaran::where('jenjang_id', $this->santri->kelas->jenjang->id)->sum('nominal');
+
+        $pembayaran_bulan_total = $totalPembayaran * $cicilan->count();
+        $total_cicilan_belum_bayar = $this->filter['bulan'] ? $totalPembayaran : $pembayaran_bulan_total;
 
         return view('livewire.admin.spp.detail-laporan-cicilan-santri', [
             'cicilan' => $cicilan,
@@ -92,6 +95,7 @@ class DetailLaporanCicilanSantri extends Component
             'bulanList' => $this->getBulanList(),
             'total_cicilan' => $cicilan->count(),
             'total_nominal' => $cicilan->sum('nominal'),
+            'total_cicilan_belum_bayar' => $total_cicilan_belum_bayar,
         ]);
     }
 }
