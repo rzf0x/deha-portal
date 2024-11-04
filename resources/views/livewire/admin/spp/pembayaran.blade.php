@@ -72,11 +72,11 @@
                     <hr>
                     
                     <div class="mt-1">
-                        <p style="margin-bottom: -5px;">Keterangan:</p>
-                        <div class="d-flex flex-row gap-2">
-                            <span class="mr-3"><span class="text-danger">Merah</span>: <span class="fw-bold">Belum bayar</span></span>
-                            <span class="mr-3"><span class="text-success">Hijau</span>: <span class="fw-bold">Lunas</span></span>
-                            <span class="mr-3"><span class="text-warning">Kuning</span>: <span class="fw-bold">Cicilan</span></span>
+                        <p style="margin-bottom: 0;">Keterangan:</p>
+                        <div class="d-flex flex-row gap-3">
+                            <span class="mr-3"><span class="text-danger">Merah </span>: <span class="fw-bold">Belum bayar</span></span>
+                            <span class="mr-3"><span class="text-success">Hijau </span>: <span class="fw-bold">Lunas</span></span>
+                            <span class="mr-3"><span class="text-warning">Kuning </span>: <span class="fw-bold">Cicilan</span></span>
                         </div>
                     </div>
                     
