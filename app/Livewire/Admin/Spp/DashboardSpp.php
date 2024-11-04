@@ -28,7 +28,6 @@ class DashboardSpp extends Component
 
     public function mount()
     {
-
         $this->bulanSekarang = Carbon::now()->monthName;
 
         $santri = Santri::where('status_kesantrian', 'aktif')
@@ -127,25 +126,8 @@ class DashboardSpp extends Component
     {
         $monthlyTotals = $this->getMonthlyTotals();
 
-        // Menyiapkan nama bulan dari Januari hingga Desember
-        $bulanNames = [
-            'Januari',
-            'Februari',
-            'Maret',
-            'April',
-            'Mei',
-            'Juni',
-            'Juli',
-            'Agustus',
-            'September',
-            'Oktober',
-            'November',
-            'Desember'
-        ];
-
         return view('livewire.admin.spp.dashboard-spp', [
             'monthlyTotals' => $monthlyTotals,
-            'bulanNames' => $bulanNames,
         ]);
     }
 }

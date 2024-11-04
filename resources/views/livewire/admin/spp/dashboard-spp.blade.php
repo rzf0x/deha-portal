@@ -16,13 +16,15 @@
             <x-card.card-basic title="Santri cicilan bulan ini" value="{{ $cicilan }}" subValue="Santri"
                 iconClass="bi bi-circle-fill" textColor="blue" />
         </div>
+        
+
         <div class="col-lg-3 col-12">
             <x-card.card-basic title="Total Nominal Pembayaran" value="Rp" subValue="{{ $totalNominal }}"
                 iconClass="bi bi-cash-stack" textColor="green" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Pembayaran Diterima" value="Rp"
-                subValue="{{ $totalNominalDiterima }}" iconClass="bi bi-cash-stack" textColor="green" />
+            <x-card.card-basic title="Pembayaran Diterima" value="Rp" subValue="{{ $totalNominalDiterima }}"
+                iconClass="bi bi-cash-stack" textColor="green" />
         </div>
         <div class="col-lg-3 col-12">
             <x-card.card-basic title="Pembayaran Belum Diterima" value=" Rp"
@@ -52,6 +54,7 @@
                 </div>
             </div>
         </div>
+    
     </div>
 
     <div class="row mb-4">
@@ -107,7 +110,20 @@
         },
         colors: ['#4154f1'],
         xaxis: {
-            categories: @json($bulanNames),
+            categories: [
+                'Januari',
+                'Februari',
+                'Maret',
+                'April',
+                'Mei',
+                'Juni',
+                'Juli',
+                'Agustus',
+                'September',
+                'Oktober',
+                'November',
+                'Desember'
+            ],
             axisBorder: {
                 show: false
             },
