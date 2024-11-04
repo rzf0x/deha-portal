@@ -40,8 +40,12 @@ class DetailLaporanCicilanSantri extends Component
         return Cicilan::with([
             'pembayaran.pembayaranTimeline:id,nama_bulan',
             'pembayaran.pembayaranTipe:id,nama',
+            'pembayaran',
             'pembayaran.cicilans' // Ambil data pembayaran yang terkait
         ])
+        ->whereHas('pembayaran', function ($query) {
+            $query->where('status', 'cicilan');
+        })
             ->whereHas('pembayaran.cicilans', function ($query) {
                 $query->where('santri_id', $this->santriId);
             })
@@ -62,6 +66,7 @@ class DetailLaporanCicilanSantri extends Component
         return Cicilan::query()
             ->whereHas('pembayaran', function ($query) {
                 $query->where('santri_id', $this->santriId);
+                $query->where('status', 'cicilan');
             })
             ->selectRaw('DISTINCT YEAR(created_at) as tahun')
             ->orderByDesc('tahun')
@@ -72,6 +77,7 @@ class DetailLaporanCicilanSantri extends Component
         return Cicilan::with(['pembayaran.pembayaranTimeline'])
             ->whereHas('pembayaran', function ($query) {
                 $query->where('santri_id', $this->santriId);
+                $query->where('status', 'cicilan');
             })
             ->get()
             ->pluck('pembayaran.pembayaranTimeline.nama_bulan')
@@ -95,7 +101,7 @@ class DetailLaporanCicilanSantri extends Component
             'bulanList' => $this->getBulanList(),
             'total_cicilan' => $cicilan->count(),
             'total_nominal' => $cicilan->sum('nominal'),
-            'total_cicilan_belum_bayar' => $total_cicilan_belum_bayar,
+            'total_cicilan_belum_bayar' => $total_cicilan_belum_bayar - $cicilan->sum('nominal'),
         ]);
     }
 }
