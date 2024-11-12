@@ -55,7 +55,7 @@
                                     </span>
                                 </td>
                                 <td>{{ $item->jenjang->nama ?? 'N/A' }}</td>
-                                <td>{{ $item->pembayaranTipe->nama }}</td>
+                                <td>{{ $item->pembayaranTipe?->nama }}</td>
                                 <td>
                                     <div class="d-flex gap-2">
                                         <button 
