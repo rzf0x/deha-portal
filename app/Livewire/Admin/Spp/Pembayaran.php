@@ -76,7 +76,7 @@ class Pembayaran extends Component
     public function updatePembayaran()
     {
         $this->Clickpembayaran->status = $this->selectedStatus;
-        
+
         if ($this->Clickpembayaran->status == 'lunas') {
             $this->Clickpembayaran->nominal = $this->detailPembayaran->sum('nominal');
         } else if ($this->Clickpembayaran->status == 'cicilan') {
@@ -84,10 +84,10 @@ class Pembayaran extends Component
         } else if ($this->Clickpembayaran->status == 'belum bayar') {
             $this->Clickpembayaran->nominal = 0;
         }
-        
+
         $this->Clickpembayaran->metode_pembayaran = $this->selectedMetodePembayaran;
         $this->Clickpembayaran->save();
-        
+
         $this->pembayaran = SppPembayaran::with('pembayaranTimeline')->where('santri_id', $this->santriSelected->id)->get();
         $this->isModalOpen = false;
     }
