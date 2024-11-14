@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Admin\Spp;
 
+use App\Models\Jenjang;
 use App\Models\Santri;
 use App\Models\Spp\DetailItemPembayaran;
 use App\Models\Spp\Pembayaran;
@@ -26,17 +27,33 @@ class DashboardSpp extends Component
     public $persentasePembayaran;
     public $tagihanAkanJatuhTempo;
 
+    public $filter = [
+        'jenjang' => 'SMPI Daarul Huffazh',
+        'tahun' => '',
+    ];
+
     public function mount()
     {
         $this->bulanSekarang = Carbon::now()->monthName;
+        $this->filter['tahun'] = date('Y');
 
-        $santri = Santri::where('status_kesantrian', 'aktif')
+        $this->generateData();
+    }
+
+    public function generateData()
+    {
+        $santri = Santri::with('kelas.jenjang', 'Pembayaran')->where('status_kesantrian', 'aktif')
             ->with(['Pembayaran' => function ($query) {
                 $query->whereHas('pembayaranTimeline', function ($subQuery) {
                     $subQuery->where('nama_bulan', $this->bulanSekarang);
-                });
+                })
+                    ->whereYear('created_at', $this->filter['tahun']);
             }])
+            ->whereHas('kelas.jenjang', function ($query) {
+                $query->where('nama', $this->filter['jenjang']);
+            })
             ->get();
+
 
         $this->lunas = $santri->filter(function ($item) {
             return $item->Pembayaran->contains('status', 'lunas');
@@ -51,26 +68,49 @@ class DashboardSpp extends Component
         })->count();
 
         $this->totalSantri = $santri->count();
-        $totalNominalTerbayar = $santri->flatMap->Pembayaran->sum('nominal');
-        $totalNominalPembayaran = DetailItemPembayaran::sum('nominal') * $this->totalSantri;
+
+        $totalNominalTerbayar = $santri->flatMap->Pembayaran->filter(fn($pembayaran) => $pembayaran->created_at->year === $this->filter['tahun'])->sum('nominal');
+
+        $totalNominalPembayaran = DetailItemPembayaran::whereHas('jenjang', function ($query) {
+            $query->where('nama', $this->filter['jenjang']);
+        })
+            ->sum('nominal') * $this->totalSantri;
 
         $this->totalNominalDiterima = $this->formatRupiah($totalNominalTerbayar);
         $this->totalNominalTertunda = $this->formatRupiah($totalNominalTerbayar - $totalNominalPembayaran);
         $this->totalNominal = $this->formatRupiah($totalNominalPembayaran);
 
-        if ($this->totalNominalDiterima > 0) {
+        if ($this->totalNominalDiterima > 0 && $totalNominalPembayaran != 0) {
             $this->persentasePembayaran = round(($totalNominalTerbayar / $totalNominalPembayaran) * 100, 1);
         } else {
             $this->persentasePembayaran = 0;
         }
         $this->tagihanAkanJatuhTempo = $this->calculateDueDate();
+
+        $this->dispatch('updateCharts', [
+            'monthlyTotals' => $this->getMonthlyTotals(),
+            'belum_bayar' => $this->belum_bayar,
+            'lunas' => $this->lunas,
+            'cicilan' => $this->cicilan,
+        ]);
+        // dd(123);
     }
 
     public function getMonthNames()
     {
         return [
-            'January', 'February', 'March', 'April', 'May', 'June', 
-            'July', 'August', 'September', 'October', 'November', 'December'
+            'Januari',
+            'Februari',
+            'Maret',
+            'April',
+            'Mei',
+            'Juni',
+            'Juli',
+            'Agustus',
+            'September',
+            'Oktober',
+            'November',
+            'Desember'
         ];
     }
 
@@ -83,6 +123,10 @@ class DashboardSpp extends Component
 
         // Ambil total pembayaran per bulan berdasarkan pembayaran_timeline
         $results = Pembayaran::with('pembayaranTimeline')
+            ->whereHas('santri.kelas.jenjang', function ($query) {
+                $query->where('nama', $this->filter['jenjang']);
+            })
+            ->whereYear('created_at', $this->filter['tahun'])
             ->selectRaw('pembayaran_timeline_id, SUM(nominal) as total')
             ->groupBy('pembayaran_timeline_id')
             ->get();
@@ -121,13 +165,22 @@ class DashboardSpp extends Component
         $BulanIni = Carbon::create($currentDate->year, $currentDate->month);
         return $currentDate->greaterThan($BulanIni) ? $currentDate->diffInDays($BulanIni->addMonth()) : $currentDate->diffInDays($BulanIni);
     }
+    public function updatedSelectedYear()
+    {
+        $this->updateChartData();
+    }
 
     public function render()
     {
-        $monthlyTotals = $this->getMonthlyTotals();
-
+        $this->dispatch('updateCharts', [
+            'monthlyTotals' => $this->getMonthlyTotals(),
+            'belum_bayar' => $this->belum_bayar,
+            'lunas' => $this->lunas,
+            'cicilan' => $this->cicilan,
+        ]);
         return view('livewire.admin.spp.dashboard-spp', [
-            'monthlyTotals' => $monthlyTotals,
+            'monthlyTotals' => $this->getMonthlyTotals(),
+            'jenjangs' => Jenjang::all(),
         ]);
     }
 }

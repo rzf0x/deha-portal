@@ -20,7 +20,7 @@ class DetailLaporanCicilanSantri extends Component
         'tahun' => ''
     ];
 
-    public function mount($id)
+    public function mount($id, $bulan = null)
     {
         $this->santriId = $id;
         // Memuat hanya field yang diperlukan
@@ -31,7 +31,7 @@ class DetailLaporanCicilanSantri extends Component
             ])
             ->findOrFail($id);
 
-        $this->filter['bulan'] = Carbon::now()->monthName;
+        $this->filter['bulan'] = $bulan ?? Carbon::now()->monthName;
         $this->filter['tahun'] = date('Y');
     }
 
@@ -43,9 +43,9 @@ class DetailLaporanCicilanSantri extends Component
             'pembayaran',
             'pembayaran.cicilans' // Ambil data pembayaran yang terkait
         ])
-        ->whereHas('pembayaran', function ($query) {
-            $query->where('status', 'cicilan');
-        })
+            ->whereHas('pembayaran', function ($query) {
+                $query->where('status', 'cicilan');
+            })
             ->whereHas('pembayaran.cicilans', function ($query) {
                 $query->where('santri_id', $this->santriId);
             })
@@ -91,9 +91,9 @@ class DetailLaporanCicilanSantri extends Component
     {
         $cicilan = $this->getCicilan();
         $totalPembayaran = DetailItemPembayaran::where('jenjang_id', $this->santri->kelas->jenjang->id)->sum('nominal');
-
         $pembayaran_bulan_total = $totalPembayaran * $cicilan->count();
-        $total_cicilan_belum_bayar = $this->filter['bulan'] ? $totalPembayaran : $pembayaran_bulan_total;
+
+        $total_cicilan_belum_bayar = ($this->filter['bulan'] ? $totalPembayaran : $pembayaran_bulan_total) - $cicilan->sum('nominal');
 
         return view('livewire.admin.spp.detail-laporan-cicilan-santri', [
             'cicilan' => $cicilan,
@@ -101,7 +101,7 @@ class DetailLaporanCicilanSantri extends Component
             'bulanList' => $this->getBulanList(),
             'total_cicilan' => $cicilan->count(),
             'total_nominal' => $cicilan->sum('nominal'),
-            'total_cicilan_belum_bayar' => $total_cicilan_belum_bayar - $cicilan->sum('nominal'),
+            'total_cicilan_belum_bayar' => $total_cicilan_belum_bayar,
         ]);
     }
 }

@@ -6,12 +6,12 @@
                 placeholder="Cari Santri..." required>
             <button type="submit" class="btn btn-primary w-25">Cari</button>
         </form>
+        @if ($errorMessage)
+            <div class="alert alert-danger mt-3 errorMessage">{{ $errorMessage }}</div>
+        @endif
     </div>
 
     <!-- Error Message -->
-    @if ($errorMessage)
-        <div class="alert alert-danger mt-3">{{ $errorMessage }}</div>
-    @endif
 
     <!-- Search Results -->
     <div class="d-flex flex-wrap mt-3">
@@ -39,12 +39,12 @@
                     </div>
                     <div class="row card-body">
                         @foreach ([
-                            'Nama Santri' => $santriSelected->nama,
-                            'TTL' => "{$santriSelected->tempat_lahir}, {$santriSelected->tanggal_lahir}",
-                            'Kelas' => $santriSelected->kelas->nama,
-                            'Kamar' => $santriSelected->kamar->nama,
-                            'Jenjang' => $santriSelected->kelas->jenjang->nama,
-                        ] as $label => $value)
+        'Nama Santri' => $santriSelected->nama,
+        'TTL' => "{$santriSelected->tempat_lahir}, {$santriSelected->tanggal_lahir}",
+        'Kelas' => $santriSelected->kelas->nama,
+        'Kamar' => $santriSelected->kamar->nama,
+        'Jenjang' => $santriSelected->kelas->jenjang->nama,
+    ] as $label => $value)
                             <div class="col-lg-6">
                                 <h6>{{ $label }}:</h6>
                                 <p>{{ $value }}</p>
@@ -70,16 +70,19 @@
                         @endforeach
                     </div>
                     <hr>
-                    
+
                     <div class="mt-1">
                         <p style="margin-bottom: 0;">Keterangan:</p>
                         <div class="d-flex flex-row gap-3">
-                            <span class="mr-3"><span class="text-danger">Merah </span>: <span class="fw-bold">Belum bayar</span></span>
-                            <span class="mr-3"><span class="text-success">Hijau </span>: <span class="fw-bold">Lunas</span></span>
-                            <span class="mr-3"><span class="text-warning">Kuning </span>: <span class="fw-bold">Cicilan</span></span>
+                            <span class="mr-3"><span class="text-danger">Merah </span>: <span class="fw-bold">Belum
+                                    bayar</span></span>
+                            <span class="mr-3"><span class="text-success">Hijau </span>: <span
+                                    class="fw-bold">Lunas</span></span>
+                            <span class="mr-3"><span class="text-warning">Kuning </span>: <span
+                                    class="fw-bold">Cicilan</span></span>
                         </div>
                     </div>
-                    
+
                     <!-- Modal Pembayaran -->
                     @if ($isModalOpen)
                         <div class="card mt-3">
@@ -87,67 +90,119 @@
                                 <!-- Row for aligning headers -->
                                 <div class="row mb-3">
                                     <div class="col-12 @if ($selectedStatus === 'cicilan') col-lg-6 @endif">
-                                        <h5>Detail Pembayaran: bulan 
-                                            <span class="text-primary" style="font-weight: 900">{{ $Clickpembayaran->pembayaranTimeline->nama_bulan }}</span>
+                                        <h5>Detail Pembayaran: bulan
+                                            <span class="text-primary"
+                                                style="font-weight: 900">{{ $Clickpembayaran->pembayaranTimeline->nama_bulan }}</span>
                                         </h5>
                                     </div>
-                                    
+
                                     @if ($selectedStatus === 'cicilan')
-                                        <div class="col-12 col-lg-6">
+                                        <div class="col-12 col-lg-6 d-flex justify-content-between">
                                             <h5>Rincian Cicilan</h5>
+                                            <a href="{{ route('spp.detail-laporan-cicilan-santri', [
+                                                'id' => $santriSelected->id,
+                                                'bulan' => $Clickpembayaran->pembayaranTimeline->nama_bulan,
+                                            ]) }}"
+                                                class="text-decoration-underline {{ $Clickpembayaran->cicilans->isNotEmpty() ? '' : 'd-none' }}">Lihat
+                                                Detail Cicilan</a>
                                         </div>
                                     @endif
                                 </div>
-                    
+
                                 <!-- Row for main content sections -->
                                 <div class="row">
                                     <!-- Payment Details Section -->
-                                    <div class="col-12 @if ($selectedStatus === 'cicilan') col-lg-6 @endif d-flex flex-column">
+                                    <div
+                                        class="col-12 @if ($selectedStatus === 'cicilan') col-lg-6 @endif d-flex flex-column">
                                         <div class="form-group">
                                             <label for="status">Ubah status pembayaran:
-                                                <span wire:target='selectedStatus' wire:loading.class.remove='d-none' class="d-none spinner-border spinner-border-sm"></span>
+                                                <span wire:target='selectedStatus' wire:loading.class.remove='d-none'
+                                                    class="d-none spinner-border spinner-border-sm"></span>
                                             </label>
-                                            <select wire:loading.attr="disabled" wire:model.live="selectedStatus" class="form-control">
+                                            <select wire:loading.attr="disabled" wire:model.live="selectedStatus"
+                                                class="form-control">
                                                 <option value="lunas">Lunas</option>
                                                 <option value="belum bayar">Belum Bayar</option>
                                                 <option value="cicilan">Cicilan</option>
                                             </select>
                                         </div>
-                    
+
                                         @if ($selectedStatus != 'belum bayar')
                                             <div class="form-group">
                                                 <label for="Metode">Ubah Metode pembayaran:
-                                                    <span wire:target='selectedMetodePembayaran' wire:loading.class.remove='d-none' class="d-none spinner-border spinner-border-sm"></span>
+                                                    <span wire:target='selectedMetodePembayaran'
+                                                        wire:loading.class.remove='d-none'
+                                                        class="d-none spinner-border spinner-border-sm"></span>
                                                 </label>
-                                                <select wire:loading.attr="disabled" wire:model.live="selectedMetodePembayaran" class="form-control">
+                                                <select wire:loading.attr="disabled"
+                                                    wire:model.live="selectedMetodePembayaran" class="form-control">
                                                     <option value="transfer">Transfer</option>
                                                     <option value="cash">Cash</option>
                                                 </select>
+                                                @if ($selectedStatus !== 'cicilan')
+                                                    <div class="form-group">
+                                                        <label for="Metode">Masukan Bukti Pembayaran
+                                                            <span wire:target='buktiPembayaran'
+                                                                wire:loading.class.remove='d-none'
+                                                                class="d-none spinner-border spinner-border-sm"></span>
+                                                        </label>
+                                                        <input required type="file" class="form-control"
+                                                            wire:loading.attr='disabled'
+                                                            wire:model.live.debounce.1ms="buktiPembayaran">
+                                                    </div>
+                                                    @if ($buktiPembayaran)
+                                                        <div class="overflow-y-auto rounded-4" style="height: 25rem;">
+                                                            <img src="{{ $buktiPembayaran->temporaryUrl() }}"
+                                                                alt="Foto" class="rounded-4 object-fit-cover w-100">
+                                                        </div>
+                                                    @endif
+                                                @endif
                                             </div>
                                         @endif
-                    
-                                        <div class="d-flex justify-content-end mt-3">
-                                            <button wire:loading.attr="disabled" wire:click="updatePembayaran" class="btn btn-primary">Update Data</button>
-                                        </div>
+                                        @if ($selectedStatus !== 'cicilan')
+                                            <div class="d-flex justify-content-end mt-3">
+                                                <button wire:loading.attr="disabled" wire:target='buktiPembayaran' wire:click="updatePembayaran"
+                                                    class="btn btn-primary">Update status pembayaran</button>
+                                            </div>
+                                        @endif
                                     </div>
-                    
+
                                     <!-- Installment Details Section -->
                                     @if ($selectedStatus === 'cicilan')
                                         <div class="col-12 col-lg-6 d-flex flex-column">
                                             <form wire:submit.prevent="storeCicilan" method="post">
                                                 <div class="form-group">
                                                     <label>Keterangan</label>
-                                                    <input type="text" class="form-control" wire:model="keteranganCicilan" required>
+                                                    <input type="text" class="form-control"
+                                                        wire:model="keteranganCicilan" required>
                                                 </div>
                                                 <div class="form-group">
                                                     <label>Jumlah</label>
-                                                    <input type="number" class="form-control" wire:model="jumlahCicilan" required>
+                                                    <input type="number" class="form-control"
+                                                        wire:model="jumlahCicilan" required>
                                                 </div>
+                                                <div class="form-group">
+                                                    <label for="Metode">Masukan Bukti Pembayaran
+                                                        <span wire:target='buktiPembayaran'
+                                                            wire:loading.class.remove='d-none'
+                                                            class="d-none spinner-border spinner-border-sm"></span>
+                                                    </label>
+                                                    <input required type="file" class="form-control"
+                                                        wire:loading.attr='disabled'
+                                                        wire:model.live.debounce.1ms="buktiPembayaran">
+                                                </div>
+                                                @if ($buktiPembayaran)
+                                                    <div class="overflow-y-auto rounded-4" style="height: 25rem;">
+                                                        <img src="{{ $buktiPembayaran->temporaryUrl() }}"
+                                                            alt="Foto" class="rounded-4 object-fit-cover w-100">
+                                                    </div>
+                                                @endif
                                                 <div class="d-flex justify-content-end">
-                                                    <button wire:loading.attr="disabled" class="btn btn-primary" wire:click='$refresh'>Simpan</button>
+                                                    <button wire:loading.attr="disabled" wire:target='buktiPembayaran' class="btn btn-primary"
+                                                        wire:click='$refresh'>Tambahkan Cicilan</button>
                                                 </div>
                                             </form>
-                    
+
                                             @if ($errors->any())
                                                 <div class="alert alert-danger mt-3">
                                                     <ul>
@@ -163,7 +218,7 @@
                             </div>
                         </div>
                     @endif
-                    
+
 
                     <!-- End of Modal Pembayaran -->
 
@@ -193,3 +248,11 @@
         </div>
     @endif
 </div>
+
+<script>
+    window.addEventListener('hide-error', event => {
+        setTimeout(() => {
+            @this.set('errorMessage', '');
+        }, event.detail.delay);
+    });
+</script>

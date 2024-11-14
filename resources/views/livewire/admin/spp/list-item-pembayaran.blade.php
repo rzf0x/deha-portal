@@ -13,14 +13,14 @@
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="d-flex gap-3">
                     <select wire:model.live="jenjangFilter" class="form-select">
-                        <option value="">Semua Jenjang</option>
+                        <option value="">Pilih Jenjang</option>
                         @foreach ($jenjangOptions as $jenjang)
                             <option value="{{ $jenjang->id }}">{{ $jenjang->nama }}</option>
                         @endforeach
                     </select>
 
                     <select wire:model.live="tipePembayaranFilter" class="form-select">
-                        <option value="">Semua Tipe</option>
+                        <option value="">Pilih Tipe</option>
                         @foreach ($tipePembayaranOptions as $id => $nama)
                             <option value="{{ $id }}">{{ $nama }}</option>
                         @endforeach

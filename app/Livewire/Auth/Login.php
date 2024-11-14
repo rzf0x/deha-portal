@@ -16,6 +16,8 @@ class Login extends Component
     #[Validate('required')]
     public $password;
 
+    public $showPassword;
+
     #[Title('Halaman Login')]
 
     public function login()
@@ -37,15 +39,16 @@ class Login extends Component
             // Simpan data ke dalam sesi
             session(['role' => $result->nama]);
 
-
             if ($result->nama === 'Petugas SPP') {
                 return redirect()->route('spp.dashboard');
             } else {
                 return redirect()->route('admin.dashboard');
             }
         }
+        else{
+            session()->flash('error', 'Invalid credentials!');
+        }
 
-        session()->flash('error', 'Invalid credentials!');
     }
 
     public function logout()
