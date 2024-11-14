@@ -27,7 +27,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('product_id')->constrained('products');
@@ -39,7 +39,7 @@ return new class extends Migration
 
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('orders');
+            $table->foreignId('transaction_id')->constrained('transactions');
             $table->string('payment_method');
             $table->string('payment_status');
             $table->datetime('payment_date');
@@ -78,7 +78,7 @@ return new class extends Migration
 
         Schema::create('payment_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('order_id')->constrained('orders');
+            $table->foreignId('transaction_id')->constrained('transactions');
             $table->foreignId('product_id')->constrained('products');
             $table->integer('quantity');
             $table->decimal('price', 10, 2);
@@ -94,7 +94,7 @@ return new class extends Migration
     {
         Schema::dropIfExists('categories');
         Schema::dropIfExists('products');
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('transactions');
         Schema::dropIfExists('payments');
         Schema::dropIfExists('laundries');
         Schema::dropIfExists('laundry_services');
