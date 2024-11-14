@@ -2,6 +2,7 @@
 
 namespace App\Models\Spp;
 
+use App\Models\Santri;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,6 +19,7 @@ class Pembayaran extends Model
         'pembayaran_tipe_id',
         'santri_id',
         'pembayaran_timeline_id',
+        'bukti_pembayaran',
     ];
 
     public function pembayaranTipe()

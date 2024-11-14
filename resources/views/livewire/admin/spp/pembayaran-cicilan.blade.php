@@ -54,7 +54,7 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('spp.detail-laporan-cicilan-santri', $santri->id) }}"
+                                    <a href="{{ route('spp.detail-laporan-cicilan-santri', ['id'=>$santri->id]) }}"
                                        class="btn btn-sm btn-info">
                                        <i class="bi bi-eye-fill"></i> Detail
                                     </a>

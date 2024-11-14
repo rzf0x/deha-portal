@@ -3,7 +3,6 @@
 namespace App\Livewire\Admin\Spp;
 
 use App\Models\Santri;
-use App\Models\Spp\DetailItemPembayaran;
 use App\Models\Spp\Pembayaran;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -35,18 +34,7 @@ class DetailLaporanSppSantri extends Component
 
     protected function getPembayaran()
     {
-        return Pembayaran::query()
-            ->select([
-                'id',
-                'santri_id',
-                'pembayaran_timeline_id',
-                'pembayaran_tipe_id',
-                'nominal',
-                'metode_pembayaran',
-                'status',
-                'created_at'
-            ])
-            ->with([
+        return Pembayaran::with([
                 'pembayaranTimeline:id,nama_bulan',
                 'pembayaranTipe:id,nama'
             ])

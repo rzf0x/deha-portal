@@ -14,6 +14,7 @@ class Cicilan extends Model
     protected $fillable = [
         'nominal',
         'keterangan',
+        'bukti_pembayaran',
         'pembayaran_id',
     ];
 

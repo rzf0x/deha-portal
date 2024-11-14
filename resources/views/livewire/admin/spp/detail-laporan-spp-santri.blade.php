@@ -1,10 +1,7 @@
 <div>
     @if (session()->has('message'))
         <div class="d-flex justify-content-end">
-            <div x-data="{ show: true }" 
-                x-show="show" 
-                x-init="setTimeout(() => show = false, 2500)" 
-                class="alert alert-success w-25">
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 2500)" class="alert alert-success w-25">
                 {{ session('message') }}
             </div>
         </div>
@@ -22,11 +19,14 @@
                         </tr>
                         <tr>
                             <td>Kelas</td>
-                            <td>: <span class="badge bg-info">{{ $santri->kelas?->nama ?? 'Belum ada kelas' }}</span></td>
+                            <td>: <span class="badge bg-info">{{ $santri->kelas?->nama ?? 'Belum ada kelas' }}</span>
+                            </td>
                         </tr>
                         <tr>
                             <td>Kamar</td>
-                            <td>: <span class="badge bg-warning text-dark">{{ $santri->kamar?->nama ?? 'Belum ada kamar' }}</span></td>
+                            <td>: <span
+                                    class="badge bg-warning text-dark">{{ $santri->kamar?->nama ?? 'Belum ada kamar' }}</span>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -60,13 +60,13 @@
                 <h5 class="card-title">Riwayat Pembayaran</h5>
                 <div class="d-flex gap-2">
                     <select wire:model.live="filter.tahun" class="form-select">
-                        <option value="">Semua Tahun</option>
-                        @foreach($tahunList as $tahun)
+                        <option value="">Pilih Tahun</option>
+                        @foreach ($tahunList as $tahun)
                             <option value="{{ $tahun }}">{{ $tahun }}</option>
                         @endforeach
                     </select>
                     <select wire:model.live="filter.status" class="form-select">
-                        <option value="">Semua Status</option>
+                        <option value="">Pilih Status</option>
                         <option value="lunas">Lunas</option>
                         <option value="belum bayar">belum bayar</option>
                         <option value="cicilan">cicilan</option>
@@ -85,6 +85,7 @@
                             <th>Tipe</th>
                             <th>Metode</th>
                             <th>Status</th>
+                            <th>Bukti</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -105,13 +106,38 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="badge {{ match($bayar->status) {
-                                        'lunas' => 'bg-success',
-                                        'cicilan' => 'bg-warning text-dark',
-                                        default => 'bg-danger'
-                                    } }}">
+                                    <span
+                                        class="badge {{ match ($bayar->status) {
+                                            'lunas' => 'bg-success',
+                                            'cicilan' => 'bg-warning text-dark',
+                                            default => 'bg-danger',
+                                        } }}">
                                         {{ str($bayar->status)->title() }}
                                     </span>
+                                </td>
+                                <td>
+                                    {{-- @dd($bayar) --}}
+                                    @if ($bayar->status == 'cicilan')
+                                        <a href="{{ route('spp.detail-laporan-cicilan-santri', [
+                                            'id' => $santri->id,
+                                            'bulan' => $bayar->pembayaranTimeline->nama_bulan,
+                                        ]) }}"
+                                            class="text-decoration-underline">Lihat Detail Cicilan</a>
+                                    @elseif($bayar->status == 'lunas')
+                                        @if ($bayar->bukti_pembayaran)
+                                            <img src="{{ asset('storage/' . $bayar->bukti_pembayaran) }}"
+                                                alt="foto" class="img-fluid rounded-4"
+                                                style="object-fit: cover; height: 10rem; width: 10rem;">
+                                        @else
+                                            <span class="badge bg-danger">
+                                                kosong
+                                            </span>
+                                        @endif
+                                    @elseif($bayar->status == 'belum bayar')
+                                        <span class="badge bg-danger">
+                                            kosong
+                                        </span>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

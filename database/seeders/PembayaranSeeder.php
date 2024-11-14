@@ -27,7 +27,7 @@ class PembayaranSeeder extends Seeder
                 'metode_pembayaran' => 'cash',
                 'pembayaran_tipe_id' => 1, // Sesuaikan dengan ID pembayaran_tipe yang ada
                 'santri_id' => 1, // Sesuaikan dengan ID santri yang ada
-                'pembayaran_timeline_id' => 10,
+                'pembayaran_timeline_id' => 11,
             ],
         ];
 

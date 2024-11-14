@@ -46,10 +46,10 @@
             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
             
             <!-- Livewire Charts Scripts -->
-            @livewireChartsScripts
             
             <!-- Livewire Scripts -->
             @livewireScripts
+            @livewireChartsScripts
         </div>
     </div>
 
