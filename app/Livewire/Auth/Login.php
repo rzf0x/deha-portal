@@ -30,7 +30,7 @@ class Login extends Component
         if (Auth::attempt($credentials)) {
 
             $user = Auth::user();
-            $data = $user->admin->roles_id;
+            $data = $user->roles_id;
 
             $result = Role::where('id', $data)->first();
 

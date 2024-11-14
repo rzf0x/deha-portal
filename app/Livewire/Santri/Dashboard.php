@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Santri;
 
+use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 class Dashboard extends Component
