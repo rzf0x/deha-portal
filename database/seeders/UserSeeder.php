@@ -16,11 +16,39 @@ class UserSeeder extends Seeder
     {
         $data = [
             [
+                'roles_id' => 1,
+                'name' => 'User',
                 'email' => 'superadmin@example.com',
                 'password' => Hash::make('password123')
             ],
             [
+                'roles_id' => 2,
+                'name' => 'User',
                 'email' => 'admin-spp@example.com',
+                'password' => Hash::make('password123')
+            ],
+            [
+                'roles_id' => 3,
+                'name' => 'User',
+                'email' => 'petugas-e-cashless@example.com',
+                'password' => Hash::make('password123')
+            ],
+            [
+                'roles_id' => 4,
+                'name' => 'User',
+                'email' => 'petugas-warung@example.com',
+                'password' => Hash::make('password123')
+            ],
+            [
+                'roles_id' => 5,
+                'name' => 'User',
+                'email' => 'petugas-laundry@example.com',
+                'password' => Hash::make('password123')
+            ],
+            [
+                'roles_id' => 6,
+                'name' => 'User',
+                'email' => 'santri@example.com',
                 'password' => Hash::make('password123')
             ],
         ];

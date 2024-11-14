@@ -47,7 +47,7 @@ class ListAdmin extends Component
     #[Computed]
     public function listRoleAdmin()
     {
-        return Role::all();
+        return Role::where('nama', '!=', 'Santri')->get();
     }
 
     public function render()

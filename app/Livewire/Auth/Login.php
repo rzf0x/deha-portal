@@ -38,10 +38,18 @@ class Login extends Component
             session(['role' => $result->nama]);
 
 
-            if ($result->nama === 'Petugas SPP') {
-                return redirect()->route('spp.dashboard');
-            } else {
+            if ($result->nama === 'Super Admin') {
                 return redirect()->route('admin.dashboard');
+            } else if ($result->nama === 'Petugas SPP') {
+                return redirect()->route('spp.dashboard');
+            } else if ($result->nama === 'Petugas E-Cashless') {
+                return redirect()->route('petugas-e-cashless.dashboard');
+            } else if ($result->nama === 'Petugas Warung') {
+                return redirect()->route('petugas-warung.dashboard');
+            } else if ($result->nama === 'Petugas Laundry') {
+                return redirect()->route('petugas-laundry.dashboard');
+            } else {
+                return redirect()->route('santri.dashboard');
             }
         }
 
