@@ -85,7 +85,7 @@ return new class extends Migration
             $table->foreignId('laundry_service_id')->constrained('laundry_services');
             $table->integer('quantity');
             $table->decimal('subtotal', 10, 2);
-            $table->enum('status', ['pending', 'picked_up', 'processing', 'ready', 'delivered']);
+            $table->enum('status', ['menunggu', 'dicuci', 'disetrika', 'siap diambil']);
             $table->timestamps();
         });
 
