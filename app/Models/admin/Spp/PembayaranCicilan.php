@@ -2,6 +2,7 @@
 
 namespace App\Models\Admin\Spp;
 
+use App\Models\Spp\Pembayaran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 

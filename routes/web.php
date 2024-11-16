@@ -10,6 +10,7 @@ use App\Livewire\Admin\Spp\Pembayaran;
 use App\Livewire\Admin\Spp\PembayaranCicilan;
 use App\Livewire\Admin\Spp\TambahSantri;
 use App\Livewire\Auth\Logout;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -76,6 +77,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     });
 });
 
+Route::get('/optimize-clear', function () {
+    Artisan::call('optimize:clear');
+    return 'Cache berhasil dibersihkan!';
+});
 
 Route::prefix('spp')->middleware('auth')->group(function(){
 
