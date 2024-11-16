@@ -12,9 +12,6 @@
                                 Laundry bulanan santri
                             </div>
                         </div>
-                        <div class="icon-circle bg-primary bg-opacity-10">
-                            <i class="fas fa-box-archive text-primary"></i>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -29,9 +26,6 @@
                             <div class="text-success mt-1">
                                 <i class="fas fa-arrow-up me-1"></i>+ 15 order baru
                             </div>
-                        </div>
-                        <div class="icon-circle bg-success bg-opacity-10">
-                            <i class="fas fa-tshirt text-success"></i>
                         </div>
                     </div>
                 </div>
@@ -48,9 +42,6 @@
                                 8 Kamar
                             </div>
                         </div>
-                        <div class="icon-circle bg-warning bg-opacity-10">
-                            <i class="fas fa-building text-warning"></i>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -62,12 +53,9 @@
                         <div>
                             <div class="text-muted mb-1">Total Service</div>
                             <div class="h3 mb-0">10</div>
-                            <div class="text-danger mt-1">
+                            <div class="text-primary mt-1">
                                 Jenis service laundry
                             </div>
-                        </div>
-                        <div class="icon-circle bg-danger bg-opacity-10">
-                            <i class="fas fa-money-bill text-danger"></i>
                         </div>
                     </div>
                 </div>
