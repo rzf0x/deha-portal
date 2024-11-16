@@ -68,3 +68,20 @@ body {
 
     font-size: 29px;
 }
+
+.chart-container, .card-information-sales {
+    display: flex;
+    flex-direction: column;
+}
+.chart-revenue, .card-information-sales > .row {
+    flex: 1;
+}
+.card-information-sales .row:first-child {
+    margin-bottom: 1rem;
+}
+.min-h-100 {
+    height: 100%;
+}
+.bg-secondary {
+    background-color: #f1f3f5 !important;
+}

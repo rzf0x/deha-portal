@@ -9,11 +9,18 @@ class LaundryService extends Model
 {
     use HasFactory;
 
-    protected $table = 'laundry_service';
     protected $fillable = ['laundry_id', 'name', 'description', 'price'];
 
     public function laundry()
     {
         return $this->belongsTo(Laundry::class);
+    }
+
+    // Relasi Many-to-Many dengan LaundryOrder
+    public function orders()
+    {
+        return $this->belongsToMany(LaundryOrder::class, 'laundry_order_items')
+            ->withPivot('quantity', 'price', 'subtotal', 'notes')
+            ->withTimestamps();
     }
 }

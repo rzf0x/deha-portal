@@ -6,14 +6,13 @@ use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PaymentDetail extends Model
+class TransactionItem extends Model
 {
     use HasFactory;
 
-    protected $table = 'payment_details';
-    protected $fillable = ['order_id', 'product_id', 'quantity', 'price', 'subtotal'];
+    protected $fillable = ['transaction_id', 'product_id', 'quantity', 'price', 'subtotal'];
 
-    public function order()
+    public function transaction()
     {
         return $this->belongsTo(Transaction::class);
     }

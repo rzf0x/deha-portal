@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.css">
 
     <link rel="shortcut icon" href="{{ asset('logo.webp') }}" type="image/x-icon">
+    <link rel="stylesheet" href="{{ asset('custom.css') }}">
 
     <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/app.css') }}">
     {{-- <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/app-dark.css') }}"> --}}
@@ -41,13 +42,13 @@
 
             {{-- @include('components.layouts.partials.footer') --}}
 
-            
+
             <!-- Include ApexCharts library -->
             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-            
+
             <!-- Livewire Charts Scripts -->
             @livewireChartsScripts
-            
+
             <!-- Livewire Scripts -->
             @livewireScripts
         </div>
@@ -60,7 +61,7 @@
     <!-- Need: Apexcharts -->
     {{-- <script src="assets/extensions/apexcharts/apexcharts.min.js"></script> --}}
     <script src="assets/static/js/pages/dashboard.js"></script>
-    
+
 </body>
 
 </html>
