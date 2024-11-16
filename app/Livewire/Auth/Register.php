@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Auth;
 
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 
 class Register extends Component
@@ -53,7 +56,16 @@ class Register extends Component
 
     public function register()
     {
-        return dd($this->email, $this->username, $this->password);
+        $user = User::create([
+            'roles_id' => 6,
+            'name' => $this->username,
+            'email' => $this->email,
+            'password' => Hash::make($this->password),
+        ]);
+
+        request()->session()->regenerate();
+        Auth::login($user);
+        return to_route('santri.dashboard');
     }
 
     public function render()

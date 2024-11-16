@@ -1,5 +1,8 @@
 <?php
 
+use App\Livewire\Admin\AdminLaundry\Dashboard as AdminLaundryDashboard;
+use App\Livewire\Admin\AdminWarung\Dashboard as AdminWarungDashboard;
+use App\Livewire\Admin\AdminECashless\Dashboard as AdminECashlessDashboard;
 use App\Livewire\Admin\ListSantri\DetailSantri;
 use App\Livewire\Admin\Spp\DashboardSpp;
 use App\Livewire\Admin\Spp\DetailLaporanCicilanSantri;
@@ -10,6 +13,8 @@ use App\Livewire\Admin\Spp\Pembayaran;
 use App\Livewire\Admin\Spp\PembayaranCicilan;
 use App\Livewire\Admin\Spp\TambahSantri;
 use App\Livewire\Auth\Logout;
+use App\Livewire\Santri\Dashboard;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -32,7 +37,6 @@ Route::get('/', function () {
 Route::prefix('auth')->group(function () {
     Route::get('/login', App\Livewire\Auth\Login::class)->name('login');
     Route::get('/register', App\Livewire\Auth\Register::class)->name('register');
-
     Route::get('/logout', Logout::class)->name('auth.logout');
 });
 
@@ -76,6 +80,10 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     });
 });
 
+Route::get('/optimize-clear', function () {
+    Artisan::call('optimize:clear');
+    return 'Cache berhasil dibersihkan!';
+});
 
 Route::prefix('spp')->middleware('auth')->group(function(){
 
@@ -92,4 +100,17 @@ Route::prefix('spp')->middleware('auth')->group(function(){
 
     Route::get('/laporan-keuangan', LaporanKeuangan::class)->name('spp.laporan-keuangan');
 
+});
+
+Route::prefix('santri')->middleware('auth')->group(function() {
+    Route::get('/dashboard', Dashboard::class)->name('santri.dashboard');
+});
+Route::prefix('petugas-warung')->middleware('auth')->group(function() {
+    Route::get('/dashboard', AdminWarungDashboard::class)->name('petugas-warung.dashboard');
+});
+Route::prefix('petugas-laundry')->middleware('auth')->group(function() {
+    Route::get('/dashboard', AdminLaundryDashboard::class)->name('petugas-laundry.dashboard');
+});
+Route::prefix('petugas-e-cashless')->middleware('auth')->group(function() {
+    Route::get('/dashboard', AdminECashlessDashboard::class)->name('petugas-e-cashless.dashboard');
 });
