@@ -91,6 +91,7 @@
                                 <th>Nama Produk</th>
                                 <th>Kategori</th>
                                 <th>Stok</th>
+                                <th>Terjual</th>
                                 <th>Harga</th>
                                 <th>Action</th>
                             </tr>
@@ -106,6 +107,7 @@
                                 <td>Produk A</td>
                                 <td>Kategori 1</td>
                                 <td>100</td>
+                                <td>-41</td>
                                 <td>Rp. 100.000</td>
                                 <td><button class="btn btn-sm btn-primary text-white"><i class="bi bi-eye-fill"></i>
                                         Detail</button></td>
@@ -120,6 +122,7 @@
                                 <td>Produk B</td>
                                 <td>Kategori 2</td>
                                 <td>50</td>
+                                <td>-21</td>
                                 <td>Rp. 200.000</td>
                                 <td><button class="btn btn-sm btn-primary text-white"><i class="bi bi-eye-fill"></i>
                                         Detail</button></td>
@@ -134,6 +137,7 @@
                                 <td>Produk C</td>
                                 <td>Kategori 3</td>
                                 <td>200</td>
+                                <td>-10</td>
                                 <td>Rp. 150.000</td>
                                 <td><button class="btn btn-sm btn-primary text-white"><i class="bi bi-eye-fill"></i>
                                         Detail</button></td>
@@ -148,6 +152,7 @@
                                 <td>Produk D</td>
                                 <td>Kategori 4</td>
                                 <td>75</td>
+                                <td>-32</td>
                                 <td>Rp. 300.000</td>
                                 <td><button class="btn btn-sm btn-primary text-white"><i class="bi bi-eye-fill"></i>
                                         Detail</button></td>
@@ -162,6 +167,7 @@
                                 <td>Produk E</td>
                                 <td>Kategori 5</td>
                                 <td>150</td>
+                                <td>-45</td>
                                 <td>Rp. 250.000</td>
                                 <td><button class="btn btn-sm btn-primary text-white"><i class="bi bi-eye-fill"></i>
                                         Detail</button></td>

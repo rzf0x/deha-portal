@@ -10,6 +10,7 @@ class LaundryOrder extends Model
 {
     use HasFactory;
 
+    /** */
     protected $fillable = ['order_number', 'user_id', 'laundry_id', 'total_price', 'status'];
 
     public function user()

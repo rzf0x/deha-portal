@@ -85,3 +85,14 @@ body {
 .bg-secondary {
     background-color: #f1f3f5 !important;
 }
+.card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+.card-subtitle {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+.progress-bar {
+    background-color: #28a745;
+}
