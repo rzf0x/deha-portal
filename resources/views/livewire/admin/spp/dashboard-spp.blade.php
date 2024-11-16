@@ -1,4 +1,13 @@
 <div>
+    <div class="form-group sticky-top bg-white p-3 shadow-sm cursor-pointer" style="top: 1rem; z-index: 99;">
+        <select wire:model.live="filter.jenjang" wire:change='generateData' wire:loading.attr="disabled" class="form-select">
+            @foreach ($jenjangs as $jenjang)
+                <option value="{{ $jenjang->nama }}">{{ $jenjang->nama }} </option>
+            @endforeach
+        </select>
+        <span wire:target='filter.jenjang' wire:loading.class.remove='d-none'
+            class="d-none spinner-border spinner-border-sm absolute-right"></span>
+    </div>
     <div class="row">
         <div class="col-lg-3 col-12">
             <x-card.card-basic title="Total Santri" value="{{ $totalSantri }}" subValue="Santri"
@@ -16,7 +25,7 @@
             <x-card.card-basic title="Santri cicilan bulan ini" value="{{ $cicilan }}" subValue="Santri"
                 iconClass="bi bi-circle-fill" textColor="blue" />
         </div>
-        
+
 
         <div class="col-lg-3 col-12">
             <x-card.card-basic title="Total Nominal Pembayaran" value="Rp" subValue="{{ $totalNominal }}"
@@ -54,7 +63,7 @@
                 </div>
             </div>
         </div>
-    
+
     </div>
 
     <div class="row mb-4">
@@ -63,7 +72,7 @@
                 <div class="card-header">
                     <h4 class="card-title">Overview Nominal Pembayaran</h4>
                 </div>
-                <div class="card-body" style="position: relative;">
+                <div wire:ignore class="card-body" style="position: relative;">
                     <div id="pembayaranChart" style="min-height: 365px;"></div>
                 </div>
             </div>
@@ -73,18 +82,14 @@
                 <div class="card-header">
                     <h4 class="card-title">Overview Pembayaran Santri</h4>
                 </div>
-                <div class="card-body" style="position: relative;">
+                <div wire:ignore class="card-body" style="position: relative;">
                     <div id="kelunasanSantriChart" style="min-height: 365px;"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-
-
 <script>
     var options = {
         series: [{
@@ -98,52 +103,19 @@
                 show: false
             }
         },
-        plotOptions: {
-            bar: {
-                borderRadius: 4,
-                horizontal: false,
-                columnWidth: '60%',
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        colors: ['#4154f1'],
         xaxis: {
-            categories: [
-                'Januari',
-                'Februari',
-                'Maret',
-                'April',
-                'Mei',
-                'Juni',
-                'Juli',
-                'Agustus',
-                'September',
-                'Oktober',
-                'November',
-                'Desember'
-            ],
-            axisBorder: {
-                show: false
-            },
-            axisTicks: {
-                show: false
-            }
+            categories: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September',
+                'Oktober', 'November', 'Desember'
+            ]
         },
         yaxis: {
             title: {
                 text: 'Jumlah Pembayaran'
             }
         },
-        grid: {
-            borderColor: '#f1f1f1',
-        },
         tooltip: {
             y: {
-                formatter: function(val) {
-                    return "Rp " + val.toLocaleString('id-ID')
-                }
+                formatter: val => "Rp " + val.toLocaleString('id-ID')
             }
         }
     };
@@ -152,18 +124,21 @@
         series: [{{ $belum_bayar }}, {{ $lunas }}, {{ $cicilan }}],
         chart: {
             type: 'donut',
-            height: '100%'
+            height: '100%',
+            events: {
+                mounted: function(chartContext, config) {
+                    checkEmptyData(chartContext);
+                },
+                updated: function(chartContext, config) {
+                    checkEmptyData(chartContext);
+                }
+            }
         },
         labels: ['Belum Bayar', 'Sudah Lunas', 'Cicilan'],
         colors: ['#ff6384', '#36a2eb', '#ffce56'],
-        legend: {
-            position: 'bottom'
-        },
         tooltip: {
             y: {
-                formatter: function(val) {
-                    return val + " Santri"
-                }
+                formatter: val => val + " Santri"
             }
         }
     };
@@ -173,4 +148,58 @@
 
     chart.render();
     donutChart.render();
+
+    // Status untuk melacak apakah anotasi "Santri Kosong" sudah diterapkan
+    var isEmptyDataDisplayed = false;
+
+    // Fungsi untuk mengecek apakah data di chart donut kosong
+    function checkEmptyData(chartContext) {
+        const isEmpty = donutOptions.series.every(value => value === 0);
+
+        // Hanya perbarui anotasi jika status isEmpty berubah
+        if (isEmpty && !isEmptyDataDisplayed) {
+            chartContext.updateOptions({
+                annotations: {
+                    position: 'front',
+                    texts: [{
+                        text: 'Santri Kosong',
+                        x: '50%',
+                        y: '50%',
+                        textAnchor: 'middle',
+                        style: {
+                            fontSize: '20px',
+                            fontFamily: 'Arial',
+                            color: '#999'
+                        }
+                    }]
+                }
+            });
+            isEmptyDataDisplayed = true; // Tandai bahwa anotasi telah diterapkan
+        } else if (!isEmpty && isEmptyDataDisplayed) {
+            chartContext.updateOptions({
+                annotations: {
+                    texts: []
+                }
+            });
+            isEmptyDataDisplayed = false; // Hapus tanda jika ada data
+        }
+    }
+
+    // Mendengarkan event 'updateCharts' dari Livewire
+    document.addEventListener('updateCharts', event => {
+        const data = event.detail[0];
+
+        // Update data chart area
+        chart.updateSeries([{
+            name: 'Total Pembayaran',
+            data: data.monthlyTotals
+        }]);
+
+        // Update data chart donut dan cek apakah datanya kosong
+        donutChart.updateSeries([data.belum_bayar, data.lunas, data.cicilan]);
+
+        // Perbarui nilai donutOptions.series sesuai data terbaru
+        donutOptions.series = [data.belum_bayar, data.lunas, data.cicilan];
+        checkEmptyData(donutChart);
+    });
 </script>

@@ -1,10 +1,7 @@
 <div>
     @if (session()->has('message'))
         <div class="d-flex justify-content-end">
-            <div x-data="{ show: true }" 
-                x-show="show" 
-                x-init="setTimeout(() => show = false, 2500)" 
-                class="alert alert-success w-25">
+            <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 2500)" class="alert alert-success w-25">
                 {{ session('message') }}
             </div>
         </div>
@@ -22,11 +19,14 @@
                         </tr>
                         <tr>
                             <td>Kelas</td>
-                            <td>: <span class="badge bg-info">{{ $santri->kelas?->nama ?? 'Belum ada kelas' }}</span></td>
+                            <td>: <span class="badge bg-info">{{ $santri->kelas?->nama ?? 'Belum ada kelas' }}</span>
+                            </td>
                         </tr>
                         <tr>
                             <td>Kamar</td>
-                            <td>: <span class="badge bg-warning text-dark">{{ $santri->kamar?->nama ?? 'Belum ada kamar' }}</span></td>
+                            <td>: <span
+                                    class="badge bg-warning text-dark">{{ $santri->kamar?->nama ?? 'Belum ada kamar' }}</span>
+                            </td>
                         </tr>
                     </table>
                 </div>
@@ -36,7 +36,9 @@
                             <div class="card bg-danger text-white">
                                 <div class="card-body">
                                     <h6 class="card-title">Total belum lunas</h6>
-                                    <h4 class="text-white">{{ number_format($total_cicilan_belum_bayar) }}</h4>
+                                    <h4 class="text-white">
+                                        {{ $total_cicilan_belum_bayar < 0 ? 'Cicilan Lunas melebihi batas' : number_format($total_cicilan_belum_bayar) }}
+                                    </h4>
                                 </div>
                             </div>
                         </div>
@@ -68,14 +70,14 @@
                 <h5 class="card-title">Riwayat Cicilan</h5>
                 <div class="d-flex gap-2">
                     <select wire:model.live="filter.tahun" class="form-select">
-                        <option value="">Semua Tahun</option>
-                        @foreach($tahunList as $tahun)
+                        <option value="">Pilih Tahun</option>
+                        @foreach ($tahunList as $tahun)
                             <option value="{{ $tahun }}">{{ $tahun }}</option>
                         @endforeach
                     </select>
                     <select wire:model.live="filter.bulan" class="form-select">
-                        <option value="">Semua Bulan</option>
-                        @foreach($bulanList as $bulan)
+                        <option value="">Pilih Bulan</option>
+                        @foreach ($bulanList as $bulan)
                             <option value="{{ $bulan }}">{{ $bulan }}</option>
                         @endforeach
                     </select>
@@ -94,6 +96,7 @@
                             <th>Tipe</th>
                             <th>Metode</th>
                             <th>Status</th>
+                            <th>Bukti Pembayaran</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -115,18 +118,31 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="badge {{ match($item->pembayaran->status) {
-                                        'lunas' => 'bg-success',
-                                        'cicilan' => 'bg-warning text-dark',
-                                        default => 'bg-danger'
-                                    } }}">
+                                    <span
+                                        class="badge {{ match ($item->pembayaran->status) {
+                                            'lunas' => 'bg-success',
+                                            'cicilan' => 'bg-warning text-dark',
+                                            default => 'bg-danger',
+                                        } }}">
                                         {{ str($item->pembayaran->status)->title() }}
                                     </span>
+                                </td>
+                                <td>
+                                    @if ($item->bukti_pembayaran)
+                                        <img src="{{ asset('storage/' . $item->bukti_pembayaran) }}" alt="foto"
+                                            class="img-fluid rounded-4"
+                                            style="object-fit: cover; height: 10rem; width: 10rem;">
+                                    @else
+                                        <span class="badge bg-danger">
+                                            kosong
+                                        </span>
+                                    @endif
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="8" class="text-center">Tidak ada data cicilan</td>
+                                <td colspan="9" class="text-center">Tidak ada data cicilan pada bulan
+                                    {{ $filter['bulan'] }}</td>
                             </tr>
                         @endforelse
                     </tbody>
