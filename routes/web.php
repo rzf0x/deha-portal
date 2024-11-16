@@ -34,7 +34,7 @@ Route::get('/', function () {
     return redirect('/auth/login');
 });
 
-Route::prefix('auth')->middleware('secure')->group(function () {
+Route::prefix('auth')->group(function () {
     Route::get('/login', App\Livewire\Auth\Login::class)->name('login');
     Route::get('/register', App\Livewire\Auth\Register::class)->name('register');
     Route::get('/logout', Logout::class)->name('auth.logout');
@@ -44,7 +44,7 @@ Route::fallback(function(){
     return view('404');
 });
 
-Route::prefix('admin')->middleware(['auth', 'secure:1'])->group(function () {
+Route::prefix('admin')->middleware('auth')->group(function () {
 
     // Dashboard
     Route::get('/dashboard', App\Livewire\Admin\Dashboard::class)->name('admin.dashboard');
@@ -85,7 +85,7 @@ Route::get('/optimize-clear', function () {
     return 'Cache berhasil dibersihkan!';
 });
 
-Route::prefix('spp')->middleware(['auth', 'secure:2'])->group(function(){
+Route::prefix('spp')->middleware('auth')->group(function(){
 
     // Dashboard
     Route::get('/dashboard', DashboardSpp::class)->name('spp.dashboard');

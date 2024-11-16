@@ -11,15 +11,10 @@ class PaymentDetail extends Model
     use HasFactory;
 
     protected $table = 'payment_details';
-    protected $fillable = ['order_id', 'product_id', 'quantity', 'price', 'subtotal'];
+    protected $fillable = ['payment_id', 'notes'];
 
-    public function order()
+    public function payment()
     {
-        return $this->belongsTo(Transaction::class);
-    }
-
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Payment::class);
     }
 }

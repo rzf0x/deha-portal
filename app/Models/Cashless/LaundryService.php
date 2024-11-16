@@ -19,8 +19,6 @@ class LaundryService extends Model
     // Relasi Many-to-Many dengan LaundryOrder
     public function orders()
     {
-        return $this->belongsToMany(LaundryOrder::class, 'laundry_order_items')
-            ->withPivot('quantity', 'price', 'subtotal', 'notes')
-            ->withTimestamps();
+        return $this->hasMany(Laundry::class);
     }
 }

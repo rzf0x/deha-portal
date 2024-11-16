@@ -44,7 +44,6 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->integer('quantity');
             $table->decimal('price', 10, 2); // Harga saat pembelian
-            $table->decimal('subtotal', 10, 2);
             $table->timestamps();
         });
 
@@ -55,7 +54,7 @@ return new class extends Migration
             $table->string('payment_method');
             $table->enum('payment_status', ['pending', 'processing', 'success', 'failed']);
             $table->datetime('payment_date');
-            $table->decimal('amount', 10, 2);
+            $table->decimal('subtotal', 10, 2);
             $table->decimal('kembalian', 10, 2)->nullable();
             $table->timestamps();
         });
@@ -83,42 +82,17 @@ return new class extends Migration
             $table->string('order_number')->unique(); // Nomor pesanan laundry unique
             $table->foreignId('user_id')->constrained('users');
             $table->foreignId('laundry_id')->constrained('laundries');
-            $table->decimal('total_price', 10, 2);
-            $table->enum('status', ['pending', 'picked_up', 'processing', 'ready', 'delivered']);
-            $table->timestamps();
-        });
-
-         // Tabel pivot untuk relasi many-to-many antara laundry_orders dan laundry_services
-        Schema::create('laundry_order_items', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('laundry_order_id')->constrained('laundry_orders')->onDelete('cascade');
-            $table->foreignId('laundry_service_id')->constrained('laundry_services')->onDelete('cascade');
+            $table->foreignId('laundry_service_id')->constrained('laundry_services');
             $table->integer('quantity');
-            $table->decimal('price', 10, 2); // Harga saat pemesanan
             $table->decimal('subtotal', 10, 2);
-            $table->text('notes')->nullable(); // Catatan khusus untuk layanan
-            $table->timestamps();
-        });
-
-        Schema::create('laundry_payments', function (Blueprint $table) {
-            $table->id();
-            $table->string('payment_number')->unique(); // Nomor pembayaran laundry unique
-            $table->foreignId('laundry_order_id')->constrained('laundry_orders')->onDelete('cascade');
-            $table->string('payment_method');
-            $table->enum('payment_status', ['pending', 'processing', 'success', 'failed']);
-            $table->datetime('payment_date');
-            $table->decimal('amount', 10, 2);
-            $table->decimal('kembalian', 10, 2)->nullable();
+            $table->enum('status', ['pending', 'picked_up', 'processing', 'ready', 'delivered']);
             $table->timestamps();
         });
 
         Schema::create('payment_details', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('transaction_id')->constrained('transactions');
-            $table->foreignId('product_id')->constrained('products');
-            $table->integer('quantity');
-            $table->decimal('price', 10, 2);
-            $table->decimal('subtotal', 10, 2);
+            $table->foreignId('payment_id')->constrained('payments');
+            $table->string('notes')->nullable();
             $table->timestamps();
         });
     }
@@ -128,8 +102,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('laundry_payments');
-        Schema::dropIfExists('laundry_order_items');
         Schema::dropIfExists('laundry_orders');
         Schema::dropIfExists('laundry_services');
         Schema::dropIfExists('laundries');
