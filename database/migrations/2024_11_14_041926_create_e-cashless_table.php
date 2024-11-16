@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->decimal('price', 10, 2);
+            $table->integer('stok');
             $table->foreignId('seller_id')->constrained('users');
             $table->foreignId('category_id')->constrained('categories');
             $table->timestamps();
