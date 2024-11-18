@@ -13,6 +13,7 @@ use App\Livewire\Admin\ListSantri\DetailSantri;
 use App\Livewire\Admin\Spp\DashboardSpp;
 use App\Livewire\Admin\Spp\DetailLaporanCicilanSantri;
 use App\Livewire\Admin\Spp\DetailLaporanSppSantri;
+use App\Livewire\Admin\Spp\KwitansiInvoice;
 use App\Livewire\Admin\Spp\LaporanKeuangan;
 use App\Livewire\Admin\Spp\ListItemPembayaran;
 use App\Livewire\Admin\Spp\Pembayaran;
@@ -109,6 +110,7 @@ Route::prefix('spp')->middleware('auth')->group(function(){
 
     Route::get('/laporan-keuangan', LaporanKeuangan::class)->name('spp.laporan-keuangan');
 
+    Route::get('/kwitansi/{id}', [KwitansiInvoice::class, 'cetakKwitansi'])->name('cetak-kwitansi-spp');
 });
 
 Route::prefix('santri')->middleware('auth')->group(function() {

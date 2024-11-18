@@ -22,13 +22,13 @@
             <span>List Item Pembayaran</span>
         </a>
     </li>
-    <li class="sidebar-item {{ Request::routeIs('spp.pembayaran-cicilan') ? 'active' : '' }}">
+    <li class="sidebar-item {{ Request::routeIs('spp.pembayaran-cicilan') || Request::routeIs('spp.detail-laporan-cicilan-santri') ? 'active' : '' }}">
         <a wire:navigate href="{{ route('spp.pembayaran-cicilan') }}" class='sidebar-link'>
             <i class="bi bi-cash-stack"></i>
             <span>Pembayaran Cicilan</span>
         </a>
     </li>
-    <li class="sidebar-item {{ Request::routeIs('spp.tambah-santri') ? 'active' : '' }}">
+    <li class="sidebar-item {{ Request::routeIs('spp.tambah-santri') || Request::routeIs('spp.detail-laporan-spp-santri') ? 'active' : '' }}">
         <a wire:navigate href="{{ route('spp.tambah-santri') }}" class='sidebar-link'>
             <i class="bi bi-cash-stack"></i>
             <span>Tambah Santri</span>

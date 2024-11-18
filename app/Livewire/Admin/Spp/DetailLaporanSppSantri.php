@@ -10,7 +10,7 @@ use Livewire\Component;
 class DetailLaporanSppSantri extends Component
 {
     #[Title('Halaman Detail Spp Santri')]
-    
+
     public $santriId;
     public $santri;
     public $filter = [
@@ -35,9 +35,9 @@ class DetailLaporanSppSantri extends Component
     protected function getPembayaran()
     {
         return Pembayaran::with([
-                'pembayaranTimeline:id,nama_bulan',
-                'pembayaranTipe:id,nama'
-            ])
+            'pembayaranTimeline:id,nama_bulan',
+            'pembayaranTipe:id,nama'
+        ])
             ->where('santri_id', $this->santriId)
             ->when($this->filter['tahun'], function ($query) {
                 $query->whereYear('created_at', $this->filter['tahun']);
