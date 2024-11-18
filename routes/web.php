@@ -3,6 +3,12 @@
 use App\Livewire\Admin\AdminLaundry\Dashboard as AdminLaundryDashboard;
 use App\Livewire\Admin\AdminWarung\Dashboard as AdminWarungDashboard;
 use App\Livewire\Admin\AdminECashless\Dashboard as AdminECashlessDashboard;
+use App\Livewire\Admin\AdminECashless\HistoryPembayaran;
+use App\Livewire\Admin\AdminECashless\Pembayaran as AdminECashlessPembayaran;
+use App\Livewire\Admin\AdminLaundry\LaundryService;
+use App\Livewire\Admin\AdminLaundry\ListLaundry;
+use App\Livewire\Admin\AdminWarung\Kategori;
+use App\Livewire\Admin\AdminWarung\Produk;
 use App\Livewire\Admin\ListSantri\DetailSantri;
 use App\Livewire\Admin\Spp\DashboardSpp;
 use App\Livewire\Admin\Spp\DetailLaporanCicilanSantri;
@@ -14,6 +20,9 @@ use App\Livewire\Admin\Spp\PembayaranCicilan;
 use App\Livewire\Admin\Spp\TambahSantri;
 use App\Livewire\Auth\Logout;
 use App\Livewire\Santri\Dashboard;
+use App\Livewire\Santri\Kegiatan;
+use App\Livewire\Santri\Pengumuman;
+use App\Livewire\Santri\Profile;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -104,13 +113,23 @@ Route::prefix('spp')->middleware('auth')->group(function(){
 
 Route::prefix('santri')->middleware('auth')->group(function() {
     Route::get('/dashboard', Dashboard::class)->name('santri.dashboard');
+    Route::get('/profile', Profile::class)->name('santri.profile');
+    Route::get('/kegiatan', Kegiatan::class)->name('santri.kegiatan');
+    Route::get('/pengumuman', Pengumuman::class)->name('santri.pengumuman');
 });
 Route::prefix('petugas-warung')->middleware('auth')->group(function() {
     Route::get('/dashboard', AdminWarungDashboard::class)->name('petugas-warung.dashboard');
+    Route::get('/produk', Produk::class)->name('petugas-warung.produk');
+    Route::get('/kategori', Kategori::class)->name('petugas-warung.kategori');
+
 });
 Route::prefix('petugas-laundry')->middleware('auth')->group(function() {
     Route::get('/dashboard', AdminLaundryDashboard::class)->name('petugas-laundry.dashboard');
+    Route::get('/list-laundry', ListLaundry::class)->name('petugas-laundry.list-laundry');
+    Route::get('/laundry-service', LaundryService::class)->name('petugas-laundry.laundry-service');
 });
 Route::prefix('petugas-e-cashless')->middleware('auth')->group(function() {
     Route::get('/dashboard', AdminECashlessDashboard::class)->name('petugas-e-cashless.dashboard');
+    Route::get('/pembayaran', AdminECashlessPembayaran::class)->name('petugas-e-cashless.pembayaran');
+    Route::get('/history-pembayaran', HistoryPembayaran::class)->name('petugas-e-cashless.history-pembayaran');
 });
