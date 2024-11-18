@@ -129,9 +129,8 @@
                                 </td>
                                 <td>
                                     @if ($item->bukti_pembayaran)
-                                        <img src="{{ asset('storage/' . $item->bukti_pembayaran) }}" alt="foto"
-                                            class="img-fluid rounded-4"
-                                            style="object-fit: cover; height: 10rem; width: 10rem;">
+                                        <a href="{{ url('storage/' . $item->pembayaran->bukti_pembayaran) }}" target="_blank"
+                                            class="badge bg-success">Lihat Bukti Pembayaran</a>
                                     @else
                                         <span class="badge bg-danger">
                                             kosong
