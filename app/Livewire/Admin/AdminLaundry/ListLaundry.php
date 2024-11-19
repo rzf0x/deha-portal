@@ -99,23 +99,17 @@ class ListLaundry extends Component
         $this->calculateEstimate();
 
         try {
-            $orderNumber = 'LDY-' . date('YmdHis');
-
-            $endDate = Carbon::now()->addDays($this->laundryEstimate)->format('Y-m-d');
-
             LaundryOrder::findOrFail($this->laundryId)->update([
-                'order_number' => $orderNumber,
                 'santri_id' => $this->laundryForm->santri_id,
                 'laundry_service_id' => $this->laundryForm->laundry_service_id,
                 'quantity' => $this->laundryForm->quantity,
                 'subtotal' => $this->laundrySubtotal,
                 'status' => $this->laundryForm->status,
-                'end_date' => $endDate,
             ]);
 
             $this->reset(['laundryForm', 'laundrySubtotal', 'laundryEstimate']);
 
-            session()->flash('success', 'Pesanan laundry berhasil diupdate!');
+            session()->flash('success', 'Pesanan berhasil diupdate!');
 
             return to_route('petugas-laundry.list-laundry');
         } catch (\Exception $e) {
