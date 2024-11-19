@@ -9,14 +9,16 @@ use App\Models\Santri;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB as FacadesDB;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 
 class ListLaundry extends Component
 {
     #[Title("List Laundry")]
     public LaundryOrderForm $laundryForm;
     public $laundryServices, $laundrySubtotal, $laundryEstimate;
-    public $santris;
+    public $santris, $laundryId, $detailLaundryUser;
 
     public function mount()
     {
@@ -27,7 +29,7 @@ class ListLaundry extends Component
     #[Computed]
     public function listLaundry()
     {
-        return LaundryOrder::with('santri', 'laundryService')->get();
+        return LaundryOrder::where('status', '!=', 'diterima')->with('santri', 'laundryService')->get();
     }
 
     public function calculateSubtotal()
@@ -44,10 +46,11 @@ class ListLaundry extends Component
 
     public function create()
     {
+        $this->laundryId = null;
         $this->laundryForm->reset();
     }
 
-    public function save()
+    public function createLaundry()
     {
         $this->calculateSubtotal();
         $this->calculateEstimate();
@@ -78,9 +81,74 @@ class ListLaundry extends Component
         }
     }
 
-    public function edit()
+    public function edit($id)
     {
-        $this->laundryForm->reset();
+        $this->laundryId = $id;
+        $laundryEdit = LaundryOrder::findOrFail($id);
+        $this->laundryForm->fill($laundryEdit);
+    }
+
+    public function updateLaundry()
+    {
+        $this->calculateSubtotal();
+        $this->calculateEstimate();
+
+        try {
+            $orderNumber = 'LDY-' . date('YmdHis');
+
+            $endDate = Carbon::now()->addDays($this->laundryEstimate)->format('Y-m-d');
+
+            LaundryOrder::findOrFail($this->laundryId)->update([
+                'order_number' => $orderNumber,
+                'santri_id' => $this->laundryForm->santri_id,
+                'laundry_service_id' => $this->laundryForm->laundry_service_id,
+                'quantity' => $this->laundryForm->quantity,
+                'subtotal' => $this->laundrySubtotal,
+                'status' => $this->laundryForm->status,
+                'end_date' => $endDate,
+            ]);
+
+            $this->reset(['laundryForm', 'laundrySubtotal', 'laundryEstimate']);
+
+            session()->flash('success', 'Pesanan laundry berhasil diupdate!');
+
+            return to_route('petugas-laundry.list-laundry');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    public function detailLaundry($id)
+    {
+        $this->detailLaundryUser = LaundryOrder::findOrFail($id);
+    }
+
+    public function deleteLaundry($id)
+    {
+        $laundry = LaundryOrder::findOrFail($id);
+        session()->flash('success', 'Berhasil hapus ' . $laundry->order_number);
+        $laundry->delete();
+    }
+
+
+    public function getBadgeClass($status)
+    {
+        switch ($status) {
+            case 'menunggu':
+                return 'bg-warning';
+            case 'dicuci':
+                return 'bg-info';
+            case 'gagal':
+                return 'bg-danger';
+            case 'disetrika':
+                return 'bg-primary';
+            case 'siap diambil':
+                return 'bg-success';
+            case 'diterima':
+                return 'bg-secondary';
+            default:
+                return 'bg-light';
+        }
     }
 
     public function render()

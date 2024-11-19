@@ -7,11 +7,17 @@
         </div>
     @endif
     <div class="">
-        <div class="d-flex mb-3 justify-content-end w-100">
-            <button wire:click='createService' data-bs-toggle="modal" data-bs-target="#createOrUpdateService"
-                class="btn btn-primary">Tambah service +</button>
-        </div>
         <div class="card">
+            <div class="card-header bg-transparent">
+                <div class="d-flex justify-content-between w-100">
+                    <div class="mb-2 mb-sm-0">
+                        <h5 class="card-title fs-5 mb-0">Daftar Service Laundry</h5>
+                    </div>
+
+                    <button wire:click='createService' data-bs-toggle="modal" data-bs-target="#createOrUpdateService"
+                        class="btn btn-primary">Tambah service +</button>
+                </div>
+            </div>
             <div class="card-body">
                 <table class="table table-striped table-responsive">
                     <thead>
@@ -20,6 +26,7 @@
                             <th>Name</th>
                             <th>Description</th>
                             <th>Price</th>
+                            <th>Unit</th>
                             <th>Estimate</th>
                             <th>Actions</th>
                         </tr>
@@ -31,6 +38,7 @@
                                 <td>{{ $service->name }}</td>
                                 <td>{{ $service->description }}</td>
                                 <td>{{ $service->price }}</td>
+                                <td>{{ $service->unit }}</td>
                                 <td>{{ $service->estimate }}</td>
                                 <td>
                                     <button class="btn btn-warning" data-bs-toggle="modal"
@@ -118,7 +126,7 @@
                             @enderror
                         </div>
                         <div class="row">
-                            <div class="col-lg-6 mb-2">
+                            <div class="col-lg-4 mb-2">
                                 <label for="price" class="form-label">Harga</label>
                                 <input type="number" class="form-control" id="price" wire:model="serviceForm.price"
                                     placeholder="20000" step="0.01" required>
@@ -126,7 +134,20 @@
                                     <span class="text-danger">{{ $message }}</span>
                                 @enderror
                             </div>
-                            <div class="col-lg-6 mb-2">
+                            <div class="col-lg-4 mb-2">
+                                <div class="form-group">
+                                    <label for="unit" class="form-label">Unit</label>
+                                    <select class="form-control" id="unit" wire:model="serviceForm.unit" required
+                                        name="" id="">
+                                        <option value="Kg">Kg</option>
+                                        <option value="Pcs">Pcs</option>
+                                    </select>
+                                </div>
+                                @error('serviceForm.unit')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </div>
+                            <div class="col-lg-4 mb-2">
                                 <label for="estimate" class="form-label">Estimasi Pengerjaan</label>
                                 <input type="text" class="form-control" id="estimate"
                                     wire:model="serviceForm.estimate" placeholder="3 Hari" required>

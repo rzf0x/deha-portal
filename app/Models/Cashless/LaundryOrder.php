@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 class LaundryOrder extends Model
 {
     use HasFactory;
-
     protected $table = 'laundry_orders';
      protected $fillable = [
         'order_number',

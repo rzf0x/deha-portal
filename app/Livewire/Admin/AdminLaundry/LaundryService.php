@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\AdminLaundry;
 use App\Livewire\Forms\LaundryServiceForm;
 use App\Models\Cashless\LaundryService as CashlessLaundryService;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\On;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -42,7 +43,7 @@ class LaundryService extends Component
         $service = CashlessLaundryService::findOrFail($id);
         return $this->serviceForm->fill($service);
     }
-
+    
     public function updateLaundryService()
     {
         try {

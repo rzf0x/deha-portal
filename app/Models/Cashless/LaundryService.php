@@ -10,7 +10,7 @@ class LaundryService extends Model
     use HasFactory;
 
     protected $table = 'laundry_services';
-    protected $fillable = ['name', 'description', 'price', 'estimate'];
+    protected $fillable = ['name', 'description', 'price', 'unit', 'estimate'];
 
     public function orders()
     {

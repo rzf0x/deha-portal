@@ -138,7 +138,7 @@ Route::prefix('petugas-laundry')->middleware('auth')->group(function() {
     Route::get('/dashboard', AdminLaundryDashboard::class)->name('petugas-laundry.dashboard');
     Route::get('/list-laundry', ListLaundry::class)->name('petugas-laundry.list-laundry');
     Route::get('/laundry-service', LaundryService::class)->name('petugas-laundry.laundry-service');
-    Route::get('/riwayat-transaksi', TransaksiLaundry::class)->name('petugas-laundry.transaksi');
+    Route::get('/riwayat-pesanan', TransaksiLaundry::class)->name('petugas-laundry.pesanan');
 });
 Route::prefix('petugas-e-cashless')->middleware('auth')->group(function() {
     Route::get('/dashboard', AdminECashlessDashboard::class)->name('petugas-e-cashless.dashboard');

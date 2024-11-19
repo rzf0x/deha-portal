@@ -24,9 +24,9 @@
     </li>
 
     <li class="sidebar-item">
-        <a wire:navigate href="{{ route('petugas-laundry.transaksi') }}" class='sidebar-link {{ Request::routeIs('petugas-laundry.transaksi') ? 'text-bg-primary' : '' }}'>
-            <i class="{{ Request::routeIs('petugas-laundry.transaksi') ? 'bi bi-clock-fill text-bg-primary' : 'bi bi-clock' }}"></i>    
-            <span>Riwayat Transaksi</span>
+        <a wire:navigate href="{{ route('petugas-laundry.pesanan') }}" class='sidebar-link {{ Request::routeIs('petugas-laundry.pesanan') ? 'text-bg-primary' : '' }}'>
+            <i class="{{ Request::routeIs('petugas-laundry.pesanan') ? 'bi bi-clock-fill text-bg-primary' : 'bi bi-clock' }}"></i>    
+            <span>Riwayat Pesanan</span>
         </a>
     </li>
 </ul>
