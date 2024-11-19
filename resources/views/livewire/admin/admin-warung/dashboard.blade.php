@@ -14,7 +14,6 @@
                     </select>
                 </div>
             </div>
-            
         </div>
         <div class="row">
             <div class="col-lg-6 chart-container">
@@ -32,18 +31,22 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 card-information-sales">
-                <div class="row h-100">
-                    <div class="col-lg-6 d-flex flex-column gap-4">
-                        <div class="d-flex align-items-center bg-white  p-4 flex-grow-1 rounded-3">
+            <div class="col-lg-6">
+                <div class="row">
+                    <!-- Total Produk -->
+                    <div class="col-md-6 col-12 mb-4">
+                        <div style="background-color: #f5f5f5;" class="d-flex align-items-center p-4 h-100 rounded-3">
                             <div class="d-flex flex-column gap-3">
-                                <h5 class="mb-0">Totak Produk</h5>
+                                <h5 class="mb-0">Total Produk</h5>
                                 <h3 class="m-0 text-primary">67</h3>
                                 <p class="m-0 fs-6 text-danger"><b>- 12</b> <span class="text-dark">di bulan
                                         <b>November</b></span></p>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center bg-white  p-4 flex-grow-1 rounded-3">
+                    </div>
+                    <!-- Produk Terjual -->
+                    <div class="col-md-6 col-12 mb-4">
+                        <div style="background-color: #f5f5f5;" class="d-flex align-items-center p-4 h-100 rounded-3">
                             <div class="d-flex flex-column gap-3">
                                 <h5 class="mb-0">Produk Terjual</h5>
                                 <h3 class="m-0 text-primary">291</h3>
@@ -52,8 +55,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 d-flex flex-column gap-4">
-                        <div class="d-flex align-items-center bg-white  p-4 flex-grow-1 rounded-3">
+                    <!-- Total Transaksi -->
+                    <div class="col-md-6 col-12 mb-4">
+                        <div style="background-color: #f5f5f5;" class="d-flex align-items-center p-4 h-100 rounded-3">
                             <div class="d-flex flex-column gap-3">
                                 <h5 class="mb-0">Total Transaksi</h5>
                                 <h3 class="m-0 text-primary">190</h3>
@@ -61,7 +65,10 @@
                                         <b>November</b></span></p>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center bg-white  p-4 flex-grow-1 rounded-3">
+                    </div>
+                    <!-- Total Pembeli -->
+                    <div class="col-md-6 col-12 mb-4">
+                        <div style="background-color: #f5f5f5;" class="d-flex align-items-center p-4 h-100 rounded-3">
                             <div class="d-flex flex-column gap-3">
                                 <h5 class="mb-0">Total Pembeli</h5>
                                 <h3 class="m-0 text-primary">76</h3>
@@ -79,7 +86,7 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4 class="m-0">Tabel Produk</h4>
-                <a class="btn btn-dark mt-md-0 mt-2" href="#">Semua produk</a>
+                <a class="btn btn-dark mt-md-0 mt-2" href="{{ route('petugas-warung.produk') }}">Semua produk</a>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -109,69 +116,95 @@
                                 <td>100</td>
                                 <td>-41</td>
                                 <td>Rp. 100.000</td>
-                                <td><button class="btn btn-sm btn-primary text-white"><i class="bi bi-eye-fill"></i>
-                                        Detail</button></td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary text-white" data-bs-toggle="modal"
+                                        data-bs-target="#detailModal1">
+                                        <i class="bi bi-eye-fill"></i> Detail
+                                    </button>
+                                </td>
                             </tr>
                             <tr>
-                                <td>2</td>
+                                <td>1</td>
                                 <td>
-                                    <img src="path_to_image2.jpg"
+                                    <img src="path_to_image1.jpg"
                                         style="width: 4rem; height: 4rem; border-radius: 10%; object-fit: cover;"
-                                        alt="Produk 2">
+                                        alt="Produk 1">
                                 </td>
-                                <td>Produk B</td>
-                                <td>Kategori 2</td>
-                                <td>50</td>
-                                <td>-21</td>
-                                <td>Rp. 200.000</td>
-                                <td><button class="btn btn-sm btn-primary text-white"><i class="bi bi-eye-fill"></i>
-                                        Detail</button></td>
+                                <td>Produk A</td>
+                                <td>Kategori 1</td>
+                                <td>100</td>
+                                <td>-41</td>
+                                <td>Rp. 100.000</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary text-white" data-bs-toggle="modal"
+                                        data-bs-target="#detailModal1">
+                                        <i class="bi bi-eye-fill"></i> Detail
+                                    </button>
+                                </td>
                             </tr>
                             <tr>
-                                <td>3</td>
+                                <td>1</td>
                                 <td>
-                                    <img src="path_to_image3.jpg"
+                                    <img src="path_to_image1.jpg"
                                         style="width: 4rem; height: 4rem; border-radius: 10%; object-fit: cover;"
-                                        alt="Produk 3">
+                                        alt="Produk 1">
                                 </td>
-                                <td>Produk C</td>
-                                <td>Kategori 3</td>
-                                <td>200</td>
-                                <td>-10</td>
-                                <td>Rp. 150.000</td>
-                                <td><button class="btn btn-sm btn-primary text-white"><i class="bi bi-eye-fill"></i>
-                                        Detail</button></td>
-                            </tr>
-                            <tr>
-                                <td>4</td>
+                                <td>Produk A</td>
+                                <td>Kategori 1</td>
+                                <td>100</td>
+                                <td>-41</td>
+                                <td>Rp. 100.000</td>
                                 <td>
-                                    <img src="path_to_image4.jpg"
-                                        style="width: 4rem; height: 4rem; border-radius: 10%; object-fit: cover;"
-                                        alt="Produk 4">
+                                    <button class="btn btn-sm btn-primary text-white" data-bs-toggle="modal"
+                                        data-bs-target="#detailModal1">
+                                        <i class="bi bi-eye-fill"></i> Detail
+                                    </button>
                                 </td>
-                                <td>Produk D</td>
-                                <td>Kategori 4</td>
-                                <td>75</td>
-                                <td>-32</td>
-                                <td>Rp. 300.000</td>
-                                <td><button class="btn btn-sm btn-primary text-white"><i class="bi bi-eye-fill"></i>
-                                        Detail</button></td>
                             </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>
-                                    <img src="path_to_image5.jpg"
-                                        style="width: 4rem; height: 4rem; border-radius: 10%; object-fit: cover;"
-                                        alt="Produk 5">
-                                </td>
-                                <td>Produk E</td>
-                                <td>Kategori 5</td>
-                                <td>150</td>
-                                <td>-45</td>
-                                <td>Rp. 250.000</td>
-                                <td><button class="btn btn-sm btn-primary text-white"><i class="bi bi-eye-fill"></i>
-                                        Detail</button></td>
-                            </tr>
+
+                            {{-- Product Modal --}}
+                            <div class="modal fade" id="detailModal1" tabindex="-1" aria-labelledby="detailModalLabel1"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="detailModalLabel1">Detail Produk A</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <img src="path_to_image1.jpg" class="img-fluid rounded"
+                                                        alt="Produk A">
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Nama Produk:</label>
+                                                        <p>Produk A</p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Kategori:</label>
+                                                        <p>Kategori 1</p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Stok:</label>
+                                                        <p>100</p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Terjual:</label>
+                                                        <p>-41</p>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label class="fw-bold">Harga:</label>
+                                                        <p>Rp. 100.000</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </tbody>
                     </table>
                 </div>

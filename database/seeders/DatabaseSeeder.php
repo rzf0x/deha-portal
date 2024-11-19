@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             PembayaranTipeSeeder::class,
             PembayaranDetailSeeder::class,
             PembayaranSeeder::class,
-            OrangTuaSeeder::class
+            OrangTuaSeeder::class,
+            LaundryServiceSeeder::class,
         ]);
     }
 }
