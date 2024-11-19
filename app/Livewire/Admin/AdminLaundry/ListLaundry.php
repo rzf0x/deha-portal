@@ -5,19 +5,29 @@ namespace App\Livewire\Admin\AdminLaundry;
 use App\Livewire\Forms\LaundryOrderForm;
 use App\Models\Cashless\LaundryOrder;
 use App\Models\Cashless\LaundryService;
+use App\Models\Santri;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 use Carbon\Carbon;
+use Livewire\Attributes\Computed;
 
 class ListLaundry extends Component
 {
     #[Title("List Laundry")]
     public LaundryOrderForm $laundryForm;
     public $laundryServices, $laundrySubtotal, $laundryEstimate;
+    public $santris;
 
     public function mount()
     {
         $this->laundryServices = LaundryService::all();
+        $this->santris = Santri::all();
+    }
+
+    #[Computed]
+    public function listLaundry()
+    {
+        return LaundryOrder::with('santri', 'laundryService')->get();
     }
 
     public function calculateSubtotal()
@@ -39,9 +49,9 @@ class ListLaundry extends Component
 
     public function save()
     {
-        
         $this->calculateSubtotal();
         $this->calculateEstimate();
+
         try {
             $orderNumber = 'LDY-' . date('YmdHis');
 
@@ -49,7 +59,7 @@ class ListLaundry extends Component
 
             LaundryOrder::create([
                 'order_number' => $orderNumber,
-                'nama_santri' => $this->laundryForm->nama_santri,
+                'santri_id' => $this->laundryForm->santri_id,
                 'laundry_service_id' => $this->laundryForm->laundry_service_id,
                 'quantity' => $this->laundryForm->quantity,
                 'subtotal' => $this->laundrySubtotal,

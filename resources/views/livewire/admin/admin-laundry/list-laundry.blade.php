@@ -15,7 +15,8 @@
                     <h5 class="card-title fs-5 mb-0">Daftar Laundry</h5>
                 </div>
 
-                <button wire:click='create' data-bs-toggle="modal" data-bs-target="#createOrUpdateLaundry" class="btn btn-primary">Tambah
+                <button wire:click='create' data-bs-toggle="modal" data-bs-target="#createOrUpdateLaundry"
+                    class="btn btn-primary">Tambah
                     Laundry +</button>
             </div>
         </div>
@@ -31,56 +32,38 @@
                             <th>Kamar</th>
                             <th>Quantity</th>
                             <th>Jenis Service</th>
+                            <th>Subtotal</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>#LS-2024001</td>
-                            <td>Ahmad Faiz</td>
-                            <td>XI A</td>
-                            <td>Ummar bin Khattab</td>
-                            <td>3 Kg</td>
-                            <td>Express</td>
-                            <td><span class="badge bg-warning">Dicuci</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#orderDetail">
-                                    <i class="fas fa-eye me-1"></i>Detail
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#LS-2024002</td>
-                            <td>Fatimah Azzahra</td>
-                            <td>XI A</td>
-                            <td>Ummar bin Khattab</td>
-                            <td>4 Kg</td>
-                            <td>Express</td>
-                            <td><span class="badge bg-success">Siap Diambil</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#orderDetail">
-                                    <i class="fas fa-eye me-1"></i>Detail
-                                </button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#LS-2024003</td>
-                            <td>Muhammad Hasan</td>
-                            <td>XI A</td>
-                            <td>Ummar bin Khattab</td>
-                            <td>6 Kg</td>
-                            <td>Express</td>
-                            <td><span class="badge bg-info">Baru</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#orderDetail">
-                                    <i class="fas fa-eye me-1"></i>Detail
-                                </button>
-                            </td>
-                        </tr>
+                        @forelse ($this->listLaundry() as $laundry)
+                            <tr>
+                                <td>{{ $laundry->order_number }}</td>
+                                <td>{{ $laundry->santri->nama }}</td>
+                                <td>{{ $laundry->santri->kelas->nama }}</td>
+                                <td>{{ $laundry->santri->kamar->nama }}</td>
+                                <td>{{ $laundry->quantity }}</td>
+                                <td>{{ $laundry->laundryService->name }}</td>
+                                <td>Rp. {{ number_format($laundry->subtotal, 0, ',', '.') }}</td>
+                                <td><span class="badge bg-warning">Dicuci</span></td>
+                                <td>
+                                    <div class="d-flex gap-2">
+                                        <button class="btn btn-sm btn-warning" data-bs-toggle="modal"
+                                            data-bs-target="#orderDetail">Edit
+                                        </button>
+                                        <button class="btn btn-sm btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#orderDetail">Delete
+                                        </button>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#orderDetail">Detail
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -139,11 +122,15 @@
                         <div class="row">
                             <div class="mb-2 form-group col-lg-6">
                                 <label for="nama_santri" class="form-label">Nama Lengkap</label>
-                                <input type="text" class="form-control" id="nama_santri"
-                                    wire:model="laundryForm.nama_santri" placeholder="Muhammad Rajo" required>
-                                @error('laundryForm.nama_santri')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                                <select class="form-control" id="laundry_service_id" wire:model="laundryForm.santri_id"
+                                    required>
+                                    <option value="">Pilih Nama Santri</option>
+                                    @foreach ($santris as $santri)
+                                        <option value="{{ $santri->id }}">
+                                            {{ $santri->nama }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
                             <div class="mb-2 col-lg-6">
                                 <label for="status" class="form-label">Status</label>
@@ -163,9 +150,9 @@
 
                         <div class="row">
                             <div class="mb-2 col-lg-6 form-group">
-                                <label for="laundry_service_id" class="form-label">Layanan Laundry</label>
-                                <select class="form-control" id="laundry_service_id"
-                                    wire:model="laundryForm.laundry_service_id" required>
+                                <label for="santri_id" class="form-label">Layanan Laundry</label>
+                                <select class="form-control" id="santri_id" wire:model="laundryForm.laundry_service_id"
+                                    required>
                                     <option value="">Pilih Layanan</option>
                                     @foreach ($laundryServices as $service)
                                         <option value="{{ $service->id }}">

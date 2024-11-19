@@ -11,7 +11,7 @@ class LaundryOrderForm extends Form
     public $order_number;
 
     #[Validate('required')]
-    public $nama_santri;
+    public $santri_id;
 
     #[Validate('required|exists:laundry_services,id')]
     public $laundry_service_id;

@@ -2,6 +2,7 @@
 
 namespace App\Models\Cashless;
 
+use App\Models\Santri;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,9 +12,9 @@ class LaundryOrder extends Model
     use HasFactory;
 
     protected $table = 'laundry_orders';
-    protected $fillable = [
+     protected $fillable = [
         'order_number',
-        'nama_santri',
+        'santri_id',
         'laundry_service_id',
         'quantity',
         'subtotal',
@@ -24,5 +25,10 @@ class LaundryOrder extends Model
      public function laundryService()
      {
          return $this->belongsTo(LaundryService::class);
+     }
+ 
+     public function santri()
+     {
+         return $this->belongsTo(Santri::class);
      }
 }

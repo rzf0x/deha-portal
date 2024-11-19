@@ -71,7 +71,7 @@ return new class extends Migration
         Schema::create('laundry_orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_number')->unique(); // Nomor pesanan laundry unique
-            $table->string('nama_santri'); // Nomor pesanan laundry unique
+            $table->foreignId('santri_id')->constrained('santris')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('laundry_service_id')->constrained('laundry_services')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('quantity');
             $table->decimal('subtotal', 10, 2);
