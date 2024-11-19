@@ -54,6 +54,15 @@
     </li>
 
     <li class="sidebar-item">
+        <a wire:navigate href="{{ route('petugas-warung.riwayat-transaksi') }}"
+            class='sidebar-link {{ Request::routeIs('petugas-warung.riwayat-transaksi') ? 'text-bg-primary' : '' }}'>
+            <i
+                class="{{ Request::routeIs('petugas-warung.riwayat-transaksi') ? 'bi bi-clock-fill text-bg-primary' : 'bi bi-clock' }} fs-5"></i>
+            <span>Riwayat Transaksi</span>
+        </a>
+    </li>
+
+    <li class="sidebar-item">
         <a wire:navigate href="{{ route('petugas-warung.revenue') }}"
             class='sidebar-link {{ Request::routeIs('petugas-warung.revenue') ? 'text-bg-primary' : '' }}'>
             <i

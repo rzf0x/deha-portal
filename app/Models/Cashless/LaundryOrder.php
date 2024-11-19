@@ -10,20 +10,19 @@ class LaundryOrder extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['order_number', 'user_id', 'laundry_id', 'quantitiy', 'subtotal', 'status'];
+    protected $table = 'laundry_orders';
+    protected $fillable = [
+        'order_number',
+        'nama_santri',
+        'laundry_service_id',
+        'quantity',
+        'subtotal',
+        'status',
+        'end_date',
+    ];
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    public function laundry()
-    {
-        return $this->belongsTo(Laundry::class);
-    }
-
-    public function services()
-    {
-        return $this->belongsTo(LaundryService::class);
-    }
+     public function laundryService()
+     {
+         return $this->belongsTo(LaundryService::class);
+     }
 }

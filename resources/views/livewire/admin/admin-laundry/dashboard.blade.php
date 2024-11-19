@@ -124,11 +124,11 @@
                         </select>
                     </div>
                     <!-- Link Lihat Semua -->
-                    <a href="" class="text-primary">Lihat semua</a>
+                    <a href="{{ route('petugas-laundry.list-laundry') }}" class="text-primary">Lihat semua</a>
                 </div>
             </div>
         </div>
-        
+
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-hover">
@@ -219,34 +219,6 @@
                             <p class="mb-1">Estimasi Selesai: 17 Nov 2024</p>
                             <p class="mb-1">Status: <span class="badge bg-warning">Dicuci</span></p>
                         </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Jumlah</th>
-                                    <th>Keterangan</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Baju Putih</td>
-                                    <td>2</td>
-                                    <td>Seragam Sekolah</td>
-                                </tr>
-                                <tr>
-                                    <td>Celana</td>
-                                    <td>2</td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td>Sarung</td>
-                                    <td>1</td>
-                                    <td>-</td>
-                                </tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
                 <div class="modal-footer">

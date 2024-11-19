@@ -59,20 +59,11 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('laundries', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained('users');
-            $table->string('name');
-            $table->string('address');
-            $table->string('phone_number');
-            $table->timestamps();
-        });
-
         Schema::create('laundry_services', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('laundry_id')->constrained('laundries')->onDelete('cascade');
             $table->string('name');
             $table->text('description');
+            $table->string('estimate');
             $table->decimal('price', 10, 2);
             $table->timestamps();
         });
@@ -80,12 +71,12 @@ return new class extends Migration
         Schema::create('laundry_orders', function (Blueprint $table) {
             $table->id();
             $table->string('order_number')->unique(); // Nomor pesanan laundry unique
-            $table->foreignId('user_id')->constrained('users');
-            $table->foreignId('laundry_id')->constrained('laundries');
-            $table->foreignId('laundry_service_id')->constrained('laundry_services');
+            $table->string('nama_santri'); // Nomor pesanan laundry unique
+            $table->foreignId('laundry_service_id')->constrained('laundry_services')->onDelete('cascade')->onUpdate('cascade');
             $table->integer('quantity');
             $table->decimal('subtotal', 10, 2);
-            $table->enum('status', ['menunggu', 'dicuci', 'disetrika', 'siap diambil']);
+            $table->enum('status', ['menunggu', 'dicuci', 'gagal', 'disetrika', 'siap diambil', 'diterima']);
+            $table->string('end_date');
             $table->timestamps();
         });
 

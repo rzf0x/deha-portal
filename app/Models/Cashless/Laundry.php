@@ -10,6 +10,7 @@ class Laundry extends Model
 {
     use HasFactory;
 
+    protected $table = 'laundries';
     protected $fillable = ['user_id', 'name', 'address', 'phone_number'];
 
     public function user()

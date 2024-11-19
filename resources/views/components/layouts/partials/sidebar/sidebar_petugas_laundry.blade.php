@@ -8,6 +8,7 @@
         </a>
     </li>
 
+
     <li class="sidebar-item">
         <a wire:navigate href="{{ route('petugas-laundry.list-laundry') }}" class='sidebar-link {{ Request::routeIs('petugas-laundry.list-laundry') ? 'text-bg-primary' : '' }}'>
             <i class="{{ Request::routeIs('petugas-laundry.list-laundry') ? 'bi bi-bucket-fill text-bg-primary' : 'bi bi-bucket' }}"></i>
@@ -19,6 +20,13 @@
         <a wire:navigate href="{{ route('petugas-laundry.laundry-service') }}" class='sidebar-link {{ Request::routeIs('petugas-laundry.laundry-service') ? 'text-bg-primary' : '' }}'>
             <i class="{{ Request::routeIs('petugas-laundry.laundry-service') ? 'bi bi-basket-fill text-bg-primary' : 'bi bi-basket' }}"></i>    
             <span>Laundry Services</span>
+        </a>
+    </li>
+
+    <li class="sidebar-item">
+        <a wire:navigate href="{{ route('petugas-laundry.transaksi') }}" class='sidebar-link {{ Request::routeIs('petugas-laundry.transaksi') ? 'text-bg-primary' : '' }}'>
+            <i class="{{ Request::routeIs('petugas-laundry.transaksi') ? 'bi bi-clock-fill text-bg-primary' : 'bi bi-clock' }}"></i>    
+            <span>Riwayat Transaksi</span>
         </a>
     </li>
 </ul>
