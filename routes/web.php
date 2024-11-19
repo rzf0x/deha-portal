@@ -7,8 +7,12 @@ use App\Livewire\Admin\AdminECashless\HistoryPembayaran;
 use App\Livewire\Admin\AdminECashless\Pembayaran as AdminECashlessPembayaran;
 use App\Livewire\Admin\AdminLaundry\LaundryService;
 use App\Livewire\Admin\AdminLaundry\ListLaundry;
+use App\Livewire\Admin\AdminWarung\DetailPembayaran;
 use App\Livewire\Admin\AdminWarung\Kategori;
 use App\Livewire\Admin\AdminWarung\Produk;
+use App\Livewire\Admin\AdminWarung\Revenue;
+use App\Livewire\Admin\AdminWarung\TransaksiPesanan;
+use App\Livewire\Admin\AdminWarung\Pembayaran as PembayaaranPesanan;
 use App\Livewire\Admin\ListSantri\DetailSantri;
 use App\Livewire\Admin\Spp\DashboardSpp;
 use App\Livewire\Admin\Spp\DetailLaporanCicilanSantri;
@@ -121,6 +125,10 @@ Route::prefix('petugas-warung')->middleware('auth')->group(function() {
     Route::get('/dashboard', AdminWarungDashboard::class)->name('petugas-warung.dashboard');
     Route::get('/produk', Produk::class)->name('petugas-warung.produk');
     Route::get('/kategori', Kategori::class)->name('petugas-warung.kategori');
+    Route::get('/transaksi-pesanan', TransaksiPesanan::class)->name('petugas-warung.transaksi');
+    Route::get('/pembayaran', PembayaaranPesanan::class)->name('petugas-warung.pembayaran');
+    Route::get('/detail-pembayaran', DetailPembayaran::class)->name('petugas-warung.detail-pembayaran');
+    Route::get('/revenue', Revenue::class)->name('petugas-warung.revenue');
 
 });
 Route::prefix('petugas-laundry')->middleware('auth')->group(function() {
