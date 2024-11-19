@@ -6,17 +6,21 @@ use App\Models\Cashless\LaundryOrder;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class RiwayatTransaksi extends Component
 {
+    use WithPagination;
     #[Title('Riwayat Pesanan')]
 
+    public $perPage = 5;
+    protected $paginationTheme = 'bootstrap';
     public $detailLaundryUser;
 
     #[Computed]
     public function listLaundry()
     {
-        return LaundryOrder::where('status', 'diterima')->with('santri', 'laundryService')->get();
+        return LaundryOrder::where('status', 'diterima')->with('santri', 'laundryService')->paginate($this->perPage);
     }
 
     public function getBadgeClass($status)

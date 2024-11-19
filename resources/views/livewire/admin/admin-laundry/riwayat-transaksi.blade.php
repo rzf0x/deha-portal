@@ -52,6 +52,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{ $this->listLaundry()->links() }}
             </div>
         </div>
     </div>

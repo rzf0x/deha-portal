@@ -14,9 +14,10 @@ class LaundryService extends Component
     use WithPagination;
     #[Title('Laundry Services')]
 
-    protected $paginationTheme = 'bootstrap';
-    public $services, $serviceId;
     public $perPage = 5;
+    protected $paginationTheme = 'bootstrap';
+    
+    public $services, $serviceId;
 
     public $detailService;
     public LaundryServiceForm $serviceForm;

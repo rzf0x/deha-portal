@@ -12,10 +12,15 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB as FacadesDB;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
+use Livewire\WithPagination;
 
 class ListLaundry extends Component
 {
+    use WithPagination;
     #[Title("List Laundry")]
+
+    public $perPage = 5;
+    protected $paginationTheme = 'bootstrap';
     public LaundryOrderForm $laundryForm;
     public $laundryServices, $laundrySubtotal, $laundryEstimate;
     public $santris, $laundryId, $detailLaundryUser;
@@ -29,7 +34,7 @@ class ListLaundry extends Component
     #[Computed]
     public function listLaundry()
     {
-        return LaundryOrder::where('status', '!=', 'diterima')->with('santri', 'laundryService')->get();
+        return LaundryOrder::where('status', '!=', 'diterima')->with('santri', 'laundryService')->paginate($this->perPage);
     }
 
     public function calculateSubtotal()
