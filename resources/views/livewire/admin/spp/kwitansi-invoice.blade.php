@@ -21,85 +21,63 @@
 
         .container {
             max-width: 800px;
-            margin: 10rem auto 0;
+            margin: 9rem auto 0;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             padding: 20px;
         }
 
+        h2 {
+            font-size: 18px;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+        div {
+            margin-bottom: 20px;
+            /* Jarak antar div */
+        }
+
+        p {
+            padding: 5px 0;
+            /* Jarak dalam paragraf */
+        }
+
         .details-table {
-            width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
         }
 
         .details-table th,
         .details-table td {
-            padding: 10px;
-            border: 1px solid #e0e0e0;
+            padding: 5px 0;
             text-align: left;
+        }
+
+        .details-table.detail-pembayaran {
+            width: 100% !important;
+        }
+
+        .details-table.detail-pembayaran th {
+            width: initial;
+        }
+
+        .details-table.detail-pembayaran td {
+            padding-right: 3rem;
+            text-align: right;
         }
 
         .details-table th {
-            background-color: #f8f9fa80;
+            width: 15rem;
             color: #333;
         }
 
-        .details-table td {
-            background-color: #ffffff80;
+        .details-table tr.total {
+            border-top: 2px solid #333;
         }
 
-        .details-table tr:nth-child(even) td {
-            background-color: #f9f9f980;
-        }
-
-        .total-section {
-            margin-top: 20px;
-            text-align: right;
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .installments {
-            margin-top: 30px;
-        }
-
-        .container h2 {
-            font-size: 18px;
-            color: #444;
-            margin-bottom: 10px;
-        }
-
-        .installments-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .installments-table th,
-        .installments-table td {
-            padding: 10px;
-            border: 1px solid #e0e0e080;
-            text-align: left;
-        }
-
-        .installments-table th {
-            background-color: #f8f9fa80;
-            color: #333;
-        }
-
-        .installments-table td {
-            background-color: #ffffff80;
-        }
-
-        .installments-table tr:nth-child(even) td {
-            background-color: #f9f9f980;
-        }
-
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 14px;
-            color: #888;
+        .details-table td.total {
+            font-weight: 800;
         }
     </style>
 </head>
@@ -118,95 +96,45 @@
 
     </div>
     <div class="container">
-        <h2>Kwitansi</h2>
-        <table class="details-table">
-            <tr>
-                <th>Nomor Kwitansi</th>
-                <td>{{ $pembayaran->id }}</td>
-            </tr>
-            <tr>
-                <th>Nama Santri</th>
-                <td>{{ $pembayaran->santri->nama }}</td>
-            </tr>
-            <tr>
-                <th>NISN</th>
-                <td>{{ $pembayaran->santri->nisn }}</td>
-            </tr>
-            <tr>
-                <th>Kelas</th>
-                <td>{{ $pembayaran->santri->kelas?->nama }}</td>
-            </tr>
-            <tr>
-                <th>Semester</th>
-                <td>{{ $pembayaran->santri->semester?->nama }}</td>
-            </tr>
-            <tr>
-                <th>Angkatan</th>
-                <td>{{ $pembayaran->santri->angkatan?->tahun }}</td>
-            </tr>
-            <tr>
-                <th>Tipe Pembayaran</th>
-                <td>{{ $pembayaran->pembayaranTipe?->nama }}</td>
-            </tr>
-            <tr>
-                <th>Bulan Pembayaran</th>
-                <td>{{ $pembayaran->pembayaranTimeline?->nama_bulan }}</td>
-            </tr>
-            <tr>
-                <th>Nominal Pembayaran</th>
-                <td>Rp. {{ number_format($pembayaran->nominal, 0, ',', '.') }}</td>
-            </tr>
-            <tr>
-                <th>Metode Pembayaran</th>
-                <td>{{ ucfirst($pembayaran->metode_pembayaran) }}</td>
-            </tr>
-            <tr>
-                <th>Status Pembayaran</th>
-                <td>{{ ucfirst($pembayaran->status) }}</td>
-            </tr>
-            <tr>
-                <th>Tanggal Pembayaran</th>
-                <td>{{ \Carbon\Carbon::parse($pembayaran->updated_at)->format('d M Y H:i') }}</td>
+        <h1 style="font-size:1.5rem; text-align: center; margin-bottom: 2rem;">Surat Bukti Pembayaran SPP Bulanan</h1>
+        <h2>Biodata</h2>
+        <div>
+            <p><strong>Nama Santri:</strong> {{ $pembayaran->santri->nama }}</p>
+            <p>
+                <strong>Tempat & Tanggal Lahir:</strong>
+                {{ $pembayaran->santri->tempat_lahir }},
+                {{ \Carbon\Carbon::parse($pembayaran->santri->tanggal_lahir)->format('d M Y') }}
+            </p>
+            <p><strong>Kelas:</strong> {{ $pembayaran->santri->kelas?->nama }}</p>
+            <p><strong>Jenjang:</strong> {{ $pembayaran->santri->kelas?->jenjang?->nama }}</p>
+            <p><strong>Kamar:</strong> {{ $pembayaran->santri->Kamar?->nama }}</p>
+        </div>
+
+        <h2>List Pembayaran</h2>
+        <div>
+            <p><strong>Bulan Pembayaran:</strong> {{ $pembayaran->pembayaranTimeline?->nama_bulan }}</p>
+            <p><strong>Status Pembayaran:</strong> {{ ucfirst($pembayaran->status) }}</p>
+            <p><strong>Metode Pembayaran:</strong> {{ $pembayaran->metode_pembayaran }}</p>
+            <p><strong>Nominal Pembayaran:</strong> Rp. {{ number_format($pembayaran->nominal, 0, ',', '.') }}</p>
+            <p><strong>Tanggal Pembayaran:</strong>
+                {{ \Carbon\Carbon::parse($pembayaran->updated_at)->format('d M Y H:i') }}</p>
+        </div>
+
+        <h2>Detail Pembayaran</h2>
+
+        <table class="details-table detail-pembayaran">
+            @forelse ($detailPembayaran as $detail)
+                <tr>
+                    <th>{{ $detail->nama }} :</th>
+                    <td>Rp. {{ number_format($detail->nominal, 0, ',', '.') }}</td>
+                </tr>
+            @empty
+            @endforelse
+            <tr class="total">
+                <th>Total :</th>
+                <td>Rp. {{ number_format($detailPembayaran->sum('nominal'), 0, ',', '.') }}</td>
             </tr>
         </table>
-
-        @if ($pembayaran->status == 'cicilan')
-            <div class="installments">
-                <h2>Rincian Cicilan</h2>
-                <table class="installments-table">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nominal</th>
-                            <th>Keterangan</th>
-                            <th>Tanggal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php $totalCicilan = 0; @endphp
-                        @foreach ($pembayaran->cicilans as $cicilan)
-                            @php $totalCicilan += $cicilan->nominal; @endphp
-                            <tr>
-                                <td>{{ $loop->iteration }}</td>
-                                <td>Rp. {{ number_format($cicilan->nominal, 0, ',', '.') }}</td>
-                                <td>{{ $cicilan->keterangan }}</td>
-                                <td>{{ \Carbon\Carbon::parse($cicilan->created_at)->format('d M Y') }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <th colspan="3">Total</th>
-                            <th>Rp. {{ number_format($totalCicilan, 0, ',', '.') }}</th>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
-        @endif
-
-        <div class="footer">
-            <p>Terima kasih atas pembayaran Anda.</p>
-        </div>
     </div>
 </body>
 
