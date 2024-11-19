@@ -105,7 +105,7 @@ class Pembayaran extends Component
             }
 
             if ($this->Clickpembayaran->bukti_pembayaran) Storage::disk('public')->delete($this->Clickpembayaran->bukti_pembayaran);
-            $this->buktiPembayaran = $this->buktiPembayaran->store('photos', 'public');
+            $this->buktiPembayaran = $this->buktiPembayaran->store('e-spp/bukti-transfer', 'public');
 
             $this->Clickpembayaran->metode_pembayaran = $this->selectedMetodePembayaran;
             $this->Clickpembayaran->bukti_pembayaran = $this->buktiPembayaran;
