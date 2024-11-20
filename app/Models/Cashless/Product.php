@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Cashless;
 
 use App\Models\Cashless\Category;
-use App\Models\Cashless\Order;
 use App\Models\Cashless\Transaction;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +12,8 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'price', 'seller_id', 'category_id', 'stok'];
+    protected $table = 'products';
+    protected $fillable = ['product_number','name', 'foto', 'description', 'price', 'seller_id', 'category_id', 'stok'];
 
     public function category()
     {

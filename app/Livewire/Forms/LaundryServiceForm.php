@@ -15,6 +15,7 @@ class LaundryServiceForm extends Form
 
     #[Validate('required|string')]
     public $estimate;
+    
     #[Validate('required|string')]
     public $unit = 'Kg';
 

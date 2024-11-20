@@ -2,6 +2,7 @@
 
 namespace App\Models\Cashless;
 
+use App\Models\Cashless\Product as CashlessProduct;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ class TransactionItem extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['transaction_id', 'product_id', 'quantity', 'price'];
+    protected $fillable = ['transaction_id', 'product_id', 'quantity', 'price', 'subtotal'];
 
     public function transaction()
     {
@@ -19,6 +20,11 @@ class TransactionItem extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(CashlessProduct::class);
+    }
+
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
     }
 }
