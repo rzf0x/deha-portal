@@ -191,49 +191,15 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>TRX-002</td>
-                                <td>Ani Kurniawati</td>
-                                <td>Jaket Adidas</td>
-                                <td>1</td>
-                                <td>Rp 800.000</td>
-                                <td>Rp 80.000</td>
-                                <td>Rp 880.000</td>
-                                <td>Rp 1.000.000</td>
-                                <td>Rp 120.000</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#detailProduct"
-                                        wire:click="detailProduct('{{ $product->id }}')">Detail
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>TRX-003</td>
-                                <td>Rudi Hartono</td>
-                                <td>Tas Gucci</td>
-                                <td>1</td>
-                                <td>Rp 5.000.000</td>
-                                <td>Rp 500.000</td>
-                                <td>Rp 5.500.000</td>
-                                <td>Rp 6.000.000</td>
-                                <td>Rp 500.000</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                        data-bs-target="#detailProduct"
-                                        wire:click="detailProduct('{{ $product->id }}')">Detail
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>TRX-004</td>
-                                <td>Siti Rahayu</td>
+                                <td>TRX-001</td>
+                                <td>Budi Setiawan</td>
                                 <td>Sepatu Nike</td>
-                                <td>3</td>
-                                <td>Rp 2.250.000</td>
-                                <td>Rp 225.000</td>
-                                <td>Rp 2.475.000</td>
-                                <td>Rp 3.000.000</td>
-                                <td>Rp 525.000</td>
+                                <td>2</td>
+                                <td>Rp 1.500.000</td>
+                                <td>Rp 150.000</td>
+                                <td>Rp 1.650.000</td>
+                                <td>Rp 2.000.000</td>
+                                <td>Rp 350.000</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#detailProduct"
@@ -242,15 +208,49 @@
                                 </td>
                             </tr>
                             <tr>
-                                <td>TRX-005</td>
-                                <td>Ahmad Jabbar</td>
-                                <td>Jaket Adidas</td>
+                                <td>TRX-001</td>
+                                <td>Budi Setiawan</td>
+                                <td>Sepatu Nike</td>
                                 <td>2</td>
-                                <td>Rp 1.600.000</td>
-                                <td>Rp 160.000</td>
-                                <td>Rp 1.760.000</td>
+                                <td>Rp 1.500.000</td>
+                                <td>Rp 150.000</td>
+                                <td>Rp 1.650.000</td>
                                 <td>Rp 2.000.000</td>
-                                <td>Rp 240.000</td>
+                                <td>Rp 350.000</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#detailProduct"
+                                        wire:click="detailProduct('{{ $product->id }}')">Detail
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>TRX-001</td>
+                                <td>Budi Setiawan</td>
+                                <td>Sepatu Nike</td>
+                                <td>2</td>
+                                <td>Rp 1.500.000</td>
+                                <td>Rp 150.000</td>
+                                <td>Rp 1.650.000</td>
+                                <td>Rp 2.000.000</td>
+                                <td>Rp 350.000</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#detailProduct"
+                                        wire:click="detailProduct('{{ $product->id }}')">Detail
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>TRX-001</td>
+                                <td>Budi Setiawan</td>
+                                <td>Sepatu Nike</td>
+                                <td>2</td>
+                                <td>Rp 1.500.000</td>
+                                <td>Rp 150.000</td>
+                                <td>Rp 1.650.000</td>
+                                <td>Rp 2.000.000</td>
+                                <td>Rp 350.000</td>
                                 <td>
                                     <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                         data-bs-target="#detailProduct"
