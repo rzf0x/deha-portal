@@ -9,11 +9,11 @@ class Payment extends Model
     use HasFactory;
 
     protected $table = 'payments';
-    protected $fillable = ['transaction_id', 'payment_method', 'payment_status', 'payment_date', 'subtotal', 'kembalian'];
+    protected $fillable = ['transaction_items_id', 'payment_method', 'payment_status', 'payment_date', 'amount', 'returns'];
 
     public function order()
     {
-        return $this->belongsTo(Transaction::class);
+        return $this->belongsTo(TransactionItem::class);
     }
     
     public function paymentDetail()

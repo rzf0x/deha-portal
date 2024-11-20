@@ -15,7 +15,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row px-lg-4 px-2">
             <div class="col-lg-6 chart-container">
                 <div class="chart-revenue bg-white p-4 rounded-3 d-flex flex-column">
                     <header class="chart-header row">
@@ -90,123 +90,109 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>No.</th>
+                                <th>No. Produk</th>
                                 <th>Foto</th>
                                 <th>Nama Produk</th>
                                 <th>Kategori</th>
-                                <th>Stok</th>
-                                <th>Terjual</th>
                                 <th>Harga</th>
-                                <th>Action</th>
+                                <th>Stok</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    <img src="path_to_image1.jpg"
-                                        style="width: 4rem; height: 4rem; border-radius: 10%; object-fit: cover;"
-                                        alt="Produk 1">
-                                </td>
-                                <td>Produk A</td>
-                                <td>Kategori 1</td>
-                                <td>100</td>
-                                <td>-41</td>
-                                <td>Rp. 100.000</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary text-white" data-bs-toggle="modal"
-                                        data-bs-target="#detailModal1">
-                                        <i class="bi bi-eye-fill"></i> Detail
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    <img src="path_to_image1.jpg"
-                                        style="width: 4rem; height: 4rem; border-radius: 10%; object-fit: cover;"
-                                        alt="Produk 1">
-                                </td>
-                                <td>Produk A</td>
-                                <td>Kategori 1</td>
-                                <td>100</td>
-                                <td>-41</td>
-                                <td>Rp. 100.000</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary text-white" data-bs-toggle="modal"
-                                        data-bs-target="#detailModal1">
-                                        <i class="bi bi-eye-fill"></i> Detail
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>
-                                    <img src="path_to_image1.jpg"
-                                        style="width: 4rem; height: 4rem; border-radius: 10%; object-fit: cover;"
-                                        alt="Produk 1">
-                                </td>
-                                <td>Produk A</td>
-                                <td>Kategori 1</td>
-                                <td>100</td>
-                                <td>-41</td>
-                                <td>Rp. 100.000</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary text-white" data-bs-toggle="modal"
-                                        data-bs-target="#detailModal1">
-                                        <i class="bi bi-eye-fill"></i> Detail
-                                    </button>
-                                </td>
-                            </tr>
-
-                            {{-- Product Modal --}}
-                            <div class="modal fade" id="detailModal1" tabindex="-1" aria-labelledby="detailModalLabel1"
-                                aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="detailModalLabel1">Detail Produk A</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <img src="path_to_image1.jpg" class="img-fluid rounded"
-                                                        alt="Produk A">
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="mb-3">
-                                                        <label class="fw-bold">Nama Produk:</label>
-                                                        <p>Produk A</p>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="fw-bold">Kategori:</label>
-                                                        <p>Kategori 1</p>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="fw-bold">Stok:</label>
-                                                        <p>100</p>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="fw-bold">Terjual:</label>
-                                                        <p>-41</p>
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label class="fw-bold">Harga:</label>
-                                                        <p>Rp. 100.000</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @forelse ($this->listProduct() as $product)
+                                <tr>
+                                    <td>{{ $product->product_number }}</td>
+                                    <td>
+                                        @if ($product->foto)
+                                            <img style="width: 5rem; height: 5rem; object-fit:cover;"
+                                                src="{{ Storage::url('photos/' . $product->foto) }}" alt="">
+                                        @else
+                                            <p class="m-0">Foto tidak tersedia!</p>
+                                        @endif
+                                    </td>
+                                    <td>{{ $product->name }}</td>
+                                    <td>{{ $product->category->name ?? 'Tidak Berkategori' }}</td>
+                                    <td>Rp. {{ number_format($product->price, 0, ',', '.') }}</td>
+                                    <td>{{ $product->stok }}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                            data-bs-target="#detailProduct"
+                                            wire:click="detailProduct('{{ $product->id }}')">Detail
+                                        </button>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="6" class="text-center">
+                                        <p class="m-0">Tidak ada produk tersedia!</p>
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
+
+                    {{ $this->listProduct()->links() }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Detail Modal -->
+    <div class="modal fade" id="detailProduct" wire:ignore.self tabindex="-1">
+        <div class="modal-dialog {{ $detailProductList?->foto ? 'modal-lg' : 'modal-md' }}">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detail Produk #{{ $detailProductList?->product_number }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex">
+                        @if ($detailProductList?->foto)
+                            <div class="me-3" style="width: 100%; position: relative;">
+                                <img src="{{ Storage::url('photos/' . $detailProductList?->foto) }}"
+                                    class="img-fluid rounded"
+                                    style="position: absolute; object-fit:cover; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;">
+                            </div>
+                        @endif
+                        <div class="flex-grow-1">
+                            <div class="row">
+                                <div class="col-12 mb-2">
+                                    <strong>Nama Produk:</strong>
+                                    <p class="mb-1">{{ $detailProductList?->name }}</p>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <strong>Kategori:</strong>
+                                    <p class="mb-1">
+                                        {{ $detailProductList?->category?->name ?? 'Tidak Berkategori' }}
+                                    </p>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <strong>Harga:</strong>
+                                    <p class="mb-1">Rp.
+                                        {{ number_format($detailProductList?->price ?? 0, 0, ',', '.') }}</p>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <strong>Stok:</strong>
+                                    <p class="mb-1">{{ $detailProductList?->stok }} Unit</p>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <strong>Deskripsi:</strong>
+                                    <p class="mb-1">{{ $detailProductList?->description ?? 'Tidak ada deskripsi' }}
+                                    </p>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <strong>Dibuat Pada:</strong>
+                                    <span class="badge bg-info">
+                                        {{ $detailProductList?->created_at?->format('d M Y H:i') }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

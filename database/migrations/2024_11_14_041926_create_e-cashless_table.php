@@ -13,14 +13,17 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
+            $table->string('category_number')->unique(); 
             $table->string('name');
             $table->timestamps();
         });
 
         Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->string('product_number')->unique(); 
             $table->string('name');
-            $table->text('description');
+            $table->string('foto')->nullable();
+            $table->text('description')->nullable();
             $table->decimal('price', 10, 2);
             $table->integer('stok');
             $table->foreignId('seller_id')->constrained('users');
@@ -30,10 +33,13 @@ return new class extends Migration
 
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction_number')->unique(); // Nomor transaksi unique
-            $table->foreignId('user_id')->constrained('users');
-            $table->decimal('total_price', 10, 2);
-            $table->enum('status', ['pending', 'paid', 'delivered']);
+            $table->string('transaction_number')->unique(); 
+            $table->string('user');
+            $table->decimal('subtotal', 10, 2);
+            $table->decimal('tax', 10, 2)->default(0);
+            $table->decimal('discount', 10, 2)->default(0);
+            $table->decimal('total', 10, 2);
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
 
@@ -43,19 +49,20 @@ return new class extends Migration
             $table->foreignId('transaction_id')->constrained('transactions')->onDelete('cascade');
             $table->foreignId('product_id')->constrained('products')->onDelete('cascade');
             $table->integer('quantity');
-            $table->decimal('price', 10, 2); // Harga saat pembelian
+            $table->decimal('price', 10, 2);
+            $table->decimal('subtotal', 10, 2);
             $table->timestamps();
         });
 
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->string('payment_number')->unique(); // Nomor pembayaran unique
-            $table->foreignId('transaction_id')->constrained('transactions')->onDelete('cascade');
+            $table->foreignId('transaction_items_id')->constrained('transaction_items')->onDelete('cascade');
             $table->string('payment_method');
             $table->enum('payment_status', ['pending', 'processing', 'success', 'failed']);
             $table->datetime('payment_date');
-            $table->decimal('subtotal', 10, 2);
-            $table->decimal('kembalian', 10, 2)->nullable();
+            $table->decimal('amount', 10, 2);
+            $table->decimal('returns', 10, 2)->nullable();
             $table->timestamps();
         });
 
