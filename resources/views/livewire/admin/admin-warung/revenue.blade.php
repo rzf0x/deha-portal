@@ -17,8 +17,8 @@
                 <div style="background-color: #f5f5f5;" class="d-flex align-items-center p-4 h-100 rounded-3">
                     <div class="d-flex flex-column gap-3">
                         <h5 class="mb-0">Produk Terjual</h5>
-                        <h3 class="m-0 text-primary">291</h3>
-                        <p class="m-0 fs-6 text-success"><b>+ 101</b> <span class="text-dark">di bulan
+                        <h3 class="m-0 text-primary">32</h3>
+                        <p class="m-0 fs-6 text-success"><b>+ 11</b> <span class="text-dark">di bulan
                                 <b>November</b></span></p>
                     </div>
                 </div>
@@ -49,7 +49,7 @@
     </div>
     <div class="card">
         <div class="card-header d-flex flex-md-row flex-column justify-content-between align-items-md-center">
-            <h4>Revenue</h4>
+            <h4>Statistik Penjualan</h4>
             <div class="row">
                 <div class="col-md-6 mt-md-0 col-12">
                     <select class="form-select" style="width: 100%;">
@@ -67,7 +67,7 @@
             <div class="col-lg-8 chart-container">
                 <div class="chart-revenue bg-white p-4 rounded-3 d-flex flex-column">
                     <header class="chart-header row">
-                        <h5 class="mb-3">Pendapatan</h5>
+                        <h5 class="mb-3">Total Penjualan</h5>
                     </header>
                     <div id="chart-pendapatan" style="height: 350px;"
                         class="chart mt-2 rounded-3 h-100 w-100 flex-grow-1">
@@ -385,24 +385,24 @@
     // Bar Chart (Pendapatan Penjualan Produk)
     var pendapatanOptions = {
         series: [{
-            name: 'Pendapatan',
-            data: [150000, 200000, 180000, 250000, 300000] // Data total pendapatan dari penjualan produk
+            name: 'Terjual',
+            data: [20, 12, 15, 9, 30] // Data total pendapatan dari penjualan produk
         }],
         chart: {
-            type: 'line',
+            type: 'bar',
             height: 350,
             stacked: false,
         },
         dataLabels: {
             enabled: false
         },
-        colors: ['#ff6347', '#32cd32'],
+        colors: ['#ff6347'],
         xaxis: {
             categories: ['Produk A', 'Produk B', 'Produk C', 'Produk D', 'Produk E'], // Ganti dengan nama produk
         },
         yaxis: {
             min: 0,
-            max: 400000,
+            // max: 400000,
             tickAmount: 8,
         },
         legend: {
