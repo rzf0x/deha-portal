@@ -32,6 +32,7 @@
                             <th>Kategori</th>
                             <th>Harga</th>
                             <th>Stok</th>
+                            <th>Stok</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -41,7 +42,7 @@
                                 <td>{{ $product->product_number }}</td>
                                 <td>
                                     @if ($product->foto)
-                                        <img style="width: 5rem; height: 5rem; object-fit:cover;"
+                                        <img style="width: 3rem; border-radius: 50%; height: 3rem; object-fit:cover;"
                                             src="{{ Storage::url('photos/' . $product->foto) }}" alt="">
                                     @else
                                         <p class="m-0">Foto tidak tersedia!</p>
