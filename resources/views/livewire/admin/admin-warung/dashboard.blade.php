@@ -70,8 +70,8 @@
                     <div class="col-md-6 col-12 mb-4">
                         <div style="background-color: #f5f5f5;" class="d-flex align-items-center p-4 h-100 rounded-3">
                             <div class="d-flex flex-column gap-3">
-                                <h5 class="mb-0">Total Pembeli</h5>
-                                <h3 class="m-0 text-primary">76</h3>
+                                <h5 class="mb-0">Total Stok</h5>
+                                <h3 class="m-0 text-primary">861</h3>
                                 <p class="m-0 fs-6 text-success"><b>+ 54</b> <span class="text-dark">di bulan
                                         <b>November</b></span></p>
                             </div>
@@ -85,7 +85,7 @@
     <div class="table-produk mt-4">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="m-0">Tabel Produk</h4>
+                <h4 class="m-0">Tabel Produk - ({{ count($this->listProduct()) }})</h4>
                 <a class="btn btn-dark mt-md-0 mt-2" href="{{ route('petugas-warung.produk') }}">Semua produk</a>
             </div>
             <div class="card-body">
@@ -99,6 +99,7 @@
                                 <th>Kategori</th>
                                 <th>Harga</th>
                                 <th>Stok</th>
+                                <th>Terjual</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -118,6 +119,7 @@
                                     <td>{{ $product->category->name ?? 'Tidak Berkategori' }}</td>
                                     <td>Rp. {{ number_format($product->price, 0, ',', '.') }}</td>
                                     <td>{{ $product->stok }}</td>
+                                    <td>46</td>
                                     <td>
                                         <button class="btn btn-sm btn-primary" data-bs-toggle="modal"
                                             data-bs-target="#detailProduct"
