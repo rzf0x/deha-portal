@@ -33,10 +33,10 @@ return new class extends Migration
 
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('transaction_number')->unique(); 
+            $table->string('transaction_number'); 
             $table->string('user');
-            $table->decimal('tax', 10, 2)->default(0);
-            $table->decimal('discount', 10, 2)->default(0);
+            // $table->decimal('tax', 10, 2)->default(0);
+            // $table->decimal('discount', 10, 2)->default(0);
             $table->decimal('total', 10, 2);
             $table->decimal('subtotal', 10, 2);
             $table->text('notes')->nullable();
@@ -59,6 +59,7 @@ return new class extends Migration
             $table->string('payment_number')->unique(); // Nomor pembayaran unique
             $table->foreignId('transaction_items_id')->constrained('transaction_items')->onDelete('cascade');
             $table->string('payment_method');
+            $table->string('bukti_pembayaran');
             $table->enum('payment_status', ['pending', 'processing', 'success', 'failed']);
             $table->datetime('payment_date');
             $table->decimal('amount', 10, 2);

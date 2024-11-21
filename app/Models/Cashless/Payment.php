@@ -9,7 +9,7 @@ class Payment extends Model
     use HasFactory;
 
     protected $table = 'payments';
-    protected $fillable = ['transaction_items_id', 'payment_method', 'payment_status', 'payment_date', 'amount', 'returns'];
+    protected $fillable = ['transaction_items_id', 'payment_method', 'bukti_pembayaran', 'payment_status', 'payment_date', 'amount', 'returns'];
 
     public function order()
     {
