@@ -96,3 +96,19 @@ body {
 .progress-bar {
     background-color: #28a745;
 }
+.product-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    /* border-bottom: 1px solid #e0e0e0; */
+    padding-bottom: 15px;
+}
+.product-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+.product-details {
+    flex-grow: 1;
+}

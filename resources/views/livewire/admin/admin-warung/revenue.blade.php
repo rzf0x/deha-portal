@@ -151,8 +151,8 @@
     <div class="table-transaksi mt-4">
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="m-0">Riwayat Transaksi Penjualan</h4>
-                <a class="btn btn-dark mt-md-0 mt-2" href="{{ route('petugas-warung.riwayat-transaksi') }}">Lihat
+                <h4 class="m-0">Riwayat Detail Pembayaran</h4>
+                <a class="btn btn-dark mt-md-0 mt-2" href="{{ route('petugas-warung.detail-pembayaran') }}">Lihat
                     semua</a>
             </div>
             <div class="card-body">
@@ -160,7 +160,7 @@
                     <table class="table table-hover">
                         <thead>
                             <tr>
-                                <th>No. Transaksi</th>
+                                <th>No. Pembayaran</th>
                                 <th>Nama</th>
                                 <th>Produk</th>
                                 <th>Jumlah</th>

@@ -13,7 +13,7 @@ class Transaction extends Model
     use HasFactory;
 
     protected $table = 'transaction';
-    protected $fillable = ['transaction_number', 'user', 'subtotal', 'tax', 'discount', 'total', 'notes'];
+    protected $fillable = ['transaction_number', 'user', 'subtotal', 'total', 'notes'];
 
     // public function user()
     // {
