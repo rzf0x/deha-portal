@@ -27,11 +27,11 @@
     </li>
 
     <li class="sidebar-item">
-        <a wire:navigate href="{{ route('petugas-warung.transaksi') }}"
-            class='sidebar-link {{ Request::routeIs('petugas-warung.transaksi') ? 'text-bg-primary' : '' }}'>
+        <a wire:navigate href="{{ route('petugas-warung.pesanan') }}"
+            class='sidebar-link {{ Request::routeIs('petugas-warung.pesanan') ? 'text-bg-primary' : '' }}'>
             <i
-                class="{{ Request::routeIs('petugas-warung.transaksi') ? 'bi bi-cart-check-fill text-bg-primary' : 'bi bi-cart-check' }} fs-5"></i>
-            <span>Transaksi Pesanan</span>
+                class="{{ Request::routeIs('petugas-warung.pesanan') ? 'bi bi-cart-check-fill text-bg-primary' : 'bi bi-cart-check' }} fs-5"></i>
+            <span>Pesanan</span>
         </a>
     </li>
 
@@ -52,15 +52,6 @@
             <span>Detail Pembayaran</span>
         </a>
     </li>
-
-    {{-- <li class="sidebar-item">
-        <a wire:navigate href="{{ route('petugas-warung.riwayat-transaksi') }}"
-            class='sidebar-link {{ Request::routeIs('petugas-warung.riwayat-transaksi') ? 'text-bg-primary' : '' }}'>
-            <i
-                class="{{ Request::routeIs('petugas-warung.riwayat-transaksi') ? 'bi bi-clock-fill text-bg-primary' : 'bi bi-clock' }} fs-5"></i>
-            <span>Riwayat Transaksi</span>
-        </a>
-    </li> --}}
 
     <li class="sidebar-item">
         <a href="{{ route('petugas-warung.revenue') }}"

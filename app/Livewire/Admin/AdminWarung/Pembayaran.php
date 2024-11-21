@@ -7,7 +7,7 @@ use Livewire\Component;
 
 class Pembayaran extends Component
 {
-    #[Title('Pembayaran')]
+    #[Title('Menu Pembayaran')]
     public function render()
     {
         return view('livewire.admin.admin-warung.pembayaran');

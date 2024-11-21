@@ -59,6 +59,7 @@ return new class extends Migration
             $table->string('payment_number')->unique(); // Nomor pembayaran unique
             $table->foreignId('transaction_items_id')->constrained('transaction_items')->onDelete('cascade');
             $table->string('payment_method');
+            $table->string('bukti_pembayaran');
             $table->enum('payment_status', ['pending', 'processing', 'success', 'failed']);
             $table->datetime('payment_date');
             $table->decimal('amount', 10, 2);
