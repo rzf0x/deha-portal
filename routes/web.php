@@ -92,6 +92,11 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
         // Service
     });
+
+    Route::prefix('master-aktifitas')->group(function(){
+        Route::get('/pengumuman', App\Livewire\Admin\Pengumuman::class)->name('admin.master-aktifitas.pengumuman');
+        Route::get('/kegiatan', App\Livewire\Admin\Kegiatan::class)->name('admin.master-aktifitas.kegiatan');
+    });
 });
 
 Route::get('/optimize-clear', function () {
