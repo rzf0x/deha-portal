@@ -4,6 +4,7 @@ namespace App\Livewire\Auth;
 
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 
@@ -60,7 +61,7 @@ class Register extends Component
             'roles_id' => 6,
             'name' => $this->username,
             'email' => $this->email,
-            'password' => Hash::make($this->password),
+            'password' => Crypt::encrypt($this->password),
         ]);
 
         request()->session()->regenerate();

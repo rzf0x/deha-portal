@@ -3,7 +3,7 @@
     <div class="mb-md-3 d-flex md-2">
         <img class="bg-secondary" src="" alt="">
         <div class="">
-            <h2 class="fw-bold text-dark">Selamat Datang, {{ explode(' ', $profile->nama)[0] }}</h2>
+            <h2 class="fw-bold text-dark">Selamat Datang, {{ explode(' ', auth()->user()->name)[0] }}</h2>
         </div>
     </div>
     <!-- Dashboard Grid -->
@@ -20,27 +20,99 @@
                     </div>
                     <div class="mt-4">
                         <h6 class="mb-2 ">Nama Lengkap</h6>
-                        <p class="fw-medium">{{ $profile?->nama }}</p>
+                        <p class="fw-medium">{{ auth()->user()->name ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Email</h6>
-                        <p class="fw-medium">{{ auth()->user()->email }}</p>
+                        <p class="fw-medium">{{ auth()->user()->email ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Password</h6>
-                        <p class="fw-medium">{{ auth()->user()->password }}</p>
+                        <p class="fw-medium">{{ Crypt::decrypt(auth()->user()->password) ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Jenjang</h6>
-                        <p class="fw-medium">{{ $profile?->kelas->jenjang->nama }}</p>
+                        <p class="fw-medium">{{ $profile?->kelas->jenjang->nama ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Kelas</h6>
-                        <p class="fw-medium">{{ $profile?->kelas->nama }}</p>
+                        <p class="fw-medium">{{ $profile?->kelas->nama ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Kamar</h6>
-                        <p class="fw-medium">{{ $profile?->kamar->nama }}</p>
+                        <p class="fw-medium">{{ $profile?->kamar->nama ?? '-' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- SPP Status Card -->
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="card-title">Status SPP</h3>
+                        <div class="form-group">
+                            <select wire:model.live='setStatusSpp' class="form-control form-control-md" name=""
+                                id="">
+                                @forelse ($timeline_spp as $timeline)
+                                    <option value="{{ $timeline->nama_bulan }}">{{ $timeline->nama_bulan }}</option>
+                                @empty
+                                    <option value="">Tidak ada bulan!</option>
+                                @endforelse
+                            </select>
+                        </div>
+                    </div>
+                    <div class="status-spp">
+                        @php
+                            $statusClass = 'bg-secondary';
+                            if (isset($pembayaran)) {
+                                switch ($pembayaran->status) {
+                                    case 'lunas':
+                                        $statusClass = 'bg-success';
+                                        break;
+                                    case 'cicilan':
+                                        $statusClass = 'bg-warning';
+                                        break;
+                                }
+                            }
+                        @endphp
+                        Status Pembayaran: <span
+                            class="badge {{ $statusClass }}">{{ $pembayaran->status ?? 'belum bayar' }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title">Perkembangan Akademik</h3>
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="card-subtitle">Tahfidz</span>
+                            <span class="card-subtitle">80%</span>
+                        </div>
+                        <div class="progress rounded-5">
+                            <div class="progress-bar rounded-5 bg-primary" role="progressbar" style="width: 80%;"
+                                aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="card-subtitle">Bahasa Arab</span>
+                            <span class="card-subtitle">65%</span>
+                        </div>
+                        <div class="progress rounded-5">
+                            <div class="progress-bar bg-warning rounded-5" role="progressbar" style="width: 65%;"
+                                aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span class="card-subtitle">Fiqih</span>
+                            <span class="card-subtitle">90%</span>
+                        </div>
+                        <div class="progress rounded-5">
+                            <div class="progress-bar bg-success rounded-5" role="progressbar" style="width: 90%;"
+                                aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -105,7 +177,9 @@
                             data-bs-target="#detailPengumuman" class="mt-4">
                             <div class="border-start border-info ps-3">
                                 <h6 class="fw-medium mb-2">{{ $item->judul }}</h6>
-                                <p class="card-subtitle mb-0">{{ Str::limit($item->isi_pengumuman, 24, '...') }}</p>
+                                <p class="card-subtitle mb-0">
+                                    {{ Str::limit($item->isi_pengumuman, 24, '...') ?? '-' }}
+                                </p>
                                 <p class="text-muted small mt-1">
                                     {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
                                 </p>
@@ -114,7 +188,8 @@
                     @empty
                         <p class="text-muted mt-1">Belum ada pengumuman</p>
                     @endforelse
-                    <a href="{{ route('santri.pengumuman') }}" class="d-md-none mt-md-4 mt-3 w-100 btn btn-dark">Lihat
+                    <a href="{{ route('santri.pengumuman') }}"
+                        class="d-md-none mt-md-4 mt-3 w-100 btn btn-dark">Lihat
                         Semua Pengumuman</a>
                 </div>
             </div>
@@ -174,7 +249,7 @@
                                 <h6 class="fw-medium mb-2">{{ $item->judul }}</h6>
                                 <p class="card-subtitle mb-0">
                                     {{ \Carbon\Carbon::parse($item->waktu_mulai)->format('d M Y H:i') }} -
-                                    {{ \Carbon\Carbon::parse($item->waktu_selesai)->format('d M Y H:i') }}</p>
+                                    {{ \Carbon\Carbon::parse($item->waktu_selesai)->format('d M Y H:i') ?? '-' }}</p>
                             </div>
                         </div>
                     @empty
@@ -182,44 +257,6 @@
                     @endforelse
                     <a href="{{ route('santri.kegiatan') }}" class="d-md-none mt-md-4 mt-3 w-100 btn btn-dark">Lihat
                         Semua Kegiatan</a>
-                </div>
-            </div>
-        </div>
-        <!-- Academic Progress Card -->
-        <div class="col-12 col-md-6 col-lg-4">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h3 class="card-title">Perkembangan Akademik</h3>
-                    <div class="mt-4">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="card-subtitle">Tahfidz</span>
-                            <span class="card-subtitle">80%</span>
-                        </div>
-                        <div class="progress rounded-5">
-                            <div class="progress-bar rounded-5 bg-primary" role="progressbar" style="width: 80%;"
-                                aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="card-subtitle">Bahasa Arab</span>
-                            <span class="card-subtitle">65%</span>
-                        </div>
-                        <div class="progress rounded-5">
-                            <div class="progress-bar bg-warning rounded-5" role="progressbar" style="width: 65%;"
-                                aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
-                    <div class="mt-3">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="card-subtitle">Fiqih</span>
-                            <span class="card-subtitle">90%</span>
-                        </div>
-                        <div class="progress rounded-5">
-                            <div class="progress-bar bg-success rounded-5" role="progressbar" style="width: 90%;"
-                                aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -233,13 +270,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-2"><b>{{ $detailKegiatanModal?->isi_kegiatan }}</p>
+                    <p class="mb-2"><b>{{ $detailKegiatanModal?->isi_kegiatan ?? '-' }}</p>
                 </div>
                 <div class="modal-footer justify-content-start">
                     <p class="mb-2">
-                        {{ \Carbon\Carbon::parse($detailKegiatanModal?->waktu_mulai)->format('d M Y H:i') }}</p>
+                        {{ \Carbon\Carbon::parse($detailKegiatanModal?->waktu_mulai)->format('d M Y H:i') ?? '-' }}</p>
                     <p class="mb-2">
-                        {{ \Carbon\Carbon::parse($detailKegiatanModal?->waktu_selesai)->format('d M Y H:i') }}</p>
+                        {{ \Carbon\Carbon::parse($detailKegiatanModal?->waktu_selesai)->format('d M Y H:i') ?? '-' }}
+                    </p>
                 </div>
             </div>
         </div>
@@ -250,16 +288,16 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        <p class="mb-2">{{ $detailPengumumanModal?->judul }}</p>
+                        <p class="mb-2">{{ $detailPengumumanModal?->judul ?? '-' }}</p>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-2">{{ $detailPengumumanModal?->isi_pengumuman }}</p>
+                    <p class="mb-2">{{ $detailPengumumanModal?->isi_pengumuman ?? '-' }}</p>
                 </div>
                 <div class="modal-footer justify-content-start">
                     <p class="mb-2">
-                        {{ \Carbon\Carbon::parse($detailPengumumanModal?->tanggal)->format('d M Y') }}</p>
+                        {{ \Carbon\Carbon::parse($detailPengumumanModal?->tanggal)->format('d M Y') ?? '-' }}</p>
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@ namespace App\Livewire\Santri;
 use App\Livewire\Forms\ProfileSantriForm;
 use App\Models\Santri;
 use App\Models\User;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -25,7 +26,10 @@ class Profile extends Component
     {
         $this->userId = $id;
         $userEdit = User::findOrFail($id);
-        $this->userForm->fill($userEdit);
+        $this->userForm->fill([
+            'email' =>$userEdit->email,
+            'password' =>  Crypt::decrypt($userEdit->password),
+        ]);
     }
 
     public function close()
@@ -38,7 +42,7 @@ class Profile extends Component
         try {
             User::findOrFail($this->userId)->update([
                 'email' => $this->userForm->email,
-                'password' => Hash::make($this->userForm->password),
+                'password' =>  Crypt::encrypt($this->userForm->password),
             ]);
             return to_route('santri.profile');
         } catch (\Throwable $th) {

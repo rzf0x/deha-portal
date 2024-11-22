@@ -18,7 +18,7 @@
                     </div>
                 </div>
             @empty
-                <p class="text-secondary">Belum ada kegiatan</p>
+                <p class="text-secondary">Belum ada pengumuman</p>
             @endforelse
         </div>
     </div>

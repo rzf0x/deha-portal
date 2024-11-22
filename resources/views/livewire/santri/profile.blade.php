@@ -4,7 +4,7 @@
             <div class="card shadow-sm">
                 <div class="card-body">
                     <div class="d-flex align-items-center justify-content-between">
-                        <h3 class="card-title">Informasi Pribadi</h3>
+                        <h3 class="card-title">Data Pribadi</h3>
                         <button class="btn btn-dark" wire:click='edit("{{  auth()->user()->id }}")' data-bs-target='#santriProfile'
                             data-bs-toggle="modal">
                             Edit Profile
@@ -12,7 +12,7 @@
                     </div>
                     <div class="mt-4">
                         <h6 class="mb-2 ">Nama Lengkap</h6>
-                        <p class="fw-medium">{{ $profile?->nama }}</p>
+                        <p class="fw-medium">{{ auth()->user()->name }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Email</h6>
@@ -20,19 +20,19 @@
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Password</h6>
-                        <p class="fw-medium">{{ auth()->user()->password }}</p>
+                        <p class="fw-medium">{{ Crypt::decrypt(auth()->user()->password) }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Jenjang</h6>
-                        <p class="fw-medium">{{ $profile?->kelas->jenjang->nama }}</p>
+                        <p class="fw-medium">{{ $profile?->kelas->jenjang->nama  ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Kelas</h6>
-                        <p class="fw-medium">{{ $profile?->kelas->nama }}</p>
+                        <p class="fw-medium">{{ $profile?->kelas->nama  ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Kamar</h6>
-                        <p class="fw-medium">{{ $profile?->kamar->nama }}</p>
+                        <p class="fw-medium">{{ $profile?->kamar->nama  ?? '-' }}</p>
                     </div>
                 </div>
             </div>
@@ -45,28 +45,28 @@
                     </div>
                     <div class="mt-4">
                         <h6 class="mb-2 ">Jenis Kelamin</h6>
-                        <p class="fw-medium">{{ $profile?->jenis_kelamin }}</p>
+                        <p class="fw-medium">{{ $profile?->jenis_kelamin  ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Tempat/Tanggal Lahir</h6>
-                        <p class="fw-medium">{{ $profile?->tempat_lahir }},
-                            {{ \Carbon\Carbon::parse($profile?->tanggal_lahir)->format('d M Y') }}</p>
+                        <p class="fw-medium">{{ $profile?->tempat_lahir  ?? '-' }},
+                            {{ \Carbon\Carbon::parse($profile?->tanggal_lahir)->format('d M Y') }} 
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2">Aktifitas Pendidikan</h6>
-                        <p class="fw-medium badge m-0 bg-primary">{{ $profile?->aktivitas_pendidikan }}</p>
+                        <p class="fw-medium badge m-0 bg-primary">{{ $profile?->aktivitas_pendidikan ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2">NISN</h6>
-                        <p class="fw-medium">{{ $profile?->nisn }}</p>
+                        <p class="fw-medium">{{ $profile?->nisn ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">NISM</h6>
-                        <p class="fw-medium">{{ $profile?->nism }}</p>
+                        <p class="fw-medium">{{ $profile?->nism ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">NPSN</h6>
-                        <p class="fw-medium">{{ $profile?->npsn }}</p>
+                        <p class="fw-medium">{{ $profile?->npsn ?? '-' }}</p>
                     </div>
                 </div>
             </div>
