@@ -12,4 +12,10 @@ class ProfileSantriForm extends Form
 
     #[Validate('required|min:8')]
     public $password;
+
+    protected $messages = [
+        'email.min' => 'Masukkan email',
+        'password.required' => 'Minimal 8 karakter',
+        'password.min' => 'Minimal 8 karakter',
+    ];
 }

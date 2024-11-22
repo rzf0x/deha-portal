@@ -31,7 +31,9 @@ class DatabaseSeeder extends Seeder
             OrangTuaSeeder::class,
             LaundryServiceSeeder::class,
             ProductCategorySeeder::class,
-            ProductListSeeder::class
+            ProductListSeeder::class,
+            PengumumanSeeder::class,
+            KegiatanSeeder::class,
         ]);
     }
 }

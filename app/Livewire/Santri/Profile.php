@@ -26,10 +26,7 @@ class Profile extends Component
     {
         $this->userId = $id;
         $userEdit = User::findOrFail($id);
-        $this->userForm->fill([
-            'email' =>$userEdit->email,
-            'password' =>  Crypt::decrypt($userEdit->password),
-        ]);
+        $this->userForm->fill($userEdit);
     }
 
     public function close()
@@ -39,10 +36,11 @@ class Profile extends Component
 
     public function updateProfileSantri()
     {
+        $this->userForm->validate();
         try {
             User::findOrFail($this->userId)->update([
                 'email' => $this->userForm->email,
-                'password' =>  Crypt::encrypt($this->userForm->password),
+                'password' =>  Hash::make($this->userForm->password),
             ]);
             return to_route('santri.profile');
         } catch (\Throwable $th) {

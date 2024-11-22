@@ -9,7 +9,6 @@ use App\Models\Spp\Pembayaran;
 use App\Models\Spp\PembayaranTimeline;
 use Carbon\Carbon;
 use Livewire\Attributes\Computed;
-use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
@@ -32,7 +31,6 @@ class Dashboard extends Component
 
     public function updatedSetStatusSpp($value)
     {
-        // Lakukan sesuatu saat $setStatusSpp berubah
         $this->pembayaran = Pembayaran::with('pembayaranTimeline', 'santri')
             ->whereHas('santri', function ($query) {
                 return $query->where('nama', auth()->user()->name);
@@ -41,7 +39,6 @@ class Dashboard extends Component
                 return $query->where('nama_bulan', $value);
             })->first();
     }
-
     #[Computed]
     public function listPengumuman()
     {

@@ -20,7 +20,7 @@
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Password</h6>
-                        <p class="fw-medium">{{ Crypt::decrypt(auth()->user()->password) }}</p>
+                        <p class="fw-medium">{{ auth()->user()->password }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Jenjang</h6>
@@ -45,7 +45,7 @@
                     </div>
                     <div class="mt-4">
                         <h6 class="mb-2 ">Jenis Kelamin</h6>
-                        <p class="fw-medium">{{ $profile?->jenis_kelamin  ?? '-' }}</p>
+                        <p class="fw-medium">{{ $profile?->jenis_kelamin == 'putera' ? 'laki-laki' : 'perempuan'  ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Tempat/Tanggal Lahir</h6>

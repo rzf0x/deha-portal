@@ -28,7 +28,7 @@
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Password</h6>
-                        <p class="fw-medium">{{ Crypt::decrypt(auth()->user()->password) ?? '-' }}</p>
+                        <p class="fw-medium">{{ auth()->user()->password ?? '-' }}</p>
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2 ">Jenjang</h6>
@@ -77,7 +77,7 @@
                             }
                         @endphp
                         Status Pembayaran: <span
-                            class="badge {{ $statusClass }}">{{ $pembayaran->status ?? 'belum bayar' }}</span>
+                            class="badge ms-1 {{ $statusClass }}">{{ $pembayaran->status ?? 'belum bayar' }}</span>
                     </div>
                 </div>
             </div>

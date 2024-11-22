@@ -1,26 +1,26 @@
 <div class="">
     <div class="row">
-        <div class="col-lg-4 col-md-6 col-12">
-            @forelse ($this->listPengumuman() as $item)
+        @forelse ($this->listPengumuman() as $item)
+            <div style="cursor: pointer;" class="col-lg-4 col-md-6 col-12">
                 <div data-bs-toggle="modal" wire:click='detailPengumuman("{{ $item->id }}")'
                     data-bs-target="#detailPengumuman" class= "card">
                     <div class="card-header">
                         <h5 class="m-0">{{ $item->judul }}</h5>
                     </div>
                     <div class="card-body">
-                        <p class="text-secondary m-0">{{ Str::limit($item->isi_pengumuman, 120, '...') }}</p>
+                        <p class="text-secondary m-0">{{ Str::limit($item->isi_pengumuman, 80, '...') }}</p>
                     </div>
-                    <div class="card-footer">
+                    <div class="px-4">
                         <p>
                             <span
                                 class="badge bg-primary">{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</span>
                         </p>
                     </div>
                 </div>
-            @empty
-                <p class="text-secondary">Belum ada pengumuman</p>
-            @endforelse
-        </div>
+            </div>
+        @empty
+            <p class="text-secondary">Belum ada pengumuman</p>
+        @endforelse
     </div>
 
     <div class="modal fade" id="detailPengumuman" wire:ignore.self tabindex="-1">
