@@ -22,7 +22,7 @@
         </div>
         <div class="form-group position-relative has-icon-left mb-4">
             <input type="text" wire:model.live="username" class="form-control form-control-xl"
-                placeholder="Username">
+                placeholder="Nama Lengkap">
             <div class="form-control-icon">
                 <i class="bi bi-person"></i>
             </div>

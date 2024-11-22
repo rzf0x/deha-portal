@@ -105,4 +105,20 @@
 
     {{-- Data Master Pondok --}}
 
+    {{-- Master Aktifitas --}}
+    <li class="sidebar-item has-sub {{ Request::routeIs('admin.master-aktifitas*') ? 'active' : '' }}">
+        <a href="" class='sidebar-link'>
+            <i class="bi bi-journal-text"></i>
+            <span>Master Aktifitas</span>
+        </a>
+
+        <ul class="submenu ">
+            <li class="submenu-item  ">
+                <a href="{{ route('admin.master-aktifitas.pengumuman') }}" wire:navigate  class="submenu-link {{ Request::routeIs('admin.master-aktifitas.pengumuman') ? 'text-primary fs-6' : '' }}">Pengumuman</a>
+            </li>
+            <li class="submenu-item">
+                <a href="{{ route('admin.master-aktifitas.kegiatan') }}" wire:navigate  class="submenu-link {{ Request::routeIs('admin.master-aktifitas.kegiatan') ? 'text-primary fs-6' : '' }}">Kegiatan</a>
+            </li>
+        </ul>
+    </li>
 </ul>

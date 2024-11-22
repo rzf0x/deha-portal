@@ -75,7 +75,7 @@ class Santri extends Model
         return $this->hasOne(OrangTuaSantri::class);
     }
 
-    public function Pembayaran()
+    public function pembayaran()
     {
         return $this->hasMany(Pembayaran::class);
     }
