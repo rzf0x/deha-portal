@@ -61,7 +61,7 @@ class Register extends Component
             'roles_id' => 6,
             'name' => $this->username,
             'email' => $this->email,
-            'password' => Crypt::encrypt($this->password),
+            'password' => Hash::make($this->password),
         ]);
 
         request()->session()->regenerate();
