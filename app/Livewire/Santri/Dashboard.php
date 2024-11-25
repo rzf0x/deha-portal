@@ -8,6 +8,7 @@ use App\Models\Santri;
 use App\Models\Spp\Pembayaran;
 use App\Models\Spp\PembayaranTimeline;
 use Carbon\Carbon;
+use Detection\MobileDetect;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -18,13 +19,16 @@ class Dashboard extends Component
     public $detailKegiatanModal, $detailPengumumanModal;
 
     public $profile, $credentials, $timeline_spp, $pembayaran;
-    public $setStatusSpp;
+    public $setStatusSpp, $isMobile;
 
     public function mount()
     {
         $this->profile = Santri::with('kamar', 'kelas', 'semester', 'angkatan')->where('nama', auth()->user()->name)->first();
         $this->timeline_spp = PembayaranTimeline::all();
         $this->setStatusSpp = Carbon::now()->format('F');
+
+        $mobile = new MobileDetect();
+        $this->isMobile = $mobile->isMobile();
 
         $this->updatedSetStatusSpp($this->setStatusSpp);
     }
@@ -61,9 +65,9 @@ class Dashboard extends Component
         $this->detailPengumumanModal = Pengumuman::findOrFail($id);
     }
 
-
     public function render()
     {
+        if ($this->isMobile) return view('livewire.mobile.santri.dashboard')->layout('components.layouts.app-mobile');
         return view('livewire.santri.dashboard');
     }
 }

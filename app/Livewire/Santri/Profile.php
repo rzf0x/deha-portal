@@ -5,6 +5,7 @@ namespace App\Livewire\Santri;
 use App\Livewire\Forms\ProfileSantriForm;
 use App\Models\Santri;
 use App\Models\User;
+use Detection\MobileDetect;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Attributes\Title;
@@ -14,12 +15,14 @@ class Profile extends Component
 {
     #[Title('Profile Santri')]
     public $profile;
-    public $showPassword, $userId;
+    public $showPassword, $userId, $isMobile;
     public ProfileSantriForm $userForm;
 
     public function mount()
     {
         $this->profile = Santri::with('kamar', 'kelas', 'semester', 'angkatan')->where('nama', auth()->user()->name)->first();
+        $mobile = new MobileDetect();
+        $this->isMobile = $mobile->isMobile();
     }
 
     public function edit($id)
@@ -50,6 +53,7 @@ class Profile extends Component
 
     public function render()
     {
+        if ($this->isMobile) return view('livewire.mobile.santri.profile')->layout('components.layouts.app-mobile');
         return view('livewire.santri.profile');
     }
 }
