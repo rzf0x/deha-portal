@@ -18,7 +18,7 @@
     <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/iconly.css') }}">
 
     {{-- CSS Custom --}}
-    {{-- <link rel="stylesheet" href="{{ asset('custom.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('custom-mobile.css') }}">
 </head>
 
 <body>
@@ -28,15 +28,20 @@
 
         {{-- @include('components.layouts.partials.sidebar') --}}
 
-        <div id="" style="display: flex; flex-direction: column; height: 100vh;">
-            <div class="mx-3 overflow-y-auto" style="flex: 1;">
-                <div class="mt-5">
+        <div style="background-color: #FAFAFA; display: flex; flex-direction: column; height: 100vh;">
+            <div class="overflow-x-hidden overflow-y-auto" style="flex: 1;">
+                <div class="">
                     {{ $slot }}
                 </div>
             </div>
 
             <div style="flex-shrink: 0;">
-                @include('components.layouts.partials.mobile.navbar-bottom')
+                @if (request()->routeIs('admin.*'))
+                    @include('components.layouts.partials.mobile.navbar-bottom')
+                @endif
+                @if (request()->routeIs('santri.*'))
+                    @include('components.layouts.partials.mobile.navbar-santri-mobile')
+                @endif
             </div>
         </div>
 
