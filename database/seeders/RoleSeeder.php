@@ -20,6 +20,18 @@ class RoleSeeder extends Seeder
             [
                 'nama' => 'Petugas SPP'
             ],
+            [
+                'nama' => 'Petugas E-Cashless'
+            ],
+            [
+                'nama' => 'Petugas Warung'
+            ],
+            [
+                'nama' => 'Petugas Laundry'
+            ],
+            [
+                'nama' => 'Santri'
+            ],
         ];
 
         foreach ($roles as $role) {

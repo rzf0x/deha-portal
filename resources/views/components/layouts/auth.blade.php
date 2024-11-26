@@ -15,7 +15,6 @@
     {{-- <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/app-dark.css') }}"> --}}
     <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/auth.css') }}">
 </head>
-
 <body>
     <script src="{{ asset('dist/assets/static/js/initTheme.js') }}"></script>
     <div id="auth">

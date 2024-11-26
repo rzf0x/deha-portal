@@ -32,6 +32,15 @@ class TambahSantri extends Component
     #[Validate('required')]
     public $santri_id = '';
 
+    public function cariListSantri()
+    {
+        return Santri::with(['pembayaran', 'kelas', 'kamar'])
+        ->has('pembayaran')
+        ->where('nama', 'like', '%' . $this->search . '%')
+        ->orderBy('nama')
+        ->paginate(10);
+    }
+    
     public function showDropdown()
     {
         $this->isDropdownVisible = true; // Menampilkan dropdown

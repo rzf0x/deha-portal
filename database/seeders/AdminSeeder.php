@@ -15,13 +15,25 @@ class AdminSeeder extends Seeder
     {
         $data = [
             [
+                'user_id' => 1,
+                'roles_id' => 1,
+            ],
+            [
                 'user_id' => 2,
                 'roles_id' => 2
             ],
             [
-                'user_id' => 1,
-                'roles_id' => 1,
-            ]
+                'user_id' => 3,
+                'roles_id' => 3
+            ],
+            [
+                'user_id' => 4,
+                'roles_id' => 4
+            ],
+            [
+                'user_id' => 5,
+                'roles_id' => 5
+            ],
         ];
 
         DB::table('admins')->insert($data);

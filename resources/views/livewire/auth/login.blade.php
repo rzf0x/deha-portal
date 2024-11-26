@@ -10,7 +10,7 @@
     <form wire:submit='login'>
         <div class="form-group position-relative has-icon-left mb-4">
             <input required type="text" wire:model='email' class="form-control form-control-xl"
-                placeholder="Username">
+                placeholder="Email">
             <div class="form-control-icon">
                 <i class="bi bi-person"></i>
             </div>

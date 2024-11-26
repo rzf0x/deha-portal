@@ -21,7 +21,7 @@
         </div>
     </div>
     <div style="gap: 5rem;" class="d-flex flex-column">
-        <div class="row" wire:ignore>
+        <div wire:ignore class="row">
             <div class="col-lg-8">
                 <h4 class="mb-3">Overview Total Santri</h4>
                 <div id="santriChart" class="card rounded-4 p-4 h-100 w-100"></div>
@@ -94,7 +94,7 @@
     </div>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     // Bar Chart (Santri Chart)

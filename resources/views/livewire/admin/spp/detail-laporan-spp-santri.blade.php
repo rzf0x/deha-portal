@@ -86,6 +86,7 @@
                             <th>Metode</th>
                             <th>Status</th>
                             <th>Bukti</th>
+                            <th>cetak</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -125,9 +126,8 @@
                                             class="text-decoration-underline">Lihat Detail Cicilan</a>
                                     @elseif($bayar->status == 'lunas')
                                         @if ($bayar->bukti_pembayaran)
-                                            <img src="{{ asset('storage/' . $bayar->bukti_pembayaran) }}"
-                                                alt="foto" class="img-fluid rounded-4"
-                                                style="object-fit: cover; height: 10rem; width: 10rem;">
+                                            <a href="{{ url('storage/' . $bayar->bukti_pembayaran) }}" target="_blank"
+                                                class="badge bg-success">Lihat Bukti Pembayaran</a>
                                         @else
                                             <span class="badge bg-danger">
                                                 kosong
@@ -139,10 +139,20 @@
                                         </span>
                                     @endif
                                 </td>
+                                <td>
+                                    @if ($bayar->status !== 'belum bayar')
+                                        <a href='{{ route('cetak-kwitansi-spp', ['id' => $bayar->id]) }}'
+                                            class="btn btn-primary">
+                                            Cetak Kwitansi
+                                        </a>
+                                    @else
+                                        <span class="badge bg-danger">Santri belum bayar</span>
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="7" class="text-center">Tidak ada data pembayaran</td>
+                                <td colspan="9" class="text-center">Tidak ada data pembayaran</td>
                             </tr>
                         @endforelse
                     </tbody>

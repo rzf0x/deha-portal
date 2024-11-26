@@ -29,11 +29,14 @@
             <div class="d-flex justify-content-between mb-4">
                 <div class="filter-option d-flex">
                     <div class="form search px-4 border border-2 py-2 rounded-3">
-                        <input class="bg-transparent" style="border: none; outline: none;" type="text"
-                            wire:model.live="search" placeholder="Cari santri...">
-                        <a href="#" class="search_icon">
-                            <i class="bi bi-search"></i>
-                        </a>
+                        <form wire:submit='cariListSantri'>
+                            <input class="bg-transparent" style="border: none; outline: none;" type="text"
+                                wire:model="search" placeholder="Cari santri...">
+                            <button type="submit" class="search_icon bg-transparent border-0">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </form>
+
                     </div>
                 </div>
                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#formModal">
@@ -111,7 +114,7 @@
                             <label for="santri" class="form-label">
                                 <span wire:loading.class.remove='d-none'
                                     class="d-none spinner-border spinner-border-sm"></span></label>
-                                Pilih Santri
+                            Pilih Santri
                             <div class="dropdown">
                                 <input type="text" class="form-control @error('santri_id') is-invalid @enderror"
                                     wire:model.live="searchSantri"

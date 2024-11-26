@@ -17,12 +17,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
-            $table->timestamps();
-        });
-
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
@@ -155,6 +149,25 @@ return new class extends Migration
 
             $table->timestamps();
         });
+
+        // Tabel pengumuman
+        Schema::create('pengumuman', function (Blueprint $table) {
+            $table->id();
+            $table->string('judul');
+            $table->text('isi_pengumuman');
+            $table->date('tanggal');
+            $table->timestamps();
+        });
+
+        // Tabel kegiatan
+        Schema::create('kegiatan', function (Blueprint $table) {
+            $table->id();
+            $table->string('judul');
+            $table->text('isi_kegiatan');
+            $table->dateTime('waktu_mulai');
+            $table->dateTime('waktu_selesai');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -173,6 +186,7 @@ return new class extends Migration
         Schema::dropIfExists('semesters');
         Schema::dropIfExists('santris');
         Schema::dropIfExists('orang_tua_santris');
-
+        Schema::dropIfExists('kegiatan');
+        Schema::dropIfExists('pengumuman');
     }
 };
