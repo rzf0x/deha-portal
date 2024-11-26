@@ -115,26 +115,43 @@
             <p><strong>Bulan Pembayaran:</strong> {{ $pembayaran->pembayaranTimeline?->nama_bulan }}</p>
             <p><strong>Status Pembayaran:</strong> {{ ucfirst($pembayaran->status) }}</p>
             <p><strong>Metode Pembayaran:</strong> {{ $pembayaran->metode_pembayaran }}</p>
-            <p><strong>Nominal Pembayaran:</strong> Rp. {{ number_format($pembayaran->nominal, 0, ',', '.') }}</p>
+            <p><strong>Nominal Pembayaran:</strong> Rp.
+                {{ number_format($cicilan->nominal ?? $pembayaran->nominal, 0, ',', '.') }}</p>
             <p><strong>Tanggal Pembayaran:</strong>
-                {{ \Carbon\Carbon::parse($pembayaran->updated_at)->format('d M Y H:i') }}</p>
+                {{ \Carbon\Carbon::parse($cicilan->updated_at ??$pembayaran->updated_at)->format('d M Y H:i') }}</p>
         </div>
 
-        <h2>Detail Pembayaran</h2>
+        @if (empty($cicilan))
+            <h2>Detail Pembayaran</h2>
 
-        <table class="details-table detail-pembayaran">
-            @forelse ($detailPembayaran as $detail)
-                <tr>
-                    <th>{{ $detail->nama }} :</th>
-                    <td>Rp. {{ number_format($detail->nominal, 0, ',', '.') }}</td>
+            <table class="details-table detail-pembayaran">
+                @forelse ($detailPembayaran as $detail)
+                    <tr>
+                        <th>{{ $detail?->nama }} :</th>
+                        <td>Rp. {{ number_format($detail?->nominal, 0, ',', '.') }}</td>
+                    </tr>
+                @empty
+                @endforelse
+                <tr class="total">
+                    <th>Total :</th>
+                    <td>Rp. {{ number_format($detailPembayaran?->sum('nominal'), 0, ',', '.') }}</td>
                 </tr>
-            @empty
-            @endforelse
-            <tr class="total">
-                <th>Total :</th>
-                <td>Rp. {{ number_format($detailPembayaran->sum('nominal'), 0, ',', '.') }}</td>
-            </tr>
-        </table>
+            </table>
+        @else
+            <h2>Detail Cicilan</h2>
+
+            <table class="details-table detail-pembayaran">
+                <tr>    
+                    <th>Keterangan: {{ $cicilan?->keterangan }}</th>
+                    <td>Nominal: Rp. {{ number_format($cicilan?->nominal, 0, ',', '.') }}</td>
+                </tr>
+
+                <tr class="total">
+                    <th>Total Cicilan Bulan {{ $pembayaran->pembayaranTimeline?->nama_bulan }}: </th>
+                    <td>Rp. {{ number_format($cicilan?->sum('nominal'), 0, ',', '.') }}</td>
+                </tr>
+            </table>
+        @endif
     </div>
 </body>
 

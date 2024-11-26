@@ -134,6 +134,10 @@
                 }
             }
         },
+        legend: {
+            position: 'bottom',
+            fontSize: '14px',
+        },
         labels: ['Belum Bayar', 'Sudah Lunas', 'Cicilan'],
         colors: ['#ff6384', '#36a2eb', '#ffce56'],
         tooltip: {

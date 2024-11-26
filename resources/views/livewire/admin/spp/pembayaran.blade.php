@@ -2,8 +2,23 @@
     <!-- Search Form -->
     <div class="form-group sticky-top bg-white p-3 shadow-sm cursor-pointer" style="top: 1rem; z-index: 99;">
         <form wire:submit.prevent="searchSantri" class="d-flex gap-3">
-            <input type="text" wire:keydown.debounce.50ms="searchSantri" wire:model="search" class="form-control"
-                placeholder="Cari Santri..." required>
+            <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri..." >
+            <div class="d-flex gap-3 w-50">
+                <select wire:model='filter.jenjang' class="form-select" name="" id="">
+                    <option value="">Pilih Jenjang</option>
+                    @forelse ($jenjangs as $jenjang)
+                        <option value="{{ $jenjang->nama }}">{{ $jenjang->nama }}</option>
+                    @empty
+                    @endforelse
+                </select>
+                <select wire:model='filter.kelas' class="form-select" name="" id="">
+                    <option value="">Pilih Kelas</option>
+                    @forelse ($kelas as $kelas)
+                        <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
+                    @empty
+                    @endforelse
+                </select>
+            </div>
             <button type="submit" class="btn btn-primary w-25">Cari</button>
         </form>
         @if ($errorMessage)
@@ -153,7 +168,8 @@
                                                     @if ($buktiPembayaran)
                                                         <div class="overflow-y-auto rounded-4" style="height: 25rem;">
                                                             <img src="{{ $buktiPembayaran->temporaryUrl() }}"
-                                                                alt="Foto" class="rounded-4 object-fit-cover w-100">
+                                                                alt="Foto"
+                                                                class="rounded-4 object-fit-cover w-100">
                                                         </div>
                                                     @endif
                                                 @endif
@@ -161,8 +177,9 @@
                                         @endif
                                         @if ($selectedStatus !== 'cicilan')
                                             <div class="d-flex justify-content-end mt-3">
-                                                <button wire:loading.attr="disabled" wire:target='buktiPembayaran' wire:click="updatePembayaran"
-                                                    class="btn btn-primary">Update status pembayaran</button>
+                                                <button wire:loading.attr="disabled" wire:target='buktiPembayaran'
+                                                    wire:click="updatePembayaran" class="btn btn-primary">Update
+                                                    status pembayaran</button>
                                             </div>
                                         @endif
                                     </div>
@@ -198,8 +215,9 @@
                                                     </div>
                                                 @endif
                                                 <div class="d-flex justify-content-end">
-                                                    <button wire:loading.attr="disabled" wire:target='buktiPembayaran' class="btn btn-primary"
-                                                        wire:click='$refresh'>Tambahkan Cicilan</button>
+                                                    <button wire:loading.attr="disabled" wire:target='buktiPembayaran'
+                                                        class="btn btn-primary" wire:click='$refresh'>Tambahkan
+                                                        Cicilan</button>
                                                 </div>
                                             </form>
 
