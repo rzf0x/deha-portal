@@ -93,5 +93,6 @@ Route::prefix('spp')->middleware('auth')->group(function(){
 
     Route::get('/laporan-keuangan', LaporanKeuangan::class)->name('spp.laporan-keuangan');
 
-    Route::get('/kwitansi/{id}', [KwitansiInvoice::class, 'cetakKwitansi'])->name('cetak-kwitansi-spp');
+    Route::get('/kwitansi/spp/{id}', [KwitansiInvoice::class, 'cetakKwitansiPembayaran'])->name('cetak-kwitansi-spp');
+    Route::get('/kwitansi/cicilan/{id}', [KwitansiInvoice::class, 'cetakKwitansiCicilan'])->name('cetak-kwitansi-cicilan-spp');
 });

@@ -97,6 +97,7 @@
                             <th>Metode</th>
                             <th>Status</th>
                             <th>Bukti Pembayaran</th>
+                            <th>Kwitansi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -137,10 +138,20 @@
                                         </span>
                                     @endif
                                 </td>
+                                <td>
+                                    @if ($item->status !== 'belum bayar')
+                                        <a href='{{ route('cetak-kwitansi-cicilan-spp', ['id' => $item->id]) }}'
+                                            class="btn btn-primary">
+                                            Cetak Kwitansi
+                                        </a>
+                                    @else
+                                        <span class="badge bg-danger">Santri belum bayar</span>
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="text-center">Tidak ada data cicilan pada bulan
+                                <td colspan="10" class="text-center">Tidak ada data cicilan pada bulan
                                     {{ $filter['bulan'] }}</td>
                             </tr>
                         @endforelse

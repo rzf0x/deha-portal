@@ -20,11 +20,10 @@
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-between mb-4">
-                <div class="form search px-4 border border-2 py-2 rounded-3">
-                    <input class="bg-transparent" style="border: none; outline: none;" type="text"
-                        wire:model.live="search" placeholder="Cari santri...">
-                    <i class="bi bi-search"></i>
-                </div>
+                <form wire:submit.prevent="searchSantri" class="d-flex gap-3">
+                    <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri..." required>
+                    <button type="submit" class="btn btn-primary w-25">Cari</button>
+                </form>
             </div>
 
             <div class="table-responsive">
@@ -39,7 +38,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($santris as $santri)
+                        @forelse ($this->searchSantri() as $santri)
                             <tr>
                                 <td class="text-center">{{ $loop->iteration }}</td>
                                 <td>{{ $santri->nama }}</td>
@@ -54,9 +53,8 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('spp.detail-laporan-cicilan-santri', ['id'=>$santri->id]) }}"
-                                       class="btn btn-sm btn-info">
-                                       <i class="bi bi-eye-fill"></i> Detail
+                                    <a href="{{ route('spp.detail-laporan-cicilan-santri', ['id' => $santri->id]) }}" class="btn btn-sm btn-info">
+                                        <i class="bi bi-eye-fill"></i> Detail
                                     </a>
                                 </td>
                             </tr>
@@ -69,7 +67,7 @@
                         @endforelse
                     </tbody>
                 </table>
-                {{ $santris->links() }}
+                {{ $this->searchSantri()->links() }}
             </div>
         </div>
     </div>

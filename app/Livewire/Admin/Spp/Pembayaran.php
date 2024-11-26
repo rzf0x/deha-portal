@@ -3,6 +3,8 @@
 namespace App\Livewire\Admin\Spp;
 
 use App\Models\Admin\Spp\PembayaranCicilan;
+use App\Models\Jenjang;
+use App\Models\Kelas;
 use App\Models\Santri;
 use App\Models\Spp\Cicilan;
 use App\Models\Spp\DetailItemPembayaran;
@@ -42,6 +44,19 @@ class Pembayaran extends Component
     public $keteranganCicilan;
     public $buktiPembayaran;
 
+    public $filter = [
+        'jenjang' => '',
+        'kelas' => '',
+    ];
+
+    public $jenjangs, $kelas;
+
+    public function mount()
+    {
+            $this->jenjangs = Jenjang::all();
+            $this->kelas = Kelas::all();
+    }
+
     public function searchSantri()
     {
         if (empty($this->search)) {
@@ -51,7 +66,20 @@ class Pembayaran extends Component
             return;
         }
 
-        $this->searchResults = Santri::where('nama', 'like', '%' . $this->search . '%')->get();
+        $this->searchResults = Santri::with('pembayaran.santri', 'kelas', 'kelas.jenjang')
+            ->whereHas('pembayaran')
+            ->when(!empty($this->filter['jenjang']), function ($query) {
+                return $query->whereHas('kelas.jenjang', function ($subQuery) {
+                    $subQuery->where('nama', $this->filter['jenjang']);
+                });
+            })
+            ->when(!empty($this->filter['kelas']), function ($query) {
+                return $query->whereHas('kelas', function ($subQuery) {
+                    $subQuery->where('nama', $this->filter['kelas']);
+                });
+            })
+            ->where('nama', 'like', '%' . $this->search . '%')
+            ->get();
 
         if ($this->searchResults->isEmpty()) {
             $this->errorMessage = 'Santri tidak ditemukan';
@@ -122,7 +150,6 @@ class Pembayaran extends Component
     public function hideError()
     {
         $this->dispatch('hide-error', ['delay' => 2000]);
-        
     }
 
     public function closeModal()
@@ -144,7 +171,7 @@ class Pembayaran extends Component
 
     public function storeCicilan()
     {
-        
+
         try {
             $this->validate([
                 'jumlahCicilan' => 'required|numeric',
@@ -152,7 +179,7 @@ class Pembayaran extends Component
                 'Clickpembayaran.id' => 'required|exists:pembayaran,id',  // Memastikan ID pembayaran ada di database
                 'buktiPembayaran' => 'required|mimes:pdf,jpeg,png,jpg,svg|max:10000',  // Memastikan ID pembayaran ada di database
             ]);
-            
+
             $this->updatePembayaran();
 
             Cicilan::create([
