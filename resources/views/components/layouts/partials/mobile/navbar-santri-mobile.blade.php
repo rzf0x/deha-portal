@@ -32,10 +32,7 @@
             </a>
         </li>
         <li class="nav-item">
-            <a href="#" class="nav-link text-center">
-                <i class="bi bi-arrow-left-circle fs-4"></i>
-                <span class="small d-block">Logout</span>
-            </a>
+            <livewire:mobile.auth.logout>
         </li>
     </ul>
 </nav>

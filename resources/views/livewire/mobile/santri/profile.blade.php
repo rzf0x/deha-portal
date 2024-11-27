@@ -18,7 +18,7 @@
                 class="profile position-absolute start-50 translate-middle-x d-flex flex-column align-items-center gap-1">
                 <div class="position-relative" style="width: 90px; height: 90px;">
                     <img class="img-fluid rounded-circle"
-                        src="{{ $profile?->foto ? Storage::url('images/santri/' . $profile?->foto) : 'https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp' }}"
+                        src="{{ $profile?->foto ? Storage::url($profile?->foto) : 'https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp' }}"
                         alt="" style="object-fit: cover; width: 100%; height: 100%; border: 6px solid #FAFAFA">
                 </div>
                 <div class="text-center">
