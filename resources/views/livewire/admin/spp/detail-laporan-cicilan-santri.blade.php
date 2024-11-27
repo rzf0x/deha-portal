@@ -97,6 +97,7 @@
                             <th>Metode</th>
                             <th>Status</th>
                             <th>Bukti Pembayaran</th>
+                            <th>Kwitansi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -129,19 +130,28 @@
                                 </td>
                                 <td>
                                     @if ($item->bukti_pembayaran)
-                                        <img src="{{ asset('storage/' . $item->bukti_pembayaran) }}" alt="foto"
-                                            class="img-fluid rounded-4"
-                                            style="object-fit: cover; height: 10rem; width: 10rem;">
+                                        <a href="{{ url('storage/' . $item->pembayaran->bukti_pembayaran) }}" target="_blank"
+                                            class="badge bg-success">Lihat Bukti Pembayaran</a>
                                     @else
                                         <span class="badge bg-danger">
                                             kosong
                                         </span>
                                     @endif
                                 </td>
+                                <td>
+                                    @if ($item->status !== 'belum bayar')
+                                        <a href='{{ route('cetak-kwitansi-cicilan-spp', ['id' => $item->id]) }}'
+                                            class="btn btn-primary">
+                                            Cetak Kwitansi
+                                        </a>
+                                    @else
+                                        <span class="badge bg-danger">Santri belum bayar</span>
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="9" class="text-center">Tidak ada data cicilan pada bulan
+                                <td colspan="10" class="text-center">Tidak ada data cicilan pada bulan
                                     {{ $filter['bulan'] }}</td>
                             </tr>
                         @endforelse
@@ -150,4 +160,4 @@
             </div>
         </div>
     </div>
-</div>
+</div> 
