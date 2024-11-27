@@ -13,17 +13,21 @@
     </div>
 
     <div class="px-3 mt-3">
-        <div style=" z-index: 9;"
-            class="profile d-flex flex-column align-items-center gap-1">
+        <div style=" z-index: 9;" class="profile d-flex flex-column align-items-center gap-1">
             <div class="position-relative" style="width: 90px; height: 90px;">
-                <img class="img-fluid rounded-circle"
-                    src="{{ $profile?->foto ? Storage::url($profile?->foto) : 'https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp' }}"
-                    alt="" style="object-fit: cover; width: 100%; height: 100%; border: 6px solid #FAFAFA">
+                @if ($profile && $profile->foto)
+                    <img class="img-fluid rounded-circle" src="{{ Storage::url('images/santri/' . $profile->foto) }}"
+                        alt="" style="object-fit: cover; width: 100%; height: 100%;">
+                @else
+                    <img class="img-fluid rounded-circle"
+                        src="https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp"
+                        alt="" style="object-fit: cover; width: 100%; height: 100%;">
+                @endif
             </div>
             <div class="text-center">
                 <h4 class="mb-0 text-dark fw-bold">{{ auth()->user()->name }}</h4>
                 <p class="m-0 mt-1"><span class="badge bg-primary">{{ $profile?->kelas->nama ?? '-' }}</span></p>
-            </div> 
+            </div>
         </div>
     </div>
 
