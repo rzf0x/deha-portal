@@ -18,7 +18,7 @@
                 class="profile position-absolute start-50 translate-middle-x d-flex flex-column align-items-center gap-1">
                 <div class="position-relative" style="width: 90px; height: 90px;">
                     <img class="img-fluid rounded-circle"
-                        src="{{ $profile->foto ? Storage::url('images/santri/' . $profile->foto) : 'https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp' }}"
+                        src="{{ $profile?->foto ? Storage::url('images/santri/' . $profile?->foto) : 'https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp' }}"
                         alt="" style="object-fit: cover; width: 100%; height: 100%; border: 6px solid #FAFAFA">
                 </div>
                 <div class="text-center">
@@ -100,7 +100,7 @@
                             <label for="password" class="form-label">Password</label>
                             <div class="form-group position-relative">
                                 <input type="{{ $showPassword ? 'text' : 'password' }}" class="form-control"
-                                    id="password" wire:model.live="userForm.password" placeholder="Password" required>
+                                    id="password" wire:model.live="userForm.password" placeholder="Password">
                                 <div wire:click="$toggle('showPassword')"
                                     class="form-control-icon me-2 position-absolute"
                                     style="left:auto; right:0; cursor: pointer;">

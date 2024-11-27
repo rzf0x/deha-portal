@@ -18,7 +18,7 @@
     <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/iconly.css') }}">
 
     {{-- CSS Custom --}}
-    <link rel="stylesheet" href="{{ asset('custom-mobile.css') }}">
+    <link rel="stylesheet" href="{{ asset('custom.mobile.css') }}">
 </head>
 
 <body>

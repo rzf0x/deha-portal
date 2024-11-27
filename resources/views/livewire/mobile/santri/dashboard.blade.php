@@ -294,26 +294,4 @@
         </div>
     </div>
 
-    <style>
-        .scroll-container {
-            overflow-x: auto;
-            display: flex;
-            gap: 1rem;
-        }
-
-        .card {
-            min-width: 100%;
-            margin-bottom: 0;
-        }
-
-        .scroll-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .scroll-container {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
-
 </div>

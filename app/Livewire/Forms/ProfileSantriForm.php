@@ -14,7 +14,8 @@ class ProfileSantriForm extends Form
     public $password;
 
     protected $messages = [
-        'email.min' => 'Masukkan email',
+        'email.required' => 'Masukkan email',
+        'email.email' => 'Format email tidak sesuai',
         'password.required' => 'Minimal 8 karakter',
         'password.min' => 'Minimal 8 karakter',
     ];

@@ -38,7 +38,7 @@ class Pengumuman extends Component
                 'tanggal' => 'required|date',
             ]);
 
-            ModelsPengumuman::create($this->pengumumanForm->toArray());
+            ModelsPengumuman::create($this->pengumumanForm->all());
 
             session()->flash('success', 'Pengumuman baru berhasil dibuat!');
 
@@ -64,7 +64,7 @@ class Pengumuman extends Component
                 'tanggal' => 'required|date',
             ]);
 
-            ModelsPengumuman::findOrFail($this->pengumumanId)->update($this->pengumumanForm->toArray());
+            ModelsPengumuman::findOrFail($this->pengumumanId)->update($this->pengumumanForm->all());
 
             session()->flash('success', 'Pengumuman berhasil diupdate!');
 
