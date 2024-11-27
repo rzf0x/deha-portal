@@ -13,23 +13,21 @@
     </div>
 
     <div class="px-3 mt-3">
-        <div style="min-width: 100%; min-height: 160px;" class="position-relative bg-secondary rounded-4">
-            <div style="top: 7rem; z-index: 9;"
-                class="profile position-absolute start-50 translate-middle-x d-flex flex-column align-items-center gap-1">
-                <div class="position-relative" style="width: 90px; height: 90px;">
-                    <img class="img-fluid rounded-circle"
-                        src="{{ $profile?->foto ? Storage::url($profile?->foto) : 'https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp' }}"
-                        alt="" style="object-fit: cover; width: 100%; height: 100%; border: 6px solid #FAFAFA">
-                </div>
-                <div class="text-center">
-                    <h4 class="mb-0 text-dark fw-bold">{{ auth()->user()->name }}</h4>
-                    <p class="m-0 mt-1"><span class="badge bg-primary">{{ $profile?->kelas->nama ?? '-' }}</span></p>
-                </div>
+        <div style=" z-index: 9;"
+            class="profile d-flex flex-column align-items-center gap-1">
+            <div class="position-relative" style="width: 90px; height: 90px;">
+                <img class="img-fluid rounded-circle"
+                    src="{{ $profile?->foto ? Storage::url($profile?->foto) : 'https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp' }}"
+                    alt="" style="object-fit: cover; width: 100%; height: 100%; border: 6px solid #FAFAFA">
             </div>
+            <div class="text-center">
+                <h4 class="mb-0 text-dark fw-bold">{{ auth()->user()->name }}</h4>
+                <p class="m-0 mt-1"><span class="badge bg-primary">{{ $profile?->kelas->nama ?? '-' }}</span></p>
+            </div> 
         </div>
     </div>
 
-    <div style="margin-top: 8rem;" class="px-3">
+    <div class="mt-4 px-3">
         <div class="card">
             <div class="card-body">
                 <div class="">
