@@ -94,7 +94,7 @@
                             <label for="password" class="form-label">Password</label>
                             <div class="form-group position-relative">
                                 <input type="{{ $showPassword ? 'text' : 'password' }}" class="form-control"
-                                    id="password" wire:model.live="userForm.password" placeholder="Password" required>
+                                    id="password" wire:model.live="userForm.password" placeholder="Password">
                                 <div wire:click="$toggle('showPassword')"
                                     class="form-control-icon me-2 position-absolute"
                                     style="left:auto; right:0; cursor: pointer;">

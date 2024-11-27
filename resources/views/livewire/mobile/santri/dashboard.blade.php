@@ -3,8 +3,8 @@
         <div class="d-flex align-items-center gap-3">
             <div class="position-relative" style="width: 60px; height: 60px;">
                 <img class="img-fluid rounded-circle"
-                src="{{ isset($profile) && $profile->foto ? Storage::url('images/santri/' . $profile->foto) : 'https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp' }}"
-                alt="" style="object-fit: cover; width: 100%; height: 100%;">
+                    src="{{ $profile->foto ? Storage::url($profile?->foto) : 'https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp' }}"
+                    alt="" style="object-fit: cover; width: 100%; height: 100%;">
             </div>
             <div class="">
                 <h class="mb-0 text-dark fw-bold">Halo, {{ explode(' ', auth()->user()->name)[0] }}!</h>
@@ -293,27 +293,5 @@
             </div>
         </div>
     </div>
-
-    <style>
-        .scroll-container {
-            overflow-x: auto;
-            display: flex;
-            gap: 1rem;
-        }
-
-        .card {
-            min-width: 100%;
-            margin-bottom: 0;
-        }
-
-        .scroll-container::-webkit-scrollbar {
-            display: none;
-        }
-
-        .scroll-container {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-    </style>
 
 </div>

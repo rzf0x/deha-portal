@@ -39,12 +39,22 @@ class Profile extends Component
 
     public function updateProfileSantri()
     {
-        $this->userForm->validate();
+        $this->userForm->validate([
+            'email' => 'required|email',
+            'password' => 'nullable|min:8'
+        ]);
+
         try {
+            if ($this->userForm->password) {
+                User::findOrFail($this->userId)->update([
+                    'password' => Hash::make($this->userForm->password),
+                ]);
+            }
+
             User::findOrFail($this->userId)->update([
                 'email' => $this->userForm->email,
-                'password' =>  Hash::make($this->userForm->password),
             ]);
+
             return to_route('santri.profile');
         } catch (\Throwable $th) {
             //throw $th;

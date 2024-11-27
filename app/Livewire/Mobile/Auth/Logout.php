@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Auth;
+namespace App\Livewire\Mobile\Auth;
 
 use Detection\MobileDetect;
 use Illuminate\Support\Facades\Auth;
@@ -20,9 +20,9 @@ class Logout extends Component
         Auth::logout();
         return redirect()->route('login');
     }
-
+    
     public function render()
     {
-        return view('livewire.auth.logout');
+        return view('livewire.mobile.auth.logout');
     }
 }
