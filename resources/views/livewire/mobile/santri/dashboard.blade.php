@@ -2,9 +2,14 @@
     <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center gap-3">
             <div class="position-relative" style="width: 60px; height: 60px;">
-                <img class="img-fluid rounded-circle"
-                    src="{{ $profile->foto ? Storage::url($profile?->foto) : 'https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp' }}"
-                    alt="" style="object-fit: cover; width: 100%; height: 100%;">
+                @if ($profile && $profile->foto)
+                    <img class="img-fluid rounded-circle" src="{{ Storage::url('images/santri/' . $profile->foto) }}"
+                        alt="" style="object-fit: cover; width: 100%; height: 100%;">
+                @else
+                    <img class="img-fluid rounded-circle"
+                        src="https://a.storyblok.com/f/191576/1200x800/a3640fdc4c/profile_picture_maker_before.webp"
+                        alt="" style="object-fit: cover; width: 100%; height: 100%;">
+                @endif
             </div>
             <div class="">
                 <h class="mb-0 text-dark fw-bold">Halo, {{ explode(' ', auth()->user()->name)[0] }}!</h>
