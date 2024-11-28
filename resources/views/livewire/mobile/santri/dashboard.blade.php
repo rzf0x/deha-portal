@@ -3,7 +3,7 @@
         <div class="d-flex align-items-center gap-3">
             <div class="position-relative" style="width: 60px; height: 60px;">
                 @if ($profile && $profile->foto)
-                    <img class="img-fluid rounded-circle" src="{{ Storage::url('images/santri/' . $profile->foto) }}"
+                    <img class="img-fluid rounded-circle" src="{{ Storage::url($profile->foto) }}"
                         alt="" style="object-fit: cover; width: 100%; height: 100%;">
                 @else
                     <img class="img-fluid rounded-circle"
@@ -22,40 +22,6 @@
     </div>
     <div class="">
         <div class="scroll-container">
-            <div class="card bg-primary mt-4 shadow">
-                <div class="card-body">
-                    <h6 class="card-title text-white">Perkembangan Akademik</h6>
-                    <div class="mt-4">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="card-subtitle text-white">Tahfidz</span>
-                            <span class="card-subtitle text-white">80%</span>
-                        </div>
-                        <div style="background-color: #c0c0c0; height: 8px;" class="progress rounded-5">
-                            <div class="progress-bar rounded-5 bg-white" role="progressbar"
-                                style="width: 80%; height: 100%;" aria-valuenow="80" aria-valuemin="0"
-                                aria-valuemax="100">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card bg-primary mt-4 shadow">
-                <div class="card-body">
-                    <h6 class="card-title text-white">Perkembangan Akademik</h6>
-                    <div class="mt-4">
-                        <div class="d-flex justify-content-between mb-2">
-                            <span class="card-subtitle text-white">Tahfidz</span>
-                            <span class="card-subtitle text-white">80%</span>
-                        </div>
-                        <div style="background-color: #c0c0c0; height: 8px;" class="progress rounded-5">
-                            <div class="progress-bar rounded-5 bg-white" role="progressbar"
-                                style="width: 80%; height: 100%;" aria-valuenow="80" aria-valuemin="0"
-                                aria-valuemax="100">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="card bg-primary mt-4 shadow">
                 <div class="card-body">
                     <h6 class="card-title text-white">Perkembangan Akademik</h6>

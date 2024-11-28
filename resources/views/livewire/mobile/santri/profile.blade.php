@@ -3,7 +3,7 @@
         <a href="{{ route('santri.dashboard') }}" class="arrow-back">
             <i class="bi text-dark fs-1 bi-arrow-left-circle"></i>
         </a>
-        <h5 class="m-0">
+        <h5 class="m-0 text-dark">
             Profile
         </h5>
         <div data-bs-toggle='modal' wire:click='edit("{{ auth()->user()->id }}")' data-bs-target="#editProfile" data-bs
@@ -14,9 +14,9 @@
 
     <div class="px-3 mt-3">
         <div style=" z-index: 9;" class="profile d-flex flex-column align-items-center gap-1">
-            <div class="position-relative" style="width: 90px; height: 90px;">
+            <div class="position-relative" style="width: 80px; height: 80px;">
                 @if ($profile && $profile->foto)
-                    <img class="img-fluid rounded-circle" src="{{ Storage::url('images/santri/' . $profile->foto) }}"
+                    <img class="img-fluid rounded-circle" src="{{ Storage::url($profile->foto) }}"
                         alt="" style="object-fit: cover; width: 100%; height: 100%;">
                 @else
                     <img class="img-fluid rounded-circle"

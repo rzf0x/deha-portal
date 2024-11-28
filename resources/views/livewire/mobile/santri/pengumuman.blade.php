@@ -1,16 +1,16 @@
 <div class="px-3">
-    <h3 class="m-0 mb-4 mt-3">Pengumuman</h3>
+    <h3 class="m-0 mb-4 text-dark mt-3">Pengumuman</h3>
     <div style="margin-bottom: 5rem;" class="row px-3">
         @forelse ($this->listPengumuman() as $item)
             <div style="cursor: pointer;" class="bg-white rounded-3 p-3 mb-3 col-12">
                 <div data-bs-toggle="modal" wire:click='detailPengumuman("{{ $item->id }}")'
                     data-bs-target="#detailPengumuman" class="">
                     <div class="border-start border-info ps-3">
-                        <h6 class="fw-medium mb-2">{{ $item->judul }}</h6>
-                        <p class="card-subtitle mb-0">
+                        <h6 class="fw-bold text-dark mb-2">{{ $item->judul }}</h6>
+                        <p class="card-subtitle text-dark mb-0">
                             {{ Str::limit($item->isi_pengumuman, 64, '...') ?? '-' }}
                         </p>
-                        <p class="text-muted mb-0 small mt-1">
+                        <p class="text-secondary mb-0 small mt-1">
                             {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
                         </p>
                     </div>
