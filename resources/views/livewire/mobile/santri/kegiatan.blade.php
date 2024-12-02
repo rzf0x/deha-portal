@@ -1,13 +1,13 @@
 <div class="px-3">
-    <h3 class="m-0 mb-4 mt-3">Kegiatan</h3>
+    <h3 class="m-0 mb-4 text-dark mt-3">Kegiatan</h3>
     <div style="margin-bottom: 5rem;" class="row">
         @forelse ($this->listKegiatan() as $item)
             <div data-bs-toggle="modal" wire:click='detailKegiatan("{{ $item->id }}")' data-bs-target="#detailKegiatan"
                 class="mb-3 rounded-3">
                 <div style="background-color: #f5f5f5;" class="p-3">
-                    <h6 class="fw-bold mb-2">{{ $item->judul }}</h6>
-                    <p class="text-secondary small m-0">{{ Str::limit($item->isi_kegiatan, 48, '...') }}</p>
-                    <p class="small mt-2 mb-0">
+                    <h6 class="fw-bold mb-2 text-dark">{{ $item->judul }}</h6>
+                    <p class="text-dark small m-0">{{ Str::limit($item->isi_kegiatan, 48, '...') }}</p>
+                    <p class="small text-secondary mt-2 mb-0">
                         {{ \Carbon\Carbon::parse($item->waktu_mulai)->format('d M Y H:i') }} -
                         {{ \Carbon\Carbon::parse($item->waktu_selesai)->format('d M Y H:i') ?? '-' }}</p>
                 </div>
