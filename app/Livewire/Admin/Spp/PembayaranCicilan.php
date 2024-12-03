@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Admin\Spp;
 
+use App\Models\Jenjang;
+use App\Models\Kelas;
 use App\Models\Santri;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
@@ -17,18 +19,44 @@ class PembayaranCicilan extends Component
 
     // public $santris;
     public $search = '';
+    public $jenjangs = [];
+    public $kelases = [];
 
-    public function searchSantri()
+    public $filter = [
+        'jenjang' => '',
+        'kelas' => '',
+    ];
+
+    public function mount()
     {
-        return Santri::with(['pembayaran', 'pembayaran.cicilans', 'kelas', 'kamar'])
-            ->whereHas('pembayaran.cicilans') // Only include santri with payments
-            ->where('nama', 'like', '%' . $this->search . '%')
-            ->orderBy('nama')
-            ->paginate(10);
+        $this->jenjangs = Jenjang::all();
+        $this->kelases = Kelas::all();
     }
 
+    #[Computed()]
+    public function searchSantri()
+    {
+        $this->resetPage();
+
+        return Santri::with(['kelas', 'kamar'])
+        ->has('pembayaran.cicilans') // Only include santri with payments
+        ->when(!empty($this->filter['jenjang']), function ($query) {
+            return $query->whereHas('kelas.jenjang', function ($subQuery) {
+                $subQuery->where('nama', $this->filter['jenjang']);
+            });
+        })
+        ->when(!empty($this->filter['kelas']), function ($query) {
+            return $query->whereHas('kelas', function ($subQuery) {
+                $subQuery->where('nama', $this->filter['kelas']);
+            });
+        })
+        ->where('nama', 'like', '%' . $this->search . '%')
+        ->orderBy('nama')
+        ->paginate(10);
+    }
+    
     public function render()
     {
-        return view('livewire.admin.spp.pembayaran-cicilan');
+        return view('livewire.admin.spp.pembayaran-cicilan', ['santriResults' => $this->searchSantri()]);
     }
 }

@@ -69,13 +69,13 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h5 class="card-title">Riwayat Cicilan</h5>
                 <div class="d-flex gap-2">
-                    <select wire:model.live="filter.tahun" class="form-select">
+                    <select wire:model.live="filter.tahun" wire:change='generateData' class="form-select">
                         <option value="">Pilih Tahun</option>
                         @foreach ($tahunList as $tahun)
                             <option value="{{ $tahun }}">{{ $tahun }}</option>
                         @endforeach
                     </select>
-                    <select wire:model.live="filter.bulan" class="form-select">
+                    <select wire:model.live="filter.bulan" wire:change='generateData' class="form-select">
                         <option value="">Pilih Bulan</option>
                         @foreach ($bulanList as $bulan)
                             <option value="{{ $bulan }}">{{ $bulan }}</option>
@@ -130,8 +130,8 @@
                                 </td>
                                 <td>
                                     @if ($item->bukti_pembayaran)
-                                        <a href="{{ url('storage/' . $item->pembayaran->bukti_pembayaran) }}" target="_blank"
-                                            class="badge bg-success">Lihat Bukti Pembayaran</a>
+                                        <a href="{{ url('storage/' . $item->pembayaran->bukti_pembayaran) }}"
+                                            target="_blank" class="badge bg-success">Lihat Bukti Pembayaran</a>
                                     @else
                                         <span class="badge bg-danger">
                                             kosong
@@ -151,8 +151,13 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="10" class="text-center">Tidak ada data cicilan pada bulan
-                                    {{ $filter['bulan'] }}</td>
+                                <td colspan="10" class="text-center">
+                                    @if ($filter['bulan'])
+                                        Tidak ada data cicilan pada bulan {{ $filter['bulan'] }}
+                                        @else
+                                        Tidak ada data cicilan di bulan manapun
+                                    @endif
+                                </td>
                             </tr>
                         @endforelse
                     </tbody>
@@ -160,4 +165,4 @@
             </div>
         </div>
     </div>
-</div> 
+</div>

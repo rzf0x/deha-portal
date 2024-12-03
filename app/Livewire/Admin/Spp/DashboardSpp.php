@@ -27,55 +27,54 @@ class DashboardSpp extends Component
     public $persentasePembayaran;
     public $tagihanAkanJatuhTempo;
 
+    public $jenjangOptions;
+    public $monthlyTotals = [];
+
     public $filter = [
         'jenjang' => 'SMPI Daarul Huffazh',
-        'tahun' => '',
     ];
 
     public function mount()
     {
         $this->bulanSekarang = Carbon::now()->monthName;
-        $this->filter['tahun'] = date('Y');
+        $this->jenjangOptions = Jenjang::all();
 
         $this->generateData();
     }
 
     public function generateData()
     {
-        $santri = Santri::with('kelas.jenjang', 'Pembayaran')->where('status_kesantrian', 'aktif')
-            ->with(['Pembayaran' => function ($query) {
-                $query->whereHas('pembayaranTimeline', function ($subQuery) {
-                    $subQuery->where('nama_bulan', $this->bulanSekarang);
-                })
-                    ->whereYear('created_at', $this->filter['tahun']);
-            }])
+        // Query utama hanya untuk mengambil santri yang sesuai filter
+        $santriIds = Santri::where('status_kesantrian', 'aktif')
             ->whereHas('kelas.jenjang', function ($query) {
-                $query->where('nama', $this->filter['jenjang']);
+                return $query->where('nama', $this->filter['jenjang']);
             })
+            ->pluck('id');
+
+        // Query status pembayaran
+        $pembayaranQuery = Pembayaran::whereIn('santri_id', $santriIds)
+            ->whereHas('pembayaranTimeline', function ($query) {
+                $query->where('nama_bulan', $this->bulanSekarang);
+            });
+
+        $statusCounts = $pembayaranQuery->groupBy('status')
+            ->selectRaw('status, count(*) as count, sum(nominal) as nominal')
             ->get();
 
+        // Assign hasil ke properti
+        $this->lunas = $statusCounts->firstWhere('status', 'lunas')->count ?? 0;
+        $this->belum_bayar = $statusCounts->firstWhere('status', 'belum bayar')->count ?? 0;
+        $this->cicilan = $statusCounts->firstWhere('status', 'cicilan')->count ?? 0;
+        $this->totalSantri = $statusCounts->sum('count');
 
-        $this->lunas = $santri->filter(function ($item) {
-            return $item->Pembayaran->contains('status', 'lunas');
-        })->count();
-
-        $this->belum_bayar = $santri->filter(function ($item) {
-            return $item->Pembayaran->contains('status', 'belum bayar');
-        })->count();
-
-        $this->cicilan = $santri->filter(function ($item) {
-            return $item->Pembayaran->contains('status', 'cicilan');
-        })->count();
-
-        $this->totalSantri = $santri->count();
-
-        $totalNominalTerbayar = $santri->flatMap->Pembayaran->filter(fn($pembayaran) => $pembayaran->created_at->year === $this->filter['tahun'])->sum('nominal');
-
+        // Hitung total nominal pembayaran
+        $totalNominalTerbayar = $statusCounts->sum('nominal');
         $totalNominalPembayaran = DetailItemPembayaran::whereHas('jenjang', function ($query) {
             $query->where('nama', $this->filter['jenjang']);
         })
             ->sum('nominal') * $this->totalSantri;
 
+        // Format nominal
         $this->totalNominalDiterima = $this->formatRupiah($totalNominalTerbayar);
         $this->totalNominalTertunda = $this->formatRupiah($totalNominalTerbayar - $totalNominalPembayaran);
         $this->totalNominal = $this->formatRupiah($totalNominalPembayaran);
@@ -93,94 +92,46 @@ class DashboardSpp extends Component
             'lunas' => $this->lunas,
             'cicilan' => $this->cicilan,
         ]);
-        // dd(123);
-    }
-
-    public function getMonthNames()
-    {
-        return [
-            'Januari',
-            'Februari',
-            'Maret',
-            'April',
-            'Mei',
-            'Juni',
-            'Juli',
-            'Agustus',
-            'September',
-            'Oktober',
-            'November',
-            'Desember'
-        ];
     }
 
     public function getMonthlyTotals()
     {
-        // Inisialisasi array untuk menyimpan total pembayaran per bulan
-        $monthlyTotals = array_fill(0, 12, 0); // Array dengan 12 elemen, diisi dengan 0
 
-        // Daftar nama bulan dalam Bahasa Indonesia
+        $monthlyTotals = array_fill(0, 12, 0);
+        $namaBulans = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
-        // Ambil total pembayaran per bulan berdasarkan pembayaran_timeline
-        $results = Pembayaran::with('pembayaranTimeline')
+        $results = Pembayaran::selectRaw('pembayaran_timeline_id, SUM(nominal) as total, pembayaran_timeline.nama_bulan')
+            ->join('pembayaran_timeline', 'pembayaran.pembayaran_timeline_id', '=', 'pembayaran_timeline.id')
             ->whereHas('santri.kelas.jenjang', function ($query) {
                 $query->where('nama', $this->filter['jenjang']);
             })
-            ->whereYear('created_at', $this->filter['tahun'])
-            ->selectRaw('pembayaran_timeline_id, SUM(nominal) as total')
-            ->groupBy('pembayaran_timeline_id')
+            ->groupBy('pembayaran_timeline_id', 'pembayaran_timeline.nama_bulan')
             ->get();
 
-        // Mengambil seluruh timeline pembayaran dalam satu query
-        $timelines = PembayaranTimeline::whereIn('id', $results->pluck('pembayaran_timeline_id'))->get()->keyBy('id');
-
-        // Mengisi array monthlyTotals dengan hasil query
         foreach ($results as $result) {
-            $bulanTimeline = $timelines->get($result->pembayaran_timeline_id);
-
-            if ($bulanTimeline) {
-                // Temukan indeks bulan berdasarkan nama bulan di $bulanNames
-                $monthlyIndex = array_search($bulanTimeline->nama_bulan, $this->getMonthNames());
-
-                if ($monthlyIndex !== false) {
-                    // Isi total untuk bulan yang sesuai
-                    $monthlyTotals[$monthlyIndex] = $result->total;
-                }
+            $monthlyIndex = array_search($result->nama_bulan, $namaBulans);
+            if ($monthlyIndex !== false) {
+                $monthlyTotals[$monthlyIndex] += $result->total;
             }
         }
 
         return $monthlyTotals;
     }
 
-
-
     private function formatRupiah($angka)
     {
         return number_format($angka, 0, ',', '.');
     }
 
-    protected function calculateDueDate()
+    private function calculateDueDate()
     {
         $currentDate = Carbon::now();
         $BulanIni = Carbon::create($currentDate->year, $currentDate->month);
         return $currentDate->greaterThan($BulanIni) ? $currentDate->diffInDays($BulanIni->addMonth()) : $currentDate->diffInDays($BulanIni);
     }
-    public function updatedSelectedYear()
-    {
-        $this->updateChartData();
-    }
 
     public function render()
     {
-        $this->dispatch('updateCharts', [
-            'monthlyTotals' => $this->getMonthlyTotals(),
-            'belum_bayar' => $this->belum_bayar,
-            'lunas' => $this->lunas,
-            'cicilan' => $this->cicilan,
-        ]);
-        return view('livewire.admin.spp.dashboard-spp', [
-            'monthlyTotals' => $this->getMonthlyTotals(),
-            'jenjangs' => Jenjang::all(),
-        ]);
+        return view('livewire.admin.spp.dashboard-spp');
     }
 }

@@ -28,6 +28,7 @@ class Pembayaran extends Component
     public $santriSelected = null;
 
     public $errorMessage = '';
+    public $message = '';
 
     public $totalAmount = 0;
     public $selectedMethods = [];
@@ -50,24 +51,25 @@ class Pembayaran extends Component
     ];
 
     public $jenjangs, $kelas;
+    public $bulanTimeline = [];
 
     public function mount()
     {
-            $this->jenjangs = Jenjang::all();
-            $this->kelas = Kelas::all();
+        $this->jenjangs = Jenjang::all();
+        $this->kelas = Kelas::all();
     }
 
     public function searchSantri()
     {
-        if (empty($this->search)) {
+        if (empty($this->filter['kelas']) && empty($this->filter['jenjang']) && empty($this->search)) {
             $this->errorMessage = 'Kolom pencarian tidak boleh kosong';
-            $this->hideError();
+            $this->dispatch('hide-error');
             $this->searchResults = [];
             return;
         }
 
-        $this->searchResults = Santri::with('pembayaran.santri', 'kelas', 'kelas.jenjang')
-            ->whereHas('pembayaran')
+        $this->searchResults = Santri::with(['kelas', 'kelas.jenjang'])
+            ->has('pembayaran')
             ->when(!empty($this->filter['jenjang']), function ($query) {
                 return $query->whereHas('kelas.jenjang', function ($subQuery) {
                     $subQuery->where('nama', $this->filter['jenjang']);
@@ -78,12 +80,14 @@ class Pembayaran extends Component
                     $subQuery->where('nama', $this->filter['kelas']);
                 });
             })
-            ->where('nama', 'like', '%' . $this->search . '%')
-            ->get();
+            ->when(!empty($this->search), function ($query) {
+                return $query->where('nama', 'like', '%' . $this->search . '%');
+            })
+            ->take(40)->get();
 
         if ($this->searchResults->isEmpty()) {
             $this->errorMessage = 'Santri tidak ditemukan';
-            $this->hideError();
+            $this->dispatch('hide-error');
         } else {
             $this->errorMessage = '';
         }
@@ -91,19 +95,20 @@ class Pembayaran extends Component
     }
 
     public function selectSantri($santriId)
-    {
+    {   
         $this->santriSelected = Santri::with([
-            'pembayaran' => function ($query) {
-                $query->with('cicilans');
-            },
             'kelas.jenjang',
-            'kamar'
+            'kamar',
+            'pembayaran.cicilans',
+            'pembayaran.pembayaranTimeline'
         ])->find($santriId);
 
-        $this->pembayaran = SppPembayaran::with('pembayaranTimeline')->where('santri_id', $santriId)->get();
+        $this->pembayaran = $this->santriSelected->pembayaran;
+
+        $this->bulanTimeline = $this->pembayaran->pluck('pembayaranTimeline.nama_bulan', 'id')->toArray();
+
         $this->detailPembayaran();
-        $this->searchResults = [];
-        $this->search = '';
+        $this->reset(['keteranganCicilan', 'jumlahCicilan', 'buktiPembayaran', 'isModalOpen']);
     }
 
     public function selectPembayaran($pembayaranId)
@@ -112,14 +117,14 @@ class Pembayaran extends Component
         $this->isModalOpen = true;
         $this->selectedStatus = $this->Clickpembayaran->status;
         $this->selectedMetodePembayaran = $this->Clickpembayaran->metode_pembayaran;
-        $this->reset(['buktiPembayaran']);
+        $this->reset(['keteranganCicilan', 'jumlahCicilan', 'buktiPembayaran']);
     }
 
     public function updatePembayaran()
     {
         try {
             $this->validate([
-                'buktiPembayaran' => 'required|mimes:pdf,jpeg,png,jpg,svg|max:10000',  // Memastikan ID pembayaran ada di database
+                'buktiPembayaran' => 'required|mimes:jpeg,png,jpg,svg|max:10000', 
             ]);
 
             $this->Clickpembayaran->status = $this->selectedStatus;
@@ -141,15 +146,14 @@ class Pembayaran extends Component
 
             $this->pembayaran = SppPembayaran::with('pembayaranTimeline')->where('santri_id', $this->santriSelected->id)->get();
             $this->isModalOpen = false;
-        } catch (\Exception $e) {
-            $this->errorMessage = 'gagal';
-            $this->hideError();
-        }
-    }
 
-    public function hideError()
-    {
-        $this->dispatch('hide-error', ['delay' => 2000]);
+            
+            $this->message = 'berhasil mengupdate pembayaran';
+            $this->dispatch('hide-message');
+        } catch (\Exception $e) {
+            $this->errorMessage = 'gagal mengupdate pembayaran';
+            $this->dispatch('hide-error');
+        }
     }
 
     public function closeModal()
@@ -176,8 +180,8 @@ class Pembayaran extends Component
             $this->validate([
                 'jumlahCicilan' => 'required|numeric',
                 'keteranganCicilan' => 'required|string',
-                'Clickpembayaran.id' => 'required|exists:pembayaran,id',  // Memastikan ID pembayaran ada di database
-                'buktiPembayaran' => 'required|mimes:pdf,jpeg,png,jpg,svg|max:10000',  // Memastikan ID pembayaran ada di database
+                'Clickpembayaran.id' => 'required|exists:pembayaran,id', 
+                'buktiPembayaran' => 'required|mimes:jpeg,png,jpg,svg|max:10000', 
             ]);
 
             $this->updatePembayaran();
@@ -190,7 +194,7 @@ class Pembayaran extends Component
             ]);
 
             $total_nominal_cicilan = Cicilan::query()->select(['nominal'])
-                ->with(['pembayaran.cicilans' . 'pembayaran.pembayaranTimeline'])
+                ->with(['pembayaran.cicilans', 'pembayaran.pembayaranTimeline'])
                 ->whereHas('pembayaran.cicilans', function ($query) {
                     $query
                         ->where('santri_id', $this->santriSelected->id)
@@ -205,9 +209,12 @@ class Pembayaran extends Component
             // Reset form
             $this->reset(['jumlahCicilan', 'keteranganCicilan', 'buktiPembayaran']);
             $this->isModalOpen = false;
+
+            $this->message = 'berhasil menyimpan cicilan';
+            $this->dispatch('hide-message');
         } catch (\Exception $e) {
-            $this->errorMessage = 'gagal';
-            $this->hideError();
+            $this->errorMessage = 'gagal menyimpan cicilan';
+            $this->dispatch('hide-error');
         }
     }
 

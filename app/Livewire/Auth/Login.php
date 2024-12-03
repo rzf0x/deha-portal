@@ -16,14 +16,11 @@ class Login extends Component
     #[Validate('required')]
     public $password;
 
-    public $showPassword;
-
     #[Title('Halaman Login')]
 
     public function login()
     {
         $this->validate();
-
         $credentials = [
             'email' => $this->email,
             'password' => $this->password,
@@ -50,12 +47,16 @@ class Login extends Component
                 return redirect()->route('petugas-warung.dashboard');
             } else if ($result->nama === 'Petugas Laundry') {
                 return redirect()->route('petugas-laundry.dashboard');
+            } else if ($result->nama === 'Guru Diniyyah') {
+                return redirect()->route('e-santri-guru-diniyyah.dashboard');
+            } else if ($result->nama === 'Guru Umum') {
+                return redirect()->route('e-santri-guru-umum.dashboard');
             } else {
                 return redirect()->route('santri.dashboard');
             }
         }
         else{
-            session()->flash('error', 'Invalid credentials!');
+            $this->addError('error', 'Invalid credentials!');
         }
 
     }

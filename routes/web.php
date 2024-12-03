@@ -1,34 +1,15 @@
 <?php
 
-use App\Livewire\Admin\AdminLaundry\Dashboard as AdminLaundryDashboard;
-use App\Livewire\Admin\AdminWarung\Dashboard as AdminWarungDashboard;
-use App\Livewire\Admin\AdminECashless\Dashboard as AdminECashlessDashboard;
-use App\Livewire\Admin\AdminECashless\HistoryPembayaran;
-use App\Livewire\Admin\AdminECashless\Pembayaran as AdminECashlessPembayaran;
-use App\Livewire\Admin\AdminLaundry\LaundryService;
-use App\Livewire\Admin\AdminLaundry\ListLaundry;
-use App\Livewire\Admin\AdminLaundry\RiwayatTransaksi as TransaksiLaundry;
-use App\Livewire\Admin\AdminWarung\DetailPembayaran;
-use App\Livewire\Admin\AdminWarung\Kategori;
-use App\Livewire\Admin\AdminWarung\Produk;
-use App\Livewire\Admin\AdminWarung\Revenue;
-use App\Livewire\Admin\AdminWarung\TransaksiPesanan;
-use App\Livewire\Admin\AdminWarung\Pembayaran as PembayaranPesanan;
+use App\Livewire\Admin;
+use App\Livewire\Auth;
+use App\Livewire\Santri;
+use App\Livewire\Admin\Spp;
+use App\Livewire\Admin\AdminWarung;
+use App\Livewire\Admin\AdminECashless;
+use App\Livewire\Admin\AdminLaundry;
+use App\Livewire\Admin\ESantri\GuruDiniyyah;
+use App\Livewire\Admin\ESantri\GuruUmum;
 use App\Livewire\Admin\ListSantri\DetailSantri;
-use App\Livewire\Admin\Spp\DashboardSpp;
-use App\Livewire\Admin\Spp\DetailLaporanCicilanSantri;
-use App\Livewire\Admin\Spp\DetailLaporanSppSantri;
-use App\Livewire\Admin\Spp\KwitansiInvoice;
-use App\Livewire\Admin\Spp\LaporanKeuangan;
-use App\Livewire\Admin\Spp\ListItemPembayaran;
-use App\Livewire\Admin\Spp\Pembayaran;
-use App\Livewire\Admin\Spp\PembayaranCicilan;
-use App\Livewire\Admin\Spp\TambahSantri;
-use App\Livewire\Auth\Logout;
-use App\Livewire\Santri\Dashboard;
-use App\Livewire\Santri\Kegiatan;
-use App\Livewire\Santri\Pengumuman;
-use App\Livewire\Santri\Profile;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -50,53 +31,53 @@ Route::get('/', function () {
 });
 
 Route::prefix('auth')->group(function () {
-    Route::get('/login', App\Livewire\Auth\Login::class)->name('login');
-    Route::get('/register', App\Livewire\Auth\Register::class)->name('register');
-    Route::get('/logout', Logout::class)->name('auth.logout');
+    Route::get('/login', Auth\Login::class)->name('login');
+    Route::get('/register', Auth\Register::class)->name('register');
+    Route::get('/logout', Auth\Logout::class)->name('auth.logout');
 });
 
-Route::fallback(function(){
+Route::fallback(function () {
     return view('404');
 });
 
 Route::prefix('admin')->middleware('auth')->group(function () {
 
     // Dashboard
-    Route::get('/dashboard', App\Livewire\Admin\Dashboard::class)->name('admin.dashboard');
+    Route::get('/dashboard', Admin\Dashboard::class)->name('admin.dashboard');
 
     // Data Master Pondok
-    Route::prefix('master-pondok')->group(function (){
-        Route::get('/jenjang', App\Livewire\Admin\Jenjang::class)->name('admin.master-pondok.jenjang');
-        Route::get('/kelas', App\Livewire\Admin\Kelas::class)->name('admin.master-pondok.kelas');
-        Route::get('/wali-kelas', App\Livewire\Admin\WaliKelas::class)->name('admin.master-pondok.wali-kelas');
-        Route::get('/kamar', App\Livewire\Admin\Kamar::class)->name('admin.master-pondok.kamar');
-        Route::get('/wali-kamar', App\Livewire\Admin\WaliKamar::class)->name('admin.master-pondok.wali-kamar');
-        Route::get('/angkatan', App\Livewire\Admin\Angkatan::class)->name('admin.master-pondok.angkatan');
-        Route::get('/semester', App\Livewire\Admin\Semester::class)->name('admin.master-pondok.semester');
+    Route::prefix('master-pondok')->group(function () {
+        Route::get('/jenjang', Admin\Jenjang::class)->name('admin.master-pondok.jenjang');
+        Route::get('/kelas', Admin\Kelas::class)->name('admin.master-pondok.kelas');
+        Route::get('/wali-kelas', Admin\WaliKelas::class)->name('admin.master-pondok.wali-kelas');
+        Route::get('/kamar', Admin\Kamar::class)->name('admin.master-pondok.kamar');
+        Route::get('/wali-kamar', Admin\WaliKamar::class)->name('admin.master-pondok.wali-kamar');
+        Route::get('/angkatan', Admin\Angkatan::class)->name('admin.master-pondok.angkatan');
+        Route::get('/semester', Admin\Semester::class)->name('admin.master-pondok.semester');
     });
 
     // Data Master Santri
     Route::prefix('master-santri')->group(function () {
-        Route::get('/list-santri', App\Livewire\Admin\ListSantri::class)->name('admin.master-santri.santri');
+        Route::get('/list-santri', Admin\ListSantri::class)->name('admin.master-santri.santri');
         Route::get('/list-santri/detail-santri/{id}', DetailSantri::class)->name('admin.master-santri.detail-santri');
 
-        Route::get('/list-wali-santri', App\Livewire\Admin\ListWaliSantri::class)->name('admin.master-santri.wali-santri');
+        Route::get('/list-wali-santri', Admin\ListWaliSantri::class)->name('admin.master-santri.wali-santri');
 
         // Services
-        Route::get('/list-santri/export/', [App\Livewire\Admin\ListSantri::class, 'export']);
+        Route::get('/list-santri/export/', [Admin\ListSantri::class, 'export']);
     });
 
     // Data Master Admin
-    Route::prefix('master-admin')->group(function(){
-        Route::get('/list-admin', App\Livewire\Admin\ListAdmin::class)->name('admin.master-admin.list-admin');
-        Route::get('/list-role', App\Livewire\Admin\ListRole::class)->name('admin.master-admin.list-role');
+    Route::prefix('master-admin')->group(function () {
+        Route::get('/list-admin', Admin\ListAdmin::class)->name('admin.master-admin.list-admin');
+        Route::get('/list-role', Admin\ListRole::class)->name('admin.master-admin.list-role');
 
         // Service
     });
 
-    Route::prefix('master-aktifitas')->group(function(){
-        Route::get('/pengumuman', App\Livewire\Admin\Pengumuman::class)->name('admin.master-aktifitas.pengumuman');
-        Route::get('/kegiatan', App\Livewire\Admin\Kegiatan::class)->name('admin.master-aktifitas.kegiatan');
+    Route::prefix('master-aktifitas')->group(function () {
+        Route::get('/pengumuman', Admin\Pengumuman::class)->name('admin.master-aktifitas.pengumuman');
+        Route::get('/kegiatan', Admin\Kegiatan::class)->name('admin.master-aktifitas.kegiatan');
     });
 });
 
@@ -105,49 +86,63 @@ Route::get('/optimize-clear', function () {
     return 'Cache berhasil dibersihkan!';
 });
 
-Route::prefix('spp')->middleware('auth')->group(function(){
+Route::prefix('spp')->middleware('auth')->group(function () {
 
     // Dashboard
-    Route::get('/dashboard', DashboardSpp::class)->name('spp.dashboard');
+    Route::get('/dashboard', Spp\DashboardSpp::class)->name('spp.dashboard');
 
     // Service
-    Route::get('/pembayaran', Pembayaran::class)->name('spp.pembayaran');
-    Route::get('/list-item-pembayaran', ListItemPembayaran::class)->name('spp.list-item-pembayaran');
-    Route::get('/pembayaran-cicilan', PembayaranCicilan::class)->name('spp.pembayaran-cicilan');
-    Route::get('/tambah-santri', TambahSantri::class)->name('spp.tambah-santri');
-    Route::get('/detail-laporan-spp-santri/{id}', DetailLaporanSppSantri::class)->name('spp.detail-laporan-spp-santri');
-    Route::get('/detail-laporan-cicilan-santri/{id}/{bulan?}', DetailLaporanCicilanSantri::class)->name('spp.detail-laporan-cicilan-santri');
+    Route::get('/pembayaran', Spp\Pembayaran::class)->name('spp.pembayaran');
+    Route::get('/list-item-pembayaran', Spp\ListItemPembayaran::class)->name('spp.list-item-pembayaran');
+    Route::get('/pembayaran-cicilan', Spp\PembayaranCicilan::class)->name('spp.pembayaran-cicilan');
+    Route::get('/tambah-santri', Spp\TambahSantri::class)->name('spp.tambah-santri');
+    Route::get('/detail-laporan-spp-santri/{id}', Spp\DetailLaporanSppSantri::class)->name('spp.detail-laporan-spp-santri');
+    Route::get('/detail-laporan-cicilan-santri/{id}/{bulan?}', Spp\DetailLaporanCicilanSantri::class)->name('spp.detail-laporan-cicilan-santri');
 
-    Route::get('/laporan-keuangan', LaporanKeuangan::class)->name('spp.laporan-keuangan');
+    Route::get('/laporan-keuangan', Spp\LaporanKeuangan::class)->name('spp.laporan-keuangan');
 
-    Route::get('/kwitansi/spp/{id}', [KwitansiInvoice::class, 'cetakKwitansiPembayaran'])->name('cetak-kwitansi-spp');
-    Route::get('/kwitansi/cicilan/{id}', [KwitansiInvoice::class, 'cetakKwitansiCicilan'])->name('cetak-kwitansi-cicilan-spp');
+    Route::get('/kwitansi/spp/{id}', [Spp\KwitansiInvoice::class, 'cetakKwitansiPembayaran'])->name('cetak-kwitansi-spp');
+    Route::get('/kwitansi/cicilan/{id}', [Spp\KwitansiInvoice::class, 'cetakKwitansiCicilan'])->name('cetak-kwitansi-cicilan-spp');
 });
 
-Route::prefix('santri')->middleware('auth')->group(function() {
-    Route::get('/dashboard', Dashboard::class)->name('santri.dashboard');
-    Route::get('/profile', Profile::class)->name('santri.profile');
-    Route::get('/kegiatan', Kegiatan::class)->name('santri.kegiatan');
-    Route::get('/pengumuman', Pengumuman::class)->name('santri.pengumuman');
+Route::prefix('e-santri')->middleware('auth')->group(function () {
+    Route::prefix('guru-diniyyah')->group(function () {
+        Route::get('/dashboard', GuruDiniyyah\DashboardGuruDiniyyah::class)->name('e-santri-guru-diniyyah.dashboard');
+        Route::get('/jadwal-pelajaran', GuruDiniyyah\JadwalPelajaran::class)->name('e-santri-guru-diniyyah.jadwal-pelajaran');
+        Route::get('/jadwal-piket', GuruDiniyyah\JadwalPiket::class)->name('e-santri-guru-diniyyah.jadwal-piket');
+        Route::get('/pengumuman', GuruDiniyyah\Pengumuman::class)->name('e-santri-guru-diniyyah.pengumuman');
+    });
+    Route::prefix('guru')->group(function () {
+        Route::get('/dashboard', GuruUmum\DashboardGuruUmum::class)->name('e-santri-guru-umum.dashboard');
+        Route::get('/jadwal-pelajaran', GuruUmum\JadwalPelajaran::class)->name('e-santri-guru-umum.jadwal-pelajaran');
+        Route::get('/jadwal-piket', GuruUmum\JadwalPiket::class)->name('e-santri-guru-umum.jadwal-piket');
+        Route::get('/pengumuman', GuruUmum\Pengumuman::class)->name('e-santri-guru-umum.pengumuman');
+    });
 });
-Route::prefix('petugas-warung')->middleware('auth')->group(function() {
-    Route::get('/dashboard', AdminWarungDashboard::class)->name('petugas-warung.dashboard');
-    Route::get('/produk', Produk::class)->name('petugas-warung.produk');
-    Route::get('/kategori', Kategori::class)->name('petugas-warung.kategori');
-    Route::get('/pesanan', TransaksiPesanan::class)->name('petugas-warung.pesanan');
-    Route::get('/pembayaran', PembayaranPesanan::class)->name('petugas-warung.pembayaran');
-    Route::get('/detail-pembayaran', DetailPembayaran::class)->name('petugas-warung.detail-pembayaran');
-    Route::get('/revenue', Revenue::class)->name('petugas-warung.revenue');
 
+Route::prefix('santri')->middleware('auth')->group(function () {
+    Route::get('/dashboard', Santri\Dashboard::class)->name('santri.dashboard');
+    Route::get('/profile', Santri\Profile::class)->name('santri.profile');
+    Route::get('/kegiatan', Santri\Kegiatan::class)->name('santri.kegiatan');
+    Route::get('/pengumuman', Santri\Pengumuman::class)->name('santri.pengumuman');
 });
-Route::prefix('petugas-laundry')->middleware('auth')->group(function() {
-    Route::get('/dashboard', AdminLaundryDashboard::class)->name('petugas-laundry.dashboard');
-    Route::get('/list-laundry', ListLaundry::class)->name('petugas-laundry.list-laundry');
-    Route::get('/laundry-service', LaundryService::class)->name('petugas-laundry.laundry-service');
-    Route::get('/riwayat-pesanan', TransaksiLaundry::class)->name('petugas-laundry.pesanan');
+Route::prefix('petugas-warung')->middleware('auth')->group(function () {
+    Route::get('/dashboard', AdminWarung\Dashboard::class)->name('petugas-warung.dashboard');
+    Route::get('/produk', AdminWarung\Produk::class)->name('petugas-warung.produk');
+    Route::get('/kategori', AdminWarung\Kategori::class)->name('petugas-warung.kategori');
+    Route::get('/pesanan', AdminWarung\TransaksiPesanan::class)->name('petugas-warung.pesanan');
+    Route::get('/pembayaran', AdminWarung\Pembayaran::class)->name('petugas-warung.pembayaran');
+    Route::get('/detail-pembayaran', AdminWarung\DetailPembayaran::class)->name('petugas-warung.detail-pembayaran');
+    Route::get('/revenue', AdminWarung\Revenue::class)->name('petugas-warung.revenue');
 });
-Route::prefix('petugas-e-cashless')->middleware('auth')->group(function() {
-    Route::get('/dashboard', AdminECashlessDashboard::class)->name('petugas-e-cashless.dashboard');
-    Route::get('/pembayaran', AdminECashlessPembayaran::class)->name('petugas-e-cashless.pembayaran');
-    Route::get('/history-pembayaran', HistoryPembayaran::class)->name('petugas-e-cashless.history-pembayaran');
+Route::prefix('petugas-laundry')->middleware('auth')->group(function () {
+    Route::get('/dashboard', AdminLaundry\Dashboard::class)->name('petugas-laundry.dashboard');
+    Route::get('/list-laundry', AdminLaundry\ListLaundry::class)->name('petugas-laundry.list-laundry');
+    Route::get('/laundry-service', AdminLaundry\LaundryService::class)->name('petugas-laundry.laundry-service');
+    Route::get('/riwayat-pesanan', AdminLaundry\RiwayatTransaksi::class)->name('petugas-laundry.pesanan');
+});
+Route::prefix('petugas-e-cashless')->middleware('auth')->group(function () {
+    Route::get('/dashboard', AdminECashless\Dashboard::class)->name('petugas-e-cashless.dashboard');
+    Route::get('/pembayaran', AdminECashless\Pembayaran::class)->name('petugas-e-cashless.pembayaran');
+    Route::get('/history-pembayaran', AdminECashless\HistoryPembayaran::class)->name('petugas-e-cashless.history-pembayaran');
 });

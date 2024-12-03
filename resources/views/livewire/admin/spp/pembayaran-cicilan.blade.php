@@ -19,11 +19,30 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="d-flex justify-content-between mb-4">
-                <form wire:submit.prevent="searchSantri" class="d-flex gap-3">
-                    <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri..." required>
+            <div class="row justify-content-between mb-4">
+                <form wire:submit.prevent="$refresh" class="col-4 d-flex gap-3">
+                    <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri..."
+                        required>
                     <button type="submit" class="btn btn-primary w-25">Cari</button>
                 </form>
+                <div class="col-6 d-flex gap-3 pl-5">
+                    <select wire:model="filter.jenjang" wire:change="$refresh"
+                        class="form-select py-2 rounded-3 border-2" wire:loading.attr="disabled">
+                        <option value="">Pilih Jenjang</option>
+                        @foreach ($jenjangs as $jenjang)
+                            <option value="{{ $jenjang->nama }}">{{ $jenjang->nama }}</option>
+                        @endforeach
+                    </select>
+    
+                    <!-- Kelas Dropdown -->
+                    <select wire:model="filter.kelas" wire:change="$refresh"
+                        class="form-select py-2 rounded-3 border-2" wire:loading.attr="disabled">
+                        <option value="">Pilih Kelas</option>
+                        @foreach ($kelases as $kelas)
+                            <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
             <div class="table-responsive">
@@ -38,9 +57,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($this->searchSantri() as $santri)
+                        @forelse ($santriResults as $index => $santri)
                             <tr>
-                                <td class="text-center">{{ $loop->iteration }}</td>
+                                <td class="text-center">{{ $santriResults->firstItem() + $index }}</td>
                                 <td>{{ $santri->nama }}</td>
                                 <td>
                                     <span class="badge bg-info">
@@ -53,7 +72,8 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="{{ route('spp.detail-laporan-cicilan-santri', ['id' => $santri->id]) }}" class="btn btn-sm btn-info">
+                                    <a href="{{ route('spp.detail-laporan-cicilan-santri', ['id' => $santri->id]) }}"
+                                        class="btn btn-sm btn-info">
                                         <i class="bi bi-eye-fill"></i> Detail
                                     </a>
                                 </td>
@@ -67,7 +87,7 @@
                         @endforelse
                     </tbody>
                 </table>
-                {{ $this->searchSantri()->links() }}
+                {{ $santriResults->links() }}
             </div>
         </div>
     </div>
