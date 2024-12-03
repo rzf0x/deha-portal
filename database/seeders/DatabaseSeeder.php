@@ -16,19 +16,24 @@ class DatabaseSeeder extends Seeder
             WaliKelasTableSeeder::class,
             JenjangSeeder::class,
             KelasTableSeeder::class,
+            RoleSeeder::class,
             UserSeeder::class,
             WaliKamarTableSeeder::class,
             KamarTableSeeder::class,
             SantriSeeder::class,
             AngkatanSeeder::class,
             SemesterSeeder::class,
-            RoleSeeder::class,
             AdminSeeder::class,
             PembayaranTimelineSeeder::class,
             PembayaranTipeSeeder::class,
             PembayaranDetailSeeder::class,
             PembayaranSeeder::class,
-            OrangTuaSeeder::class
+            OrangTuaSeeder::class,
+            LaundryServiceSeeder::class,
+            ProductCategorySeeder::class,
+            ProductListSeeder::class,
+            PengumumanSeeder::class,
+            KegiatanSeeder::class,
         ]);
     }
 }

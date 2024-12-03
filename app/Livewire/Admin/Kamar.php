@@ -9,6 +9,7 @@ use App\Models\WaliKamar;
 use Detection\MobileDetect;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\WithPagination;
@@ -32,6 +33,14 @@ class Kamar extends Component
 
     // Title
     #[Title('Halaman Kamar')]
+
+    #[Url(except: "")]
+    public $perPage = 5;
+
+    public function updatedPerPage()
+    {
+        $this->resetPage(); 
+    }
 
     public function create()
     {
@@ -103,7 +112,7 @@ class Kamar extends Component
     #[Computed]
     public function listKamar()
     {
-        return ModelsKamar::paginate(5);
+        return ModelsKamar::paginate($this->perPage);
     }
 
     #[Computed]

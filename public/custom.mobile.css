@@ -1,0 +1,19 @@
+.scroll-container {
+    overflow-x: auto !important;
+    display: flex !important;
+    gap: 1rem !important;
+}
+
+.card {
+    min-width: 100% !important;
+    margin-bottom: 0 !important;
+}
+
+.scroll-container::-webkit-scrollbar {
+    display: none !important;
+}
+
+.scroll-container {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+}
