@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\admin\Angkatan;
 use App\Models\admin\Semester;
+use App\Models\Cashless\LaundryOrder;
 use App\Models\Spp\Pembayaran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -74,8 +75,13 @@ class Santri extends Model
         return $this->hasOne(OrangTuaSantri::class);
     }
 
-    public function Pembayaran()
+    public function pembayaran()
     {
         return $this->hasMany(Pembayaran::class);
+    }
+
+    public function laundry()
+    {
+        return $this->hasMany(LaundryOrder::class);
     }
 }

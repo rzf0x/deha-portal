@@ -7,21 +7,57 @@
         </div>
     @endif
 
+    <div class="d-flex justify-content-end">
+        <div class="form-group">
+            <button wire:click="create()" type="button" class="btn btn-primary block" data-bs-toggle="modal"
+                data-bs-target="#default">
+                <i class="bi bi-plus-circle"></i>
+                <span class="ms-1">Data Baru</span>
+            </button>
+        </div>
+    </div>
+
     <div class="card">
         <div class="card-body">
             <div class="d-flex justify-content-between mb-4">
-                <div class="filter-option d-flex">
-                    <div class="form search px-3 border border-2 py-2 rounded-3">
-                        <input class="bg-transparent" style="border: none; outline: none;" type="text"
-                            wire:model.live='search' placeholder="Cari santri...">
-                        <a href="#" class="search_icon"><i class="fa fa-search" aria-hidden="true"></i></a>
+                <div class="filter-option align-items-center d-flex gap-3">
+                    <div class="form-group search rounded-3">
+                        <input id="search" class="bg-transparent border form-control"
+                            style="border: none; outline: none;" type="text" wire:model.live='search'
+                            placeholder="Car nama santri...">
+                    </div>
+                    <div class="form-group">
+                        <select id="kelas" class="form-select" wire:model.live="kelasFilter">
+                            <option value="">Kelas</option>
+                            @foreach ($kelas as $kelasFilter)
+                                <option value="{{ $kelasFilter->nama }}">{{ $kelasFilter->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="jenjang" class="form-select" wire:model.live="jenjangFilter">
+                            <option value="">Jenjang</option>
+                            @foreach ($jenjang as $jenjangFilter)
+                                <option value="{{ $jenjangFilter->nama }}">{{ $jenjangFilter->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="kamar" class="form-select" wire:model.live="kamarFilter">
+                            <option value="">Kamar</option>
+                            @foreach ($kamar as $kamarFilter)
+                                <option value="{{ $kamarFilter->nama }}">{{ $kamarFilter->nama }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="jenis_kelamin" class="form-select" wire:model.live="jenisKelaminFilter">
+                            <option value="">Jenis Kelamin</option>
+                            <option value="putera">Laki-laki</option>
+                            <option value="puteri">Perempuan</option>
+                        </select>
                     </div>
                 </div>
-                <button wire:click="create()" type="button" class="btn btn-primary block" data-bs-toggle="modal"
-                    data-bs-target="#default">
-                    <i class="bi bi-plus-circle"></i>
-                    <span class="ms-1">Data Baru</span>
-                </button>
             </div>
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -145,7 +181,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="nisn">NISN</label>
                                     <input type="text" class="form-control" wire:model="santriForm.nisn"
-                                        id="nisn" placeholder="3021312222012312">
+                                        id="nisn" placeholder="2021918002" max="10">
                                     @error('santriForm.nisn')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -155,7 +191,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="nism">NISM</label>
                                     <input type="text" class="form-control" wire:model="santriForm.nism"
-                                        id="nism" placeholder="20241021982">
+                                        id="nism" placeholder="111233180875170017" max="18">
                                     @error('santriForm.nism')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -165,7 +201,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="npsn">NPSN</label>
                                     <input type="text" class="form-control" wire:model="santriForm.npsn"
-                                        id="npsn" placeholder="70047049">
+                                        id="npsn" placeholder="21012345" max="8">
                                     @error('santriForm.npsn')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -214,7 +250,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="nik">NIK</label>
                                     <input type="text" class="form-control" wire:model="santriForm.nik"
-                                        id="nik" placeholder="30213129123">
+                                        id="nik" placeholder="1050245708900001" max="16">
                                     @error('santriForm.nik')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -248,7 +284,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="tanggal_lahir">Tanggal Lahir</label>
                                     <input type="date" class="form-control" wire:model="santriForm.tanggal_lahir"
-                                        id="tanggal_lahir" placeholder="19-08-2012">
+                                        id="tanggal_lahir" placeholder="01/0/2012">
                                     @error('santriForm.tanggal_lahir')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -316,7 +352,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="no_kip">No KIP</label>
                                     <input type="text" class="form-control" wire:model="santriForm.no_kip"
-                                        id="no_kip" placeholder="3172041912080001">
+                                        id="no_kip" placeholder="1234567890123456" max="16">
                                     @error('santriForm.no_kip')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -326,7 +362,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="no_kk">No KK</label>
                                     <input type="text" class="form-control" wire:model="santriForm.no_kk"
-                                        id="no_kk" placeholder="3327070903170010">
+                                        id="no_kk" placeholder="310101123456" max="16">
                                     @error('santriForm.no_kk')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -410,7 +446,7 @@
                                     <label for="nama_kepala_keluarga">Nama Kepala Keluarga</label>
                                     <input type="text" class="form-control"
                                         wire:model="santriForm.nama_kepala_keluarga" id="nama_kepala_keluarga"
-                                        placeholder="SARJIMIN">
+                                        placeholder="Subarno">
                                     @error('santriForm.nama_kepala_keluarga')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -431,7 +467,7 @@
                                     <label for="yang_membiayai_sekolah">Yang Membiayai Sekolah</label>
                                     <input type="text" class="form-control"
                                         wire:model="santriForm.yang_membiayai_sekolah" id="yang_membiayai_sekolah"
-                                        placeholder="Bapak">
+                                        placeholder="Ayah/Ibu/Lainnya">
                                     @error('santriForm.yang_membiayai_sekolah')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -482,7 +518,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="nik_ayah">NIK Ayah</label>
                                     <input type="text" class="form-control" wire:model="waliSantriForm.nik_ayah"
-                                        id="nik_ayah" placeholder="006152172193719">
+                                        id="nik_ayah" placeholder="1050245708900003" max="16">
                                     @error('waliSantriForm.nik_ayah')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -493,7 +529,7 @@
                                     <label for="tempat_lahir_ayah">Tempat Lahir Ayah</label>
                                     <input type="text" class="form-control"
                                         wire:model="waliSantriForm.tempat_lahir_ayah" id="tempat_lahir_ayah"
-                                        placeholder="DKI Jakarta">
+                                        placeholder="Cirebon">
                                     @error('waliSantriForm.tempat_lahir_ayah')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -504,7 +540,7 @@
                                     <label for="tanggal_lahir_ayah">Tanggal Lahir Ayah</label>
                                     <input type="date" class="form-control"
                                         wire:model="waliSantriForm.tanggal_lahir_ayah" id="tanggal_lahir_ayah"
-                                        placeholder="DKI Jakarta">
+                                        placeholder="01/01/1990">
                                     @error('waliSantriForm.tanggal_lahir_ayah')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -516,6 +552,7 @@
                                     <select class="form-select"
                                         wire:model.defer="waliSantriForm.pendidikan_terakhir_ayah">
                                         <option value="">-- Pendidikan --</option>
+                                        <option value="tidak sekolah">Tidak Sekolah</option>
                                         <option value="sd">SD</option>
                                         <option value="smp">SMP</option>
                                         <option value="sma">SMA</option>
@@ -533,7 +570,7 @@
                                     <label for="pekerjaan_ayah">Pekerjaan Ayah</label>
                                     <input type="text" class="form-control"
                                         wire:model="waliSantriForm.pekerjaan_ayah" id="pekerjaan_ayah"
-                                        placeholder="Programmer">
+                                        placeholder="Pegawai Swasta">
                                     @error('waliSantriForm.pekerjaan_ayah')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -544,7 +581,7 @@
                                     <label for="penghasilan_ayah">Penghasilan Ayah</label>
                                     <input type="text" class="form-control"
                                         wire:model="waliSantriForm.penghasilan_ayah" id="penghasilan_ayah"
-                                        placeholder="1000000">
+                                        placeholder="10000000">
                                     @error('waliSantriForm.penghasilan_ayah')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -555,7 +592,7 @@
                                     <label for="no_telp_ayah">No Telp Ayah</label>
                                     <input type="text" class="form-control"
                                         wire:model="waliSantriForm.no_telp_ayah" id="no_telp_ayah"
-                                        placeholder="+62888....">
+                                        placeholder="08168271922">
                                     @error('waliSantriForm.no_telp_ayah')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -588,7 +625,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="nik_ibu">NIK ibu</label>
                                     <input type="text" class="form-control" wire:model="waliSantriForm.nik_ibu"
-                                        id="nik_ibu" placeholder="006152172193719">
+                                        id="nik_ibu" placeholder="1050245708900002" max="16">
                                     @error('waliSantriForm.nik_ibu')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -623,7 +660,7 @@
                                     <label for="tanggal_lahir_ibu">Tanggal Lahir ibu</label>
                                     <input type="date" class="form-control"
                                         wire:model="waliSantriForm.tanggal_lahir_ibu" id="tanggal_lahir_ibu"
-                                        placeholder="DKI Jakarta">
+                                        placeholder="01/01/1990">
                                     @error('waliSantriForm.tanggal_lahir_ibu')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -635,6 +672,7 @@
                                     <select class="form-select"
                                         wire:model.defer="waliSantriForm.pendidikan_terakhir_ibu">
                                         <option value="">-- Pendidikan --</option>
+                                        <option value="tidak sekolah">Tidak Sekolah</option>
                                         <option value="sd">SD</option>
                                         <option value="smp">SMP</option>
                                         <option value="sma">SMA</option>
@@ -652,7 +690,7 @@
                                     <label for="pekerjaan_ibu">Pekerjaan ibu</label>
                                     <input type="text" class="form-control"
                                         wire:model="waliSantriForm.pekerjaan_ibu" id="pekerjaan_ibu"
-                                        placeholder="Programmer">
+                                        placeholder="Ibu Rumah Tangga">
                                     @error('waliSantriForm.pekerjaan_ibu')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -664,7 +702,7 @@
                                     <label for="penghasilan_ibu">Penghasilan ibu</label>
                                     <input type="text" class="form-control"
                                         wire:model="waliSantriForm.penghasilan_ibu" id="penghasilan_ibu"
-                                        placeholder="1000000">
+                                        placeholder="9000000">
                                     @error('waliSantriForm.penghasilan_ibu')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -675,7 +713,7 @@
                                     <label for="no_telp_ibu">No Telp ibu</label>
                                     <input type="text" class="form-control"
                                         wire:model="waliSantriForm.no_telp_ibu" id="no_telp_ibu"
-                                        placeholder="+62888....">
+                                        placeholder="08168271711">
                                     @error('waliSantriForm.no_telp_ibu')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -701,7 +739,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="provinsi">Provinsi</label>
                                     <input type="text" class="form-control" wire:model="waliSantriForm.provinsi"
-                                        id="provinsi" placeholder="">
+                                        id="provinsi" placeholder="Jawa Barat">
                                     @error('waliSantriForm.provinsi')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -711,7 +749,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="kabupaten">Kabupaten</label>
                                     <input type="text" class="form-control" wire:model="waliSantriForm.kabupaten"
-                                        id="kabupaten" placeholder="">
+                                        id="kabupaten" placeholder="Bandung">
                                     @error('waliSantriForm.kabupaten')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -721,7 +759,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="kecamatan">Kecamatan</label>
                                     <input type="text" class="form-control" wire:model="waliSantriForm.kecamatan"
-                                        id="kecamatan" placeholder="">
+                                        id="kecamatan" placeholder="Cidadap">
                                     @error('waliSantriForm.kecamatan')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -731,7 +769,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="kelurahan">Kelurahan</label>
                                     <input type="text" class="form-control" wire:model="waliSantriForm.kelurahan"
-                                        id="kelurahan" placeholder="">
+                                        id="kelurahan" placeholder="Cidadap">
                                     @error('waliSantriForm.kelurahan')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -741,7 +779,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="rt">RT</label>
                                     <input type="text" class="form-control" wire:model="waliSantriForm.rt"
-                                        id="rt" placeholder="">
+                                        id="rt" placeholder="01">
                                     @error('waliSantriForm.rt')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -751,7 +789,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="rw">RW</label>
                                     <input type="text" class="form-control" wire:model="waliSantriForm.rw"
-                                        id="rw" placeholder="">
+                                        id="rw" placeholder="05">
                                     @error('waliSantriForm.rw')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -761,7 +799,7 @@
                                 <div class="form-group col-lg-4">
                                     <label for="kode_pos">Kode Pos</label>
                                     <input type="text" class="form-control" wire:model="waliSantriForm.kode_pos"
-                                        id="kode_pos" placeholder="">
+                                        id="kode_pos" placeholder="40141">
                                     @error('waliSantriForm.kode_pos')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -784,8 +822,8 @@
                                 {{-- Alamat --}}
                                 <div class="form-group col-lg-12">
                                     <label for="alamat">Alamat Lengkap</label>
-                                    <textarea name="alamat_lengkap" id="alamat" class="form-control" wire:model="waliSantriForm.alamat"
-                                        cols="30" rows="2"></textarea>
+                                    <textarea name="alamat_lengkap" id="alamat" placeholder="Jln. Mangga Besar Gg. Buah No. 01" class="form-control"
+                                        wire:model="waliSantriForm.alamat" cols="30" rows="2"></textarea>
                                     @error('waliSantriForm.alamat')
                                         <span class="text-danger error">{{ $message }}</span>
                                     @enderror
@@ -814,7 +852,7 @@
                                         <i class="bx bx-check d-block d-sm-none"></i>
                                         <span
                                             class="d-none d-sm-block {{ $santriEditId ? 'text-dark' : 'text-white' }}">
-                                            {{ $santriEditId ? 'Ubah Data' : 'Buat Data Baru' }}
+                                            Simpan Data
                                         </span>
                                     </span>
                                     <span wire:loading wire:target="foto">

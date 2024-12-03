@@ -17,12 +17,6 @@ return new class extends Migration
             $table->timestamps();
         });
 
-        Schema::create('roles', function (Blueprint $table) {
-            $table->id();
-            $table->string('nama');
-            $table->timestamps();
-        });
-
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
@@ -124,7 +118,7 @@ return new class extends Migration
             $table->string('nik_ayah')->default("0081921827873");
             $table->string('tempat_lahir_ayah');
             $table->date('tanggal_lahir_ayah')->default(date(now()));
-            $table->enum('pendidikan_terakhir_ayah', ['sd', 'smp', 'sma', 'slta', 'diploma', 'sarjana'])->default("sarjana");
+            $table->enum('pendidikan_terakhir_ayah', ['tidak sekolah', 'sd', 'smp', 'sma', 'slta', 'diploma', 'sarjana'])->default("sarjana");
             $table->string('pekerjaan_ayah');
             $table->string('penghasilan_ayah');
             $table->string('no_telp_ayah');
@@ -136,7 +130,7 @@ return new class extends Migration
             $table->string('nik_ibu');
             $table->string('tempat_lahir_ibu');
             $table->string('tanggal_lahir_ibu');
-            $table->enum('pendidikan_terakhir_ibu', ['sd', 'smp', 'sma', 'slta', 'diploma', 'sarjana'])->default("sarjana");
+            $table->enum('pendidikan_terakhir_ibu', ['tidak sekolah', 'sd', 'smp', 'sma', 'slta', 'diploma', 'sarjana'])->default("sarjana");
             $table->string('pekerjaan_ibu');
             $table->string('penghasilan_ibu');
             $table->string('no_telp_ibu');
@@ -153,6 +147,25 @@ return new class extends Migration
             $table->string('kode_pos');
             $table->enum('status_orang_tua', ['kawin', 'cerai hidup', 'cerai mati'])->default("kawin");
 
+            $table->timestamps();
+        });
+
+        // Tabel pengumuman
+        Schema::create('pengumuman', function (Blueprint $table) {
+            $table->id();
+            $table->string('judul');
+            $table->text('isi_pengumuman');
+            $table->date('tanggal');
+            $table->timestamps();
+        });
+
+        // Tabel kegiatan
+        Schema::create('kegiatan', function (Blueprint $table) {
+            $table->id();
+            $table->string('judul');
+            $table->text('isi_kegiatan');
+            $table->dateTime('waktu_mulai');
+            $table->dateTime('waktu_selesai');
             $table->timestamps();
         });
     }
@@ -173,6 +186,7 @@ return new class extends Migration
         Schema::dropIfExists('semesters');
         Schema::dropIfExists('santris');
         Schema::dropIfExists('orang_tua_santris');
-
+        Schema::dropIfExists('kegiatan');
+        Schema::dropIfExists('pengumuman');
     }
 };

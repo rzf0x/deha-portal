@@ -13,16 +13,29 @@
         <div class="sidebar-menu">
 
             {{-- Superadmin Sidebar --}}
-            @if (Auth::user()->admin->roles_id == 1)
+            @if (Auth::user()->admin?->roles_id == 1)
             @include('components.layouts.partials.sidebar.sidebar_superadmin')
             {{-- #Superadmin Sidebar --}}
 
             {{-- E-SPP Sidebar --}}
-            @elseif (Auth::user()->admin->roles_id == 2)
+            @elseif (Auth::user()->admin?->roles_id == 2)
             @include('components.layouts.partials.sidebar.sidebar_spp')
+
+            {{-- E-Cashless Sidebar --}}
+            @elseif (Auth::user()->admin?->roles_id == 3)
+            @include('components.layouts.partials.sidebar.sidebar_admin_e_cashless')
+
+            {{-- Petugas Warung Sidebar --}}
+            @elseif (Auth::user()->admin?->roles_id == 4)
+            @include('components.layouts.partials.sidebar.sidebar_petugas_warung')
+
+            {{-- Petugas Laundry Sidebar --}}
+            @elseif (Auth::user()->admin?->roles_id == 5)
+            @include('components.layouts.partials.sidebar.sidebar_petugas_laundry')
+
             {{-- #E-SPP Sidebar --}}
             @else
-            <p>Dua aja dek</p>
+            @include('components.layouts.partials.sidebar.sidebar_santri')
             @endif
             <hr>
             <livewire:Auth.Logout />

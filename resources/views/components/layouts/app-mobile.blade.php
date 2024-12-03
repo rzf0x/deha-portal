@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'Page Title' }}</title>
 
+    <!-- PWA  -->
+    <meta name="theme-color" content="#6777ef" />
+    <link rel="apple-touch-icon" href="{{ asset('logo.png') }}">
+    <link rel="manifest" href="{{ asset('/manifest.json') }}">
+
     <link rel="shortcut icon"
         href="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2033%2034'%20fill-rule='evenodd'%20stroke-linejoin='round'%20stroke-miterlimit='2'%20xmlns:v='https://vecta.io/nano'%3e%3cpath%20d='M3%2027.472c0%204.409%206.18%205.552%2013.5%205.552%207.281%200%2013.5-1.103%2013.5-5.513s-6.179-5.552-13.5-5.552c-7.281%200-13.5%201.103-13.5%205.513z'%20fill='%23435ebe'%20fill-rule='nonzero'/%3e%3ccircle%20cx='16.5'%20cy='8.8'%20r='8.8'%20fill='%2341bbdd'/%3e%3c/svg%3e"
         type="image/x-icon">
@@ -18,7 +23,7 @@
     <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/iconly.css') }}">
 
     {{-- CSS Custom --}}
-    {{-- <link rel="stylesheet" href="{{ asset('custom.css') }}"> --}}
+    <link rel="stylesheet" href="{{ asset('custom.mobile.css') }}">
 </head>
 
 <body>
@@ -28,15 +33,20 @@
 
         {{-- @include('components.layouts.partials.sidebar') --}}
 
-        <div id="" style="display: flex; flex-direction: column; height: 100vh;">
-            <div class="mx-3 overflow-y-auto" style="flex: 1;">
-                <div class="mt-5">
+        <div style="background-color: #FAFAFA; display: flex; flex-direction: column; height: 100vh;">
+            <div class="overflow-x-hidden overflow-y-auto" style="flex: 1;">
+                <div class="">
                     {{ $slot }}
                 </div>
             </div>
 
             <div style="flex-shrink: 0;">
-                @include('components.layouts.partials.mobile.navbar-bottom')
+                @if (request()->routeIs('admin.*'))
+                    @include('components.layouts.partials.mobile.navbar-bottom')
+                @endif
+                @if (request()->routeIs('santri.*'))
+                    @include('components.layouts.partials.mobile.navbar-santri-mobile')
+                @endif
             </div>
         </div>
 
@@ -50,6 +60,23 @@
     <script src="assets/extensions/apexcharts/apexcharts.min.js"></script>
     <script src="assets/static/js/pages/dashboard.js"></script>
 
+    <script src="{{ asset('/sw.js') }}"></script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            // Register a service worker hosted at the root of the
+            // site using the default scope.
+            navigator.serviceWorker.register("/sw.js").then(
+                (registration) => {
+                    console.log("Service worker registration succeeded:", registration);
+                },
+                (error) => {
+                    console.error(`Service worker registration failed: ${error}`);
+                },
+            );
+        } else {
+            console.error("Service workers are not supported.");
+        }
+    </script>
 </body>
 
 </html>

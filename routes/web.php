@@ -1,5 +1,19 @@
 <?php
 
+use App\Livewire\Admin\AdminLaundry\Dashboard as AdminLaundryDashboard;
+use App\Livewire\Admin\AdminWarung\Dashboard as AdminWarungDashboard;
+use App\Livewire\Admin\AdminECashless\Dashboard as AdminECashlessDashboard;
+use App\Livewire\Admin\AdminECashless\HistoryPembayaran;
+use App\Livewire\Admin\AdminECashless\Pembayaran as AdminECashlessPembayaran;
+use App\Livewire\Admin\AdminLaundry\LaundryService;
+use App\Livewire\Admin\AdminLaundry\ListLaundry;
+use App\Livewire\Admin\AdminLaundry\RiwayatTransaksi as TransaksiLaundry;
+use App\Livewire\Admin\AdminWarung\DetailPembayaran;
+use App\Livewire\Admin\AdminWarung\Kategori;
+use App\Livewire\Admin\AdminWarung\Produk;
+use App\Livewire\Admin\AdminWarung\Revenue;
+use App\Livewire\Admin\AdminWarung\TransaksiPesanan;
+use App\Livewire\Admin\AdminWarung\Pembayaran as PembayaranPesanan;
 use App\Livewire\Admin\ListSantri\DetailSantri;
 use App\Livewire\Admin\Spp\DashboardSpp;
 use App\Livewire\Admin\Spp\DetailLaporanCicilanSantri;
@@ -11,6 +25,11 @@ use App\Livewire\Admin\Spp\Pembayaran;
 use App\Livewire\Admin\Spp\PembayaranCicilan;
 use App\Livewire\Admin\Spp\TambahSantri;
 use App\Livewire\Auth\Logout;
+use App\Livewire\Santri\Dashboard;
+use App\Livewire\Santri\Kegiatan;
+use App\Livewire\Santri\Pengumuman;
+use App\Livewire\Santri\Profile;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,7 +52,6 @@ Route::get('/', function () {
 Route::prefix('auth')->group(function () {
     Route::get('/login', App\Livewire\Auth\Login::class)->name('login');
     Route::get('/register', App\Livewire\Auth\Register::class)->name('register');
-
     Route::get('/logout', Logout::class)->name('auth.logout');
 });
 
@@ -75,8 +93,17 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
         // Service
     });
+
+    Route::prefix('master-aktifitas')->group(function(){
+        Route::get('/pengumuman', App\Livewire\Admin\Pengumuman::class)->name('admin.master-aktifitas.pengumuman');
+        Route::get('/kegiatan', App\Livewire\Admin\Kegiatan::class)->name('admin.master-aktifitas.kegiatan');
+    });
 });
 
+Route::get('/optimize-clear', function () {
+    Artisan::call('optimize:clear');
+    return 'Cache berhasil dibersihkan!';
+});
 
 Route::prefix('spp')->middleware('auth')->group(function(){
 
@@ -95,4 +122,32 @@ Route::prefix('spp')->middleware('auth')->group(function(){
 
     Route::get('/kwitansi/spp/{id}', [KwitansiInvoice::class, 'cetakKwitansiPembayaran'])->name('cetak-kwitansi-spp');
     Route::get('/kwitansi/cicilan/{id}', [KwitansiInvoice::class, 'cetakKwitansiCicilan'])->name('cetak-kwitansi-cicilan-spp');
+});
+
+Route::prefix('santri')->middleware('auth')->group(function() {
+    Route::get('/dashboard', Dashboard::class)->name('santri.dashboard');
+    Route::get('/profile', Profile::class)->name('santri.profile');
+    Route::get('/kegiatan', Kegiatan::class)->name('santri.kegiatan');
+    Route::get('/pengumuman', Pengumuman::class)->name('santri.pengumuman');
+});
+Route::prefix('petugas-warung')->middleware('auth')->group(function() {
+    Route::get('/dashboard', AdminWarungDashboard::class)->name('petugas-warung.dashboard');
+    Route::get('/produk', Produk::class)->name('petugas-warung.produk');
+    Route::get('/kategori', Kategori::class)->name('petugas-warung.kategori');
+    Route::get('/pesanan', TransaksiPesanan::class)->name('petugas-warung.pesanan');
+    Route::get('/pembayaran', PembayaranPesanan::class)->name('petugas-warung.pembayaran');
+    Route::get('/detail-pembayaran', DetailPembayaran::class)->name('petugas-warung.detail-pembayaran');
+    Route::get('/revenue', Revenue::class)->name('petugas-warung.revenue');
+
+});
+Route::prefix('petugas-laundry')->middleware('auth')->group(function() {
+    Route::get('/dashboard', AdminLaundryDashboard::class)->name('petugas-laundry.dashboard');
+    Route::get('/list-laundry', ListLaundry::class)->name('petugas-laundry.list-laundry');
+    Route::get('/laundry-service', LaundryService::class)->name('petugas-laundry.laundry-service');
+    Route::get('/riwayat-pesanan', TransaksiLaundry::class)->name('petugas-laundry.pesanan');
+});
+Route::prefix('petugas-e-cashless')->middleware('auth')->group(function() {
+    Route::get('/dashboard', AdminECashlessDashboard::class)->name('petugas-e-cashless.dashboard');
+    Route::get('/pembayaran', AdminECashlessPembayaran::class)->name('petugas-e-cashless.pembayaran');
+    Route::get('/history-pembayaran', HistoryPembayaran::class)->name('petugas-e-cashless.history-pembayaran');
 });

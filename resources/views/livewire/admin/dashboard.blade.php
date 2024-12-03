@@ -21,7 +21,7 @@
         </div>
     </div>
     <div style="gap: 5rem;" class="d-flex flex-column">
-        <div class="row" wire:ignore>
+        <div wire:ignore class="row">
             <div class="col-lg-8">
                 <h4 class="mb-3">Overview Total Santri</h4>
                 <div id="santriChart" class="card rounded-4 p-4 h-100 w-100"></div>
@@ -61,12 +61,12 @@
                                         <td>
                                             @if ($santri->foto)
                                                 <img src="{{ Storage::url('images/santri/' . basename($santri->foto)) }}"
-                                                    class="img-fluid mx-auto"
+                                                    class=""
                                                     style="width: 4rem; height: 4rem; border-radius: 50%; object-fit: cover; background-size: cover;"
                                                     alt="">
                                             @else
                                                 <img src="{{ asset('dist/assets/compiled/jpg/1.jpg') }}"
-                                                    class="img-fluid mx-auto"
+                                                    class=""
                                                     style="width: 4rem; height: 4rem; border-radius: 50%; object-fit: cover;"
                                                     alt="">
                                             @endif
@@ -94,7 +94,7 @@
     </div>
 </section>
 
-<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.45.1/dist/apexcharts.min.js"></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script>
     // Bar Chart (Santri Chart)

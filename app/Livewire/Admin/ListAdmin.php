@@ -6,6 +6,7 @@ use App\Models\admin\Admin;
 use App\Models\admin\Role;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
+use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,6 +16,14 @@ class ListAdmin extends Component
 
     public $admin_id, $user_id, $roles_id;
     #[Title('Halaman List Admin')]
+
+    #[Url(except: "")]
+    public $perPage = 5;
+
+    public function updatedPerPage()
+    {
+        $this->resetPage(); 
+    }
 
     public function create()
     {
@@ -32,13 +41,13 @@ class ListAdmin extends Component
     #[Computed]
     public function listAdmin()
     {
-        return Admin::paginate(5);
+        return Admin::paginate($this->perPage);
     }
 
     #[Computed]
     public function listRoleAdmin()
     {
-        return Role::all();
+        return Role::where('nama', '!=', 'Santri')->get();
     }
 
     public function render()
