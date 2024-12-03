@@ -47,6 +47,10 @@ class Login extends Component
                 return redirect()->route('petugas-warung.dashboard');
             } else if ($result->nama === 'Petugas Laundry') {
                 return redirect()->route('petugas-laundry.dashboard');
+            } else if ($result->nama === 'Guru Diniyyah') {
+                return redirect()->route('e-santri-guru-diniyyah.dashboard');
+            } else if ($result->nama === 'Guru Umum') {
+                return redirect()->route('e-santri-guru-umum.dashboard');
             } else {
                 return redirect()->route('santri.dashboard');
             }
