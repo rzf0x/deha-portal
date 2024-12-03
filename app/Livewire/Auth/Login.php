@@ -16,14 +16,11 @@ class Login extends Component
     #[Validate('required')]
     public $password;
 
-    public $showPassword;
-
     #[Title('Halaman Login')]
 
     public function login()
     {
         $this->validate();
-
         $credentials = [
             'email' => $this->email,
             'password' => $this->password,
@@ -46,7 +43,7 @@ class Login extends Component
             }
         }
         else{
-            session()->flash('error', 'Invalid credentials!');
+            $this->addError('error', 'Invalid credentials!');
         }
 
     }

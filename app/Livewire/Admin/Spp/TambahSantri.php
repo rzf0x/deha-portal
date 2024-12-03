@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Livewire\Admin\Spp;
 
+use App\Models\Jenjang;
+use App\Models\Kelas;
 use App\Models\Santri;
 use App\Models\Spp\Pembayaran;
 use App\Models\Spp\PembayaranTimeline;
-use App\Models\Spp\TipePembayaran;
-use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -14,7 +15,7 @@ use Livewire\WithPagination;
 class TambahSantri extends Component
 {
     use WithPagination;
-    
+
     #[Title('Manajemen SPP Santri')]
 
     protected $paginationTheme = 'bootstrap';
@@ -23,43 +24,71 @@ class TambahSantri extends Component
     public $search = '';
     public $searchSantri = '';
 
-    // Form Properties
+    // Form Properties  
     public $isCreating = true;
     public $selectedSantri = null;
 
-    public $isDropdownVisible = false;
 
     #[Validate('required')]
     public $santri_id = '';
 
-    public function cariListSantri()
+    public $searchTambahResults = [];
+
+    public $filterTambah = [
+        'jenjang' => '',
+        'kelas' => '',
+    ];
+    public $filterList = [
+        'jenjang' => '',
+        'kelas' => '',
+    ];
+
+    public $jenjangs = [], $kelases = [];
+
+    protected $listeners = ['prepareModal' => 'resetForm'];
+
+    public function mount()
     {
-        return Santri::with(['pembayaran', 'kelas', 'kamar'])
-        ->has('pembayaran')
-        ->where('nama', 'like', '%' . $this->search . '%')
-        ->orderBy('nama')
-        ->paginate(10);
-    }
-    
-    public function showDropdown()
-    {
-        $this->isDropdownVisible = true; // Menampilkan dropdown
+        $this->jenjangs = Jenjang::all();
+        $this->kelases = Kelas::all();
     }
 
-    public function hideDropdown()
+    public function cariSantri()
     {
-        $this->isDropdownVisible = false; // Menyembunyikan dropdown
+        $this->resetPage();
     }
-
     // Computed Properties
-    #[Computed()]
-    public function getFilteredSantrisProperty()
+    public function filterTambahSantris()
     {
-        return Santri::where('nama', 'like', '%' . $this->searchSantri . '%')
-        ->with(['kelas', 'kamar'])
-        ->orderBy('nama')
-        ->take(10)
-        ->get();
+        if (empty($this->filterTambah['kelas']) && empty($this->filterTambah['jenjang']) && empty($this->searchSantri)) {
+            $this->addError('messageError', 'Kolom pencarian tidak boleh kosong');
+            $this->searchTambahResults = [];
+            return;
+        }
+        $this->reset('selectedSantri','santri_id');
+
+        $this->searchTambahResults = Santri::with('kelas', 'kelas.jenjang')
+            ->when(!empty($this->filterTambah['jenjang']), function ($query) {
+                return $query->whereHas('kelas.jenjang', function ($subQuery) {
+                    $subQuery->where('nama', $this->filterTambah['jenjang']);
+                });
+            })
+            ->when(!empty($this->filterTambah['kelas']), function ($query) {
+                return $query->whereHas('kelas', function ($subQuery) {
+                    $subQuery->where('nama', $this->filterTambah['kelas']);
+                });
+            })
+            ->when(!empty($this->searchSantri), function ($query) {
+                return $query->where('nama', 'like', '%' . $this->searchSantri . '%');
+            })
+            ->orderBy('nama')
+            ->take(45)->get();
+
+        if ($this->searchTambahResults->isEmpty()) {
+            $this->addError('messageError', 'Santri tidak ditemukan');
+        } else {
+            $this->addError('messageError', '');
+        }
     }
 
     // Actions
@@ -77,8 +106,7 @@ class TambahSantri extends Component
         $existingPembayaran = Pembayaran::where('santri_id', $this->santri_id)->exists();
 
         if ($existingPembayaran) {
-            session()->flash('error', 'Santri sudah ada di pembayaran');
-            $this->dispatch('close-modal');
+            $this->addError('messageError', 'Santri sudah ada di pembayaran');
             return;
         }
 
@@ -88,9 +116,9 @@ class TambahSantri extends Component
                 Pembayaran::create([
                     'santri_id' => $this->santri_id,
                     'pembayaran_timeline_id' => $timeline->id,
-                    'pembayaran_tipe_id' => 1, // Menggunakan ID tipe yang dipilih
-                    'nominal' => 0, // Pastikan nominal sudah diisi dengan benar
-                    'metode_pembayaran' => 'cash', // Pastikan metode pembayaran sudah diisi dengan benar
+                    'pembayaran_tipe_id' => 1,
+                    'nominal' => 0,
+                    'metode_pembayaran' => 'cash',
                     'status' => 'belum bayar'
                 ]);
             };
@@ -99,7 +127,7 @@ class TambahSantri extends Component
             session()->flash('message', 'Pembayaran berhasil ditambahkan!');
             $this->dispatch('close-modal');
         } catch (\Exception $e) {
-            session()->flash('error', 'Terjadi kesalahan saat menyimpan pembayaran: ' . $e->getMessage());
+            $this->addError('messageError', 'Terjadi kesalahan saat menyimpan pembayaran: ' . $e->getMessage());
         }
     }
 
@@ -110,25 +138,41 @@ class TambahSantri extends Component
             Pembayaran::where('santri_id', $santriId)->delete();
             session()->flash('message', 'Pembayaran berhasil dihapus!');
         } catch (\Exception $e) {
-            session()->flash('error', 'Terjadi kesalahan saat menghapus pembayaran!');
+            $this->addError('messageError', 'Terjadi kesalahan saat menghapus pembayaran!');
         }
     }
 
     public function render()
     {
         return view('livewire.admin.spp.tambah-santri', [
-            'santris' => Santri::with(['pembayaran', 'kelas', 'kamar'])
+            'santris' => Santri::with(['kelas', 'kamar'])
                 ->has('pembayaran')
+                ->when(!empty($this->filterList['jenjang']), function ($query) {
+                    return $query->whereHas('kelas.jenjang', function ($subQuery) {
+                        $subQuery->where('nama', $this->filterList['jenjang']);
+                    });
+                })
+                ->when(!empty($this->filterList['kelas']), function ($query) {
+                    return $query->whereHas('kelas', function ($subQuery) {
+                        $subQuery->where('nama', $this->filterList['kelas']);
+                    });
+                })
                 ->where('nama', 'like', '%' . $this->search . '%')
                 ->orderBy('nama')
                 ->paginate(10),
-            'timelineList' => PembayaranTimeline::all(),
-            'tipeList' => TipePembayaran::all(),
-            'filteredSantris' => $this->filteredSantris
         ]);
     }
+
     public function resetForm()
     {
-        $this->reset();
+        $this->reset(
+            'searchSantri',
+            'isCreating',
+            'selectedSantri',
+            'santri_id',
+            'searchTambahResults',
+            'filterList',
+            'filterTambah',
+        );
     }
 }

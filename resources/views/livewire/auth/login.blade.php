@@ -20,27 +20,29 @@
             @endif
 
         </div>
-        <div class="form-group position-relative has-icon-left mb-4">
-            <input required type="{{ $showPassword ? 'text' : 'password' }}" wire:model="password"
-                class="form-control form-control-xl" placeholder="Password">
+        <div x-data="{ show: false }" class="form-group position-relative has-icon-left mb-3">
+            <input required :type="show ? 'text' : 'password'" 
+                   class="form-control form-control-xl" 
+                   placeholder="Password"
+                   wire:model='password'>
             <div class="form-control-icon" style="cursor: pointer;">
                 <i class="bi bi-shield-lock"></i>
             </div>
-            <div class="form-control-icon" style="left:auto; right:0; cursor: pointer;"
-                wire:click="$toggle('showPassword')">
-                <i class="bi {{ $showPassword ? 'bi-eye-slash' : 'bi-eye' }}"></i>
+            <div class="form-control-icon" style="left:auto; right:0; cursor: pointer;" @click="show = !show">
+                <i :class="!show ? 'bi-eye-slash' : 'bi-eye'"></i>
             </div>
             @if ($errors->has('password'))
                 <span class="text-danger">{{ $errors->first('password') }}</span>
             @endif
         </div>
-        <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-5">
+        
+        @error ('error')
+            <div class="text-center text-danger">
+                login gagal, password atau email salah
+            </div>
+        @enderror
+        <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-3">
             Log in <span wire:loading.class="spinner-border spinner-border-sm"></span>
         </button>
-        @if (session()->has('error'))
-            <div class="text-center text-danger">
-                {{ session('error') }}
-            </div>
-        @endif
     </form>
 </div>
