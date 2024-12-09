@@ -15,6 +15,13 @@
             <i class="{{ Request::routeIs('e-santri-guru-diniyyah.jadwal-pelajaran') ? 'bi bi-calendar-fill' : 'bi bi-calendar' }}"></i>
             <span>Jadwal Pelajaran</span>
         </a>
+
+    </li>
+    <li class="sidebar-item {{ Request::routeIs('e-santri-guru-diniyyah.kategori-pelajaran') ? 'active' : '' }}">
+        <a wire:navigate  href="{{ route('e-santri-guru-diniyyah.kategori-pelajaran') }}" class='sidebar-link'>
+            <i class="{{ Request::routeIs('e-santri-guru-diniyyah.kategori-pelajaran') ? 'bi bi-calendar-fill' : 'bi bi-calendar' }}"></i>
+            <span>Kategory Pelajaran</span>
+        </a>
     </li>
     
     <li class="sidebar-item {{ Request::routeIs('e-santri-guru-diniyyah.jadwal-piket') ? 'active' : '' }}">
