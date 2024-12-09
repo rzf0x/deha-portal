@@ -9,7 +9,7 @@ use App\Models\Spp\Pembayaran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Santri extends Model
+class Santri extends Model 
 {
     use HasFactory;
 
@@ -83,5 +83,10 @@ class Santri extends Model
     public function laundry()
     {
         return $this->hasMany(LaundryOrder::class);
+    }
+
+    public function jadwalPiket()
+    {
+        return $this->hasMany(JadwalPiket::class);
     }
 }
