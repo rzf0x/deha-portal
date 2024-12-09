@@ -168,10 +168,21 @@ return new class extends Migration
             $table->dateTime('waktu_selesai');
             $table->timestamps();
         });
+
+        // Tabel Jadwal Piket
+        Schema::create('jadwal_piket', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('santri_id')->constrained('santris')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('kelas_id')->constrained('kelas')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('keterangan');
+            $table->enum('waktu', ['pagi', 'siang', 'sore', 'malam']);
+            $table->enum('hari', ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu']);
+            $table->timestamps();
+        });
     }
 
     /**
-     * Reverse the migrations.
+     * Reverse the migrations.  
      */
     public function down(): void
     {
@@ -188,5 +199,6 @@ return new class extends Migration
         Schema::dropIfExists('orang_tua_santris');
         Schema::dropIfExists('kegiatan');
         Schema::dropIfExists('pengumuman');
+        Schema::dropIfExists('jadwal_piket');
     }
 };
