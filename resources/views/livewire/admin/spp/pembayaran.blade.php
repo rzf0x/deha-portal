@@ -2,16 +2,18 @@
     <!-- Search Form -->
     <div class="form-group sticky-top bg-white p-3 shadow-sm cursor-pointer" style="top: 1rem; z-index: 99;">
         <form wire:submit.prevent="searchSantri" class="d-flex gap-3">
-            <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri..." >
+            <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri...">
             <div class="d-flex gap-3 w-50">
-                <select wire:model='filter.jenjang' class="form-select" name="" id="">
+                <select wire:change='searchSantri' wire:model='filter.jenjang' class="form-select" name=""
+                    id="" wire:loading.attr='disabled'>
                     <option value="">Pilih Jenjang</option>
                     @forelse ($jenjangs as $jenjang)
                         <option value="{{ $jenjang->nama }}">{{ $jenjang->nama }}</option>
                     @empty
                     @endforelse
                 </select>
-                <select wire:model='filter.kelas' class="form-select" name="" id="">
+                <select wire:change='searchSantri' wire:model='filter.kelas' class="form-select" name=""
+                    id="" wire:loading.attr='disabled'>
                     <option value="">Pilih Kelas</option>
                     @forelse ($kelas as $kelas)
                         <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
@@ -24,27 +26,40 @@
         @if ($errorMessage)
             <div class="alert alert-danger mt-3 errorMessage">{{ $errorMessage }}</div>
         @endif
+        @if ($message)
+            <div class="alert alert-success mt-3 message">{{ $message }}</div>
+        @endif
     </div>
 
     <!-- Error Message -->
 
     <!-- Search Results -->
-    <div class="d-flex flex-wrap mt-3">
-        @foreach ($searchResults as $santri)
-            <div wire:click="selectSantri({{ $santri->id }})" class="mx-2 card w-25" style="cursor: pointer;">
-                <img src="{{ $santri->foto }}" class="card-img-top" alt="">
-                <div class="card-body text-center">
-                    <h5 class="card-title">{{ $santri->nama }}</h5>
-                    <p class="card-text">TTL: {{ $santri->tempat_lahir }}, {{ $santri->tanggal_lahir }}</p>
-                    <p class="card-text">Kelas: {{ $santri->kelas->nama }}</p>
-                    <p class="card-text">Jenjang: {{ $santri->kelas->jenjang->nama }}</p>
+    @if (!($santriSelected && $santriSelected?->id))
+        <div class="row mt-3">
+            @foreach ($searchResults as $santri)
+                <div class="col-12 col-md-6 col-lg-4 col-xxl-3">
+                    <div wire:click="selectSantri({{ $santri->id }})" class="card py-4" style="cursor: pointer;">
+                        @if ($santri->foto)
+                            <img {{ Storage::url('images/santri/' . basename($santri?->foto)) }} class="card-img-top"
+                                style="width: 100px; height: 100px; object-fit: cover;" alt="">
+                        @else
+                            <img src="{{ asset('dist/assets/compiled/jpg/1.jpg') }}" class="img-fluid mx-auto"
+                                style="width: 100px; height: 100px; object-fit: cover;" alt="">
+                        @endif
+                        <div class="card-body text-center">
+                            <h5 class="card-title">{{ $santri->nama }}</h5>
+                            <p class="card-text">TTL: {{ $santri->tempat_lahir }}, {{ $santri->tanggal_lahir }}</p>
+                            <p class="card-text">Kelas: {{ $santri->kelas->nama }}</p>
+                            <p class="card-text">Jenjang: {{ $santri->kelas->jenjang->nama }}</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        @endforeach
-    </div>
+            @endforeach
+        </div>
+    @endif
 
     <!-- Santri Biodata and Payment Timeline -->
-    @if ($santriSelected && $santriSelected->id)
+    @if ($santriSelected && $santriSelected?->id)
         <div class="row mt-4">
             <div class="col-12">
                 <!-- Biodata Santri -->
@@ -80,7 +95,7 @@
                                 @if ($item->status === 'lunas') btn-success 
                                 @elseif ($item->status === 'belum bayar') btn-danger 
                                 @else btn-warning @endif">
-                                {{ $item->pembayaranTimeline->nama_bulan }}
+                                {{ $bulanTimeline[$item->id] }}
                             </button>
                         @endforeach
                     </div>
@@ -165,11 +180,12 @@
                                                             wire:loading.attr='disabled'
                                                             wire:model.live.debounce.1ms="buktiPembayaran">
                                                     </div>
+
                                                     @if ($buktiPembayaran)
-                                                        <div class="overflow-y-auto rounded-4" style="height: 25rem;">
-                                                            <img src="{{ $buktiPembayaran->temporaryUrl() }}"
-                                                                alt="Foto"
-                                                                class="rounded-4 object-fit-cover w-100">
+                                                        <div class="rounded-4 w-100">
+                                                            <img src="{{ $buktiPembayaran?->temporaryUrl() }}"
+                                                                alt="Foto" class="rounded-4 object-fit-cover"
+                                                                style="height: 15rem;">
                                                         </div>
                                                     @endif
                                                 @endif
@@ -177,9 +193,11 @@
                                         @endif
                                         @if ($selectedStatus !== 'cicilan')
                                             <div class="d-flex justify-content-end mt-3">
-                                                <button wire:loading.attr="disabled" wire:target='buktiPembayaran'
-                                                    wire:click="updatePembayaran" class="btn btn-primary">Update
-                                                    status pembayaran</button>
+                                                <div class="d-flex justify-content-end">
+                                                    <button wire:loading.attr="disabled" wire:target='buktiPembayaran'
+                                                        wire:click="updatePembayaran" class="btn btn-primary">Update
+                                                        status pembayaran</button>
+                                                </div>
                                             </div>
                                         @endif
                                     </div>
@@ -209,15 +227,18 @@
                                                         wire:model.live.debounce.1ms="buktiPembayaran">
                                                 </div>
                                                 @if ($buktiPembayaran)
-                                                    <div class="overflow-y-auto rounded-4" style="height: 25rem;">
-                                                        <img src="{{ $buktiPembayaran->temporaryUrl() }}"
-                                                            alt="Foto" class="rounded-4 object-fit-cover w-100">
+                                                    <div class="rounded-4 w-100">
+                                                        <img src="{{ $buktiPembayaran?->temporaryUrl() }}"
+                                                            alt="Foto" class="rounded-4 object-fit-cover"
+                                                            style="height: 15rem;">
                                                     </div>
                                                 @endif
                                                 <div class="d-flex justify-content-end">
-                                                    <button wire:loading.attr="disabled" wire:target='buktiPembayaran'
-                                                        class="btn btn-primary" wire:click='$refresh'>Tambahkan
-                                                        Cicilan</button>
+                                                    <button wire:loading.attr="disabled" wire:loading.class="d-none"
+                                                        wire:target='buktiPembayaran' class="btn btn-primary"
+                                                        wire:click='$refresh'>
+                                                        Tambahkan Cicilan
+                                                    </button>
                                                 </div>
                                             </form>
 
@@ -271,6 +292,11 @@
     window.addEventListener('hide-error', event => {
         setTimeout(() => {
             @this.set('errorMessage', '');
-        }, event.detail.delay);
+        }, 2000);
+    });
+    window.addEventListener('hide-message', event => {
+        setTimeout(() => {
+            @this.set('message', '');
+        }, 2000);
     });
 </script>

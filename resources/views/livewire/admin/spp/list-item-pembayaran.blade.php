@@ -1,9 +1,6 @@
 <div>
     @if (session()->has('message'))
-        <div x-data="{ show: true }" 
-             x-show="show" 
-             x-init="setTimeout(() => show = false, 3000)"
-             class="alert alert-success">
+        <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)" class="alert alert-success">
             {{ session('message') }}
         </div>
     @endif
@@ -12,14 +9,14 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="d-flex gap-3">
-                    <select wire:model.live="jenjangFilter" class="form-select">
+                    <select wire:loading.attr='disabled' wire:model.live="jenjangFilter" class="form-select">
                         <option value="">Pilih Jenjang</option>
                         @foreach ($jenjangOptions as $jenjang)
                             <option value="{{ $jenjang->id }}">{{ $jenjang->nama }}</option>
                         @endforeach
                     </select>
 
-                    <select wire:model.live="tipePembayaranFilter" class="form-select">
+                    <select wire:loading.attr='disabled' wire:model.live="tipePembayaranFilter" class="form-select">
                         <option value="">Pilih Tipe</option>
                         @foreach ($tipePembayaranOptions as $id => $nama)
                             <option value="{{ $id }}">{{ $nama }}</option>
@@ -27,7 +24,7 @@
                     </select>
                 </div>
 
-                <button wire:click="create" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#itemPembayaranModal">
+                <button wire:loading.attr='disabled' wire:click="create" class="btn btn-primary">
                     <i class="bi bi-plus-circle"></i> Tambah Data
                 </button>
             </div>
@@ -45,9 +42,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse ($this->getFilteredData as $item)
+                        @forelse ($this->getFilteredData as $index => $item)
                             <tr>
-                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $this->getFilteredData->firstItem() + $index }}</td>
                                 <td>{{ $item->nama }}</td>
                                 <td>
                                     <span class="badge bg-success">
@@ -58,17 +55,11 @@
                                 <td>{{ $item->pembayaranTipe?->nama }}</td>
                                 <td>
                                     <div class="d-flex gap-2">
-                                        <button 
-                                            wire:click="edit({{ $item->id }})" 
-                                            class="btn btn-sm btn-warning"
-                                            data-bs-toggle="modal" 
-                                            data-bs-target="#itemPembayaranModal">
+                                        <button wire:loading.attr='disabled' wire:click="edit({{ $item->id }})" class="btn btn-sm btn-warning">
                                             Edit
                                         </button>
-                                        <button 
-                                            wire:confirm="Yakin ingin menghapus data {{ $item->nama }}?"
-                                            wire:click="delete({{ $item->id }})" 
-                                            class="btn btn-sm btn-danger">
+                                        <button wire:confirm="Yakin ingin menghapus data {{ $item->nama }}?"
+                                            wire:loading.attr='disabled' wire:click="delete({{ $item->id }})" class="btn btn-sm btn-danger">
                                             Hapus
                                         </button>
                                     </div>
@@ -79,6 +70,7 @@
                                 <td colspan="6" class="text-center">Tidak ada data</td>
                             </tr>
                         @endforelse
+                        {{ $this->getFilteredData->links() }}
                     </tbody>
                 </table>
             </div>
@@ -99,9 +91,8 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Nama</label>
-                            <input 
-                                type="text" 
-                                class="form-control @error('ItemPembayaranForm.nama') is-invalid @enderror" 
+                            <input wire:loading.attr='disabled' required type="text"
+                                class="form-control @error('ItemPembayaranForm.nama') is-invalid @enderror"
                                 wire:model="ItemPembayaranForm.nama">
                             @error('ItemPembayaranForm.nama')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -110,9 +101,8 @@
 
                         <div class="mb-3">
                             <label class="form-label">Nominal</label>
-                            <input 
-                                type="number" 
-                                class="form-control @error('ItemPembayaranForm.nominal') is-invalid @enderror" 
+                            <input wire:loading.attr='disabled' required type="number"
+                                class="form-control @error('ItemPembayaranForm.nominal') is-invalid @enderror"
                                 wire:model="ItemPembayaranForm.nominal">
                             @error('ItemPembayaranForm.nominal')
                                 <div class="invalid-feedback">{{ $message }}</div>
@@ -121,8 +111,8 @@
 
                         <div class="mb-3">
                             <label class="form-label">Tipe Pembayaran</label>
-                            <select 
-                                class="form-control @error('ItemPembayaranForm.pembayaran_tipe_id') is-invalid @enderror" 
+                            <select wire:loading.attr='disabled' required
+                                class="form-control @error('ItemPembayaranForm.pembayaran_tipe_id') is-invalid @enderror"
                                 wire:model="ItemPembayaranForm.pembayaran_tipe_id">
                                 <option value="">Pilih Tipe Pembayaran</option>
                                 @foreach ($tipePembayaranOptions as $id => $nama)
@@ -136,8 +126,8 @@
 
                         <div class="mb-3">
                             <label class="form-label">Jenjang</label>
-                            <select 
-                                class="form-control @error('ItemPembayaranForm.jenjang_id') is-invalid @enderror" 
+                            <select wire:loading.attr='disabled' required
+                                class="form-control @error('ItemPembayaranForm.jenjang_id') is-invalid @enderror"
                                 wire:model="ItemPembayaranForm.jenjang_id">
                                 <option value="">Pilih Jenjang</option>
                                 @foreach ($jenjangOptions as $jenjang)
@@ -161,9 +151,13 @@
 
 <script>
     document.addEventListener('livewire:initialized', () => {
-        // Close modal event
-        Livewire.on('modal', () => {
-            bootstrap.Modal.getInstance(document.getElementById('itemPembayaranModal')).hide();
-        });
+    Livewire.on('modal:hide', () => {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('itemPembayaranModal')) || new bootstrap.Modal(document.getElementById('itemPembayaranModal'));
+        modal.hide();
     });
+    Livewire.on('modal:show', () => {
+        const modal = bootstrap.Modal.getInstance(document.getElementById('itemPembayaranModal')) || new bootstrap.Modal(document.getElementById('itemPembayaranModal'));
+        modal.show();
+    });
+});
 </script>

@@ -1,7 +1,8 @@
 <div>
     <div class="form-group sticky-top bg-white p-3 shadow-sm cursor-pointer" style="top: 1rem; z-index: 99;">
-        <select wire:model.live="filter.jenjang" wire:change='generateData' wire:loading.attr="disabled" class="form-select">
-            @foreach ($jenjangs as $jenjang)
+        <select wire:model.live="filter.jenjang" wire:change='generateData' wire:loading.attr="disabled"
+            class="form-select">
+            @foreach ($jenjangOptions as $jenjang)
                 <option value="{{ $jenjang->nama }}">{{ $jenjang->nama }} </option>
             @endforeach
         </select>
@@ -109,6 +110,7 @@
             ]
         },
         yaxis: {
+            min: 0,
             title: {
                 text: 'Jumlah Pembayaran'
             }

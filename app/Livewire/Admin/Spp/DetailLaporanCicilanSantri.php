@@ -15,10 +15,13 @@ class DetailLaporanCicilanSantri extends Component
 
     public $santriId;
     public $santri;
+    
     public $filter = [
         'bulan' => '',
         'tahun' => ''
     ];
+
+    public $cicilan, $tahunList, $bulanList, $total_cicilan, $total_nominal, $total_cicilan_belum_bayar;
 
     public function mount($id, $bulan = null)
     {
@@ -31,8 +34,26 @@ class DetailLaporanCicilanSantri extends Component
             ])
             ->findOrFail($id);
 
-        $this->filter['bulan'] = $bulan ?? Carbon::now()->monthName;
+            $this->filter['bulan'] = $bulan ?? Carbon::now()->monthName;
+            // dd($this->filter['bulan']);
         $this->filter['tahun'] = date('Y');
+        $this->generateData();
+    }
+
+    public function generateData()
+    {
+        $cicilan = $this->getCicilan();
+        $totalPembayaran = DetailItemPembayaran::where('jenjang_id', $this->santri->kelas->jenjang->id)->sum('nominal');
+        $pembayaran_bulan_total = $totalPembayaran * $cicilan->count();
+
+        $total_cicilan_belum_bayar = ($this->filter['bulan'] ? $totalPembayaran : $pembayaran_bulan_total) - $cicilan->sum('nominal');
+
+        $this->cicilan = $cicilan;
+        $this->tahunList = $this->getTahunList();
+        $this->bulanList = $this->getBulanList();
+        $this->total_cicilan = $cicilan->count();
+        $this->total_nominal = $cicilan->sum('nominal');
+        $this->total_cicilan_belum_bayar = $total_cicilan_belum_bayar;
     }
 
     protected function getCicilan()
@@ -54,7 +75,7 @@ class DetailLaporanCicilanSantri extends Component
             })
             ->when($this->filter['bulan'], function ($query) {
                 $query->whereHas('pembayaran.pembayaranTimeline', function ($q) {
-                    $q->where('nama_bulan', $this->filter['bulan']); // Mengambil berdasarkan nama bulan
+                    $q->where('nama_bulan', $this->filter['bulan']);
                 });
             })
             ->orderBy('created_at')
@@ -74,34 +95,23 @@ class DetailLaporanCicilanSantri extends Component
     }
     protected function getBulanList()
     {
-        return Cicilan::with(['pembayaran.pembayaranTimeline'])
-            ->whereHas('pembayaran', function ($query) {
-                $query->where('santri_id', $this->santriId);
-                $query->where('status', 'cicilan');
-            })
-            ->get()
-            ->pluck('pembayaran.pembayaranTimeline.nama_bulan')
-            ->filter()
-            ->unique()
-            ->values()
-            ->toArray();
+        return ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        
+        // return Cicilan::with(['pembayaran.pembayaranTimeline'])
+        //     ->whereHas('pembayaran', function ($query) {
+        //         $query->where('santri_id', $this->santriId);
+        //         $query->where('status', 'cicilan');
+        //     })
+        //     ->get()
+        //     ->pluck('pembayaran.pembayaranTimeline.nama_bulan')
+        //     ->filter()
+        //     ->unique()
+        //     ->values()
+        //     ->toArray();
     }
 
     public function render()
     {
-        $cicilan = $this->getCicilan();
-        $totalPembayaran = DetailItemPembayaran::where('jenjang_id', $this->santri->kelas->jenjang->id)->sum('nominal');
-        $pembayaran_bulan_total = $totalPembayaran * $cicilan->count();
-
-        $total_cicilan_belum_bayar = ($this->filter['bulan'] ? $totalPembayaran : $pembayaran_bulan_total) - $cicilan->sum('nominal');
-
-        return view('livewire.admin.spp.detail-laporan-cicilan-santri', [
-            'cicilan' => $cicilan,
-            'tahunList' => $this->getTahunList(),
-            'bulanList' => $this->getBulanList(),
-            'total_cicilan' => $cicilan->count(),
-            'total_nominal' => $cicilan->sum('nominal'),
-            'total_cicilan_belum_bayar' => $total_cicilan_belum_bayar,
-        ]);
+        return view('livewire.admin.spp.detail-laporan-cicilan-santri');
     }
 }
