@@ -20,6 +20,8 @@ class DashboardGuruDiniyyah extends Component
     public $jadwalPiket = [];
     public $jadwalPelajaran = [];
 
+    public $labels, $series;
+
     public function mount()
     {
         // Hitung total statistik
@@ -28,6 +30,9 @@ class DashboardGuruDiniyyah extends Component
         $this->totalMataPelajaran = JadwalPelajaran::count();
         $this->totalPengumuman = Pengumuman::count();
         
+        $this->labels = ['Mata Pelajaran', 'Kategori Pelajaran', 'Pengumuman'];
+        $this->series = [$this->totalKategoriPelajaran, $this->totalMataPelajaran, $this->totalPengumuman];
+
         // Ambil jadwal piket
         $this->jadwalPiket = JadwalPiket::with(['santri', 'kelas'])
             ->take(10)

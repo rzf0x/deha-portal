@@ -208,67 +208,26 @@
     </div>
 </div>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.45.1/apexcharts.min.js"></script>
 <script>
     var options = {
-        series: [{
-            name: 'Mata Pelajaran',
-            data: [5, 3, 2, 5, 3, 4, 4]
-        }, {
-            name: 'Kategori Pelajaran',
-            data: [2, 4, 3, 4, 2, 5, 2]
-        }, {
-            name: 'Pengumuman',
-            data: [3, 1, 2, 3, 4, 1, 3]
-        }],
+        labels: @json($labels),
+        series: @json($series),
+        colors: ['#4A90E2', '#50E3C2', '#F5A623'],
         chart: {
-            height: 350,
-            type: 'line',
-            toolbar: {
-                show: false
+            type: 'donut',
+            height: 350
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
             }
-        },
-        colors: ['#0d6efd', '#198754'],
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'smooth',
-            width: 3
-        },
-        // grid: {
-        //     borderColor: '#e7e7e7',
-        //     row: {
-        //         colors: ['#f3f3f3', 'transparent'],
-        //         opacity: 0.5
-        //     },
-        // },
-        markers: {
-            size: 1
-        },
-        xaxis: {
-            categories: ['10 Mar', '11 Mar', '12 Mar', '13 Mar', '14 Mar', '15 Mar', '16 Mar'],
-            // title: {
-            //     text: 'Tanggal'
-            // }
-        },
-        yaxis: {
-            // title: {
-            //     text: 'Jumlah (Rp)'
-            // },
-            labels: {
-                formatter: function(val) {
-                    return val.toFixed(0);
-                }
-            }
-        },
+        }],
         legend: {
             position: 'top',
-            horizontalAlign: 'right',
-            floating: true,
-            offsetY: -25,
-            offsetX: -5
         },
         tooltip: {
             y: {
