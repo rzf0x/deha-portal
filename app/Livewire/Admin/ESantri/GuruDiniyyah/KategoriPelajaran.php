@@ -19,19 +19,11 @@ class KategoriPelajaran extends Component
     
     public $kategoriPelajaranId;
     public $detailKategoriPelajaran;
-    public $search = '';
 
     #[Computed()]
     public function listKategoriPelajaran()
     {
-        return ModelsKategoriPelajaran::where('nama', 'like', '%' . $this->search . '%')
-            ->orWhere('deskripsi', 'like', '%' . $this->search . '%')
-            ->paginate(10);
-    }
-
-    public function updatingSearch()
-    {
-        $this->resetPage();
+        return ModelsKategoriPelajaran::paginate(10);
     }
 
     public function create()
@@ -48,8 +40,7 @@ class KategoriPelajaran extends Component
             ModelsKategoriPelajaran::create($this->kategoriPelajaranForm->all());
             
             session()->flash('success', 'Kategori Pelajaran baru berhasil dibuat!');
-            $this->dispatch('close-modal');
-            $this->reset('search');
+            $this->dispatch('closeModalCreateOrUpdate');
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
@@ -71,7 +62,7 @@ class KategoriPelajaran extends Component
                 ->update($this->kategoriPelajaranForm->all());
             
             session()->flash('success', 'Kategori Pelajaran berhasil diupdate!');
-            $this->dispatch('close-modal');
+            $this->dispatch('closeModalCreateOrUpdate');
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
@@ -97,7 +88,7 @@ class KategoriPelajaran extends Component
         }
     }
 
-    public function detailKategoriPelajaran($id)
+    public function getDetailKategoriPelajaran($id)
     {
         $this->detailKategoriPelajaran = ModelsKategoriPelajaran::findOrFail($id);
     }
