@@ -60,7 +60,7 @@ class JadwalPiket extends Component
         try {
             $this->jadwalPiketForm->validate();
 
-            ModelsJadwalPiket::create($this->pengumumanForm->all());
+            ModelsJadwalPiket::create($this->jadwalPiketForm->all());
 
             session()->flash('success', 'Jadwal piket berhasil ditambahkan!');
 
