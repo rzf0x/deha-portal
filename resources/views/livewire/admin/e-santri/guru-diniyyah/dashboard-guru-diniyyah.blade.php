@@ -7,7 +7,7 @@
                     <div class="flex-grow-1">
                         <h6 class="text-muted mb-2">Total guru diniyyah</h6>
                         <div class="d-flex align-items-end justify-content-between">
-                            <h4 class="mb-0">27 Guru</h4>
+                            <h4 class="mb-0">{{ $totalGuruDiniyyah }} Guru</h4>
                         </div>
                     </div>
                 </div>
@@ -19,7 +19,7 @@
                     <div class="flex-grow-1">
                         <h6 class="text-muted mb-2">Total Mata Pelajaran</h6>
                         <div class="d-flex align-items-end justify-content-between">
-                            <h4 class="mb-0">27 Pelajaran</h4>
+                            <h4 class="mb-0">{{ $totalMataPelajaran }} Pelajaran</h4>
                         </div>
                     </div>
                 </div>
@@ -31,7 +31,7 @@
                     <div class="flex-grow-1">
                         <h6 class="text-muted mb-2">Total Kategori Pelajaran</h6>
                         <div class="d-flex align-items-end justify-content-between">
-                            <h4 class="mb-0">527 Kategori</h4>
+                            <h4 class="mb-0">{{ $totalKategoriPelajaran }} Kategori</h4>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                 <div class="card-body">
                     <div class="flex-grow-1">
                         <h6 class="text-muted mb-2">Total Pengumuman Mendatang</h6>
-                        <h4 class="mb-0">27 Pengumuman</h4>
+                        <h4 class="mb-0">{{ $totalPengumuman }} Pengumuman</h4>
                     </div>
                 </div>
             </div>
@@ -135,7 +135,7 @@
         <div class="card-body mt-4">
             <div class="tab-content">
                 <!-- Jadwal Piket -->
-                <div class="tab-pane fade show active" id="warung">
+                <div class="tab-pane fade show active" id="jadwal-piket">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
@@ -149,41 +149,56 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Asep Subardjo</td>
-                                    <td>Kelas XI A</td>
-                                    <td>Membersihkan Kelas</td>
-                                    <td>pagi</td>
-                                    <td>selasa</td>
-                                </tr>
+                                @forelse($jadwalPiket as $piket)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>{{ $piket->santri->nama ?? 'N/A' }}</td>
+                                        <td>{{ $piket->kelas->nama ?? 'N/A' }}</td>
+                                        <td>{{ $piket->keterangan }}</td>
+                                        <td>{{ $piket->waktu }}</td>
+                                        <td>{{ $piket->hari }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="6" class="text-center">Tidak ada jadwal piket</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
                 </div>
-                {{-- Mata Pelajaran --}}
-                <div class="tab-pane fade" id="laundry">
+
+                <!-- Mata Pelajaran -->
+                <div class="tab-pane fade" id="mata-pelajaran">
                     <div class="table-responsive">
                         <table class="table table-hover">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Santri</th>
-                                    <th>Kelas</th>
-                                    <th>Keterangan</th>
-                                    <th>Waktu</th>
+                                    <th>Mata Pelajaran</th>
+                                    <th> Kelas</th>
+                                    <th>Kategori</th>
+                                    <th>Waktu Mulai</th>
+                                    <th>Waktu Selesai</th>
                                     <th>Hari</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>Asep Subardjo</td>
-                                    <td>Kelas XI A</td>
-                                    <td>Membersihkan Kelas</td>
-                                    <td>pagi</td>
-                                    <td>selasa</td>
-                                </tr>
+                                @forelse($jadwalPelajaran as $index => $pelajaran)
+                                    <tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $pelajaran->mata_pelajaran }}</td>
+                                        <td>{{ $pelajaran->kelas->nama ?? 'N/A' }}</td>
+                                        <td>{{ $pelajaran->kategoriPelajaran->nama ?? 'N/A' }}</td>
+                                        <td>{{ $pelajaran->waktu_mulai }}</td>
+                                        <td>{{ $pelajaran->waktu_selesai }}</td>
+                                        <td>{{ $pelajaran->hari }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="7" class="text-center">Tidak ada mata pelajaran</td>
+                                    </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>

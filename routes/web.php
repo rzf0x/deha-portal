@@ -109,7 +109,7 @@ Route::prefix('e-santri')->middleware('auth')->group(function () {
     Route::prefix('guru-diniyyah')->group(function () {
         Route::get('/dashboard', GuruDiniyyah\DashboardGuruDiniyyah::class)->name('e-santri-guru-diniyyah.dashboard');
         Route::get('/jadwal-pelajaran', GuruDiniyyah\JadwalPelajaran::class)->name('e-santri-guru-diniyyah.jadwal-pelajaran');
-        Route::get('/kategori-pelajaran', GuruDiniyyah\JadwalPelajaran::class)->name('e-santri-guru-diniyyah.kategori-pelajaran');
+        Route::get('/kategori-pelajaran', GuruDiniyyah\KategoriPelajaran::class)->name('e-santri-guru-diniyyah.kategori-pelajaran');
         Route::get('/jadwal-piket', GuruDiniyyah\JadwalPiket::class)->name('e-santri-guru-diniyyah.jadwal-piket');
         Route::get('/pengumuman', GuruDiniyyah\Pengumuman::class)->name('e-santri-guru-diniyyah.pengumuman');
     });
