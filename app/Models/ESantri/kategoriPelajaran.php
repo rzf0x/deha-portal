@@ -1,5 +1,5 @@
 <?php
-namespace App\Models;
+namespace App\Models\ESantri;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,7 +9,8 @@ class KategoriPelajaran extends Model
     
     protected $fillable = [
         'nama',
-        'deskripsi'
+        'deskripsi',
+        'role_guru'
     ];
 
     public function jadwalPelajaran()

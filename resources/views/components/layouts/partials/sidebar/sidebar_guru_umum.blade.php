@@ -3,17 +3,24 @@
 
     <li class="sidebar-item {{ Request::routeIs('e-santri-guru-umum.dashboard') ? 'active' : '' }}">
         <a href="{{ route('e-santri-guru-umum.dashboard') }}" class='sidebar-link'>
-            <i class="{{ Request::routeIs('e-santri-guru-diniyyah.dashboard') ? 'bi bi-house-fill' : 'bi bi-house' }}"></i>
+            <i class="{{ Request::routeIs('e-santri-guru-umum.dashboard') ? 'bi bi-house-fill' : 'bi bi-house' }}"></i>
             <span>Dashboard</span>
         </a>
     </li>
-    
+
     <li class="sidebar-title">Lainnya</li>
 
     <li class="sidebar-item {{ Request::routeIs('e-santri-guru-umum.jadwal-pelajaran') ? 'active' : '' }}">
         <a wire:navigate  href="{{ route('e-santri-guru-umum.jadwal-pelajaran') }}" class='sidebar-link'>
             <i class="{{ Request::routeIs('e-santri-guru-umum.jadwal-pelajaran') ? 'bi bi-calendar-fill' : 'bi bi-calendar' }}"></i>
             <span>Jadwal Pelajaran</span>
+        </a>
+
+    </li>
+    <li class="sidebar-item {{ Request::routeIs('e-santri-guru-umum.kategori-pelajaran') ? 'active' : '' }}">
+        <a wire:navigate  href="{{ route('e-santri-guru-umum.kategori-pelajaran') }}" class='sidebar-link'>
+            <i class="{{ Request::routeIs('e-santri-guru-umum.kategori-pelajaran') ? 'bi bi-calendar-fill' : 'bi bi-calendar' }}"></i>
+            <span>Kategory Pelajaran</span>
         </a>
     </li>
     

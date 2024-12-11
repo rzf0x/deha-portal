@@ -124,7 +124,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Kelas</label>
-                            <select class="form-control" wire:model.live="jadwalPelajaranForm.kelas_id">
+                            <select class="form-control" required wire:model.live="jadwalPelajaranForm.kelas_id">
                                 <option value="">Pilih Kelas</option>
                                 @foreach ($kelasList as $kelasItem)
                                     <option value="{{ $kelasItem->id }}">{{ $kelasItem->nama }}</option>
@@ -137,7 +137,8 @@
 
                         <div class="mb-3">
                             <label class="form-label">Kategori Pelajaran</label>
-                            <select class="form-control" wire:model.live="jadwalPelajaranForm.kategori_pelajaran_id">
+                            <select class="form-control" required
+                                wire:model.live="jadwalPelajaranForm.kategori_pelajaran_id">
                                 <option value="">Pilih Kategori Pelajaran</option>
                                 @foreach ($kategoriPelajaranList as $kategoriItem)
                                     <option value="{{ $kategoriItem->id }}">{{ $kategoriItem->nama }}</option>
@@ -150,7 +151,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Mata Pelajaran</label>
-                            <input type="text" required class="form-control"
+                            <input type="text" class="form-control" required
                                 wire:model.live="jadwalPelajaranForm.mata_pelajaran">
                             @error('jadwalPelajaranForm.mata_pelajaran')
                                 <span class="text-danger">{{ $message }}</span>
@@ -159,7 +160,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Waktu Mulai</label>
-                            <input type="time" required class="form-control"
+                            <input type="time" class="form-control" required
                                 wire:model.live="jadwalPelajaranForm.waktu_mulai">
                             @error('jadwalPelajaranForm.waktu_mulai')
                                 <span class="text-danger">{{ $message }}</span>
@@ -168,7 +169,7 @@
 
                         <div class="mb-3">
                             <label class="form-label">Waktu Selesai</label>
-                            <input type="time" required class="form-control"
+                            <input type="time" class="form-control" required
                                 wire:model.live="jadwalPelajaranForm.waktu_selesai">
                             @error('jadwalPelajaranForm.waktu_selesai')
                                 <span class="text-danger">{{ $message }}</span>
@@ -177,15 +178,11 @@
 
                         <div class="mb-3">
                             <label class="form-label">Hari</label>
-                            <select class="form-control" wire:model.live="jadwalPelajaranForm.hari">
+                            <select class="form-control" required wire:model.live="jadwalPelajaranForm.hari">
                                 <option value="">Pilih Hari</option>
-                                <option value="senin">Senin</option>
-                                <option value="selasa">Selasa</option>
-                                <option value="rabu">Rabu</option>
-                                <option value="kamis">Kamis</option>
-                                <option value="jumat">Jumat</option>
-                                <option value="sabtu">Sabtu</option>
-                                <option value="minggu">Minggu</option>
+                                @foreach ($hariList as $hari)
+                                    <option value="{{ $hari }}">{{ $hari }}</option>
+                                @endforeach
                             </select>
                             @error('jadwalPelajaranForm.hari')
                                 <span class="text-danger">{{ $message }}</span>

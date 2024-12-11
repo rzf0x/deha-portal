@@ -1,18 +1,15 @@
 <?php
 namespace App\Livewire\Forms;
 
+use Livewire\Attributes\Validate;
 use Livewire\Form;
 
 class KategoriPelajaranForm extends Form
 {
+    #[Validate('required|string|unique:kategori_pelajaran,nama')]
     public $nama;
+    #[Validate('nullable|string')]
     public $deskripsi;
-
-    public function rules()
-    {
-        return [
-            'nama' => 'required|string|max:255|unique:kategori_pelajaran,nama',
-            'deskripsi' => 'nullable|string|max:500'
-        ];
-    }
+    #[Validate('required|in:diniyyah,umum')]
+    public $role_guru;
 }
