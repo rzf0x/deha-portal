@@ -116,6 +116,7 @@ Route::prefix('e-santri')->middleware('auth')->group(function () {
     Route::prefix('guru')->group(function () {
         Route::get('/dashboard', GuruUmum\DashboardGuruUmum::class)->name('e-santri-guru-umum.dashboard');
         Route::get('/jadwal-pelajaran', GuruUmum\JadwalPelajaran::class)->name('e-santri-guru-umum.jadwal-pelajaran');
+        Route::get('/kategori-pelajaran', GuruUmum\KategoriPelajaran::class)->name('e-santri-guru-umum.kategori-pelajaran');
         Route::get('/jadwal-piket', GuruUmum\JadwalPiket::class)->name('e-santri-guru-umum.jadwal-piket');
         Route::get('/pengumuman', GuruUmum\Pengumuman::class)->name('e-santri-guru-umum.pengumuman');
     });

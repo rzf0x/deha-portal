@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Admin\ESantri\GuruDiniyyah;
+namespace App\Livewire\Admin\ESantri\GuruUmum;
 
 use App\Livewire\Forms\KategoriPelajaranForm;
 use App\Models\ESantri\KategoriPelajaran as ModelsKategoriPelajaran;
@@ -25,7 +25,7 @@ class KategoriPelajaran extends Component
     #[Computed()]
     public function listKategoriPelajaran()
     {
-        return ModelsKategoriPelajaran::where('role_guru', 'diniyyah')->paginate(10);
+        return ModelsKategoriPelajaran::where('role_guru', 'umum')->paginate(10);
     }
 
     public function create()
@@ -37,7 +37,7 @@ class KategoriPelajaran extends Component
     public function createKategoriPelajaran()
     {
         try {
-            $this->kategoriPelajaranForm->role_guru = 'diniyyah';
+            $this->kategoriPelajaranForm->role_guru = 'umum';
             $this->kategoriPelajaranForm->validate();
 
             ModelsKategoriPelajaran::create($this->kategoriPelajaranForm->all());
@@ -59,7 +59,7 @@ class KategoriPelajaran extends Component
     public function updateKategoriPelajaran()
     {
         try {
-            $this->kategoriPelajaranForm->role_guru = 'diniyyah';
+            $this->kategoriPelajaranForm->role_guru = 'umum';
             $this->kategoriPelajaranForm->validate();
 
             ModelsKategoriPelajaran::findOrFail($this->kategoriPelajaranId)
@@ -98,7 +98,7 @@ class KategoriPelajaran extends Component
 
     public function render()
     {
-        return view('livewire.admin.e-santri.guru-diniyyah.kategori-pelajaran', [
+        return view('livewire.admin.e-santri.guru-umum.kategori-pelajaran', [
             'listKategoriPelajaran' => $this->listKategoriPelajaran(),
         ]);
     }

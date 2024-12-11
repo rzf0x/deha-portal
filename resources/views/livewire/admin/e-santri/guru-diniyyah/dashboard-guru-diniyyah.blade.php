@@ -93,21 +93,19 @@
                 <ul class="nav nav-tabs card-header-tabs col-12 col-md-7 d-flex align-items-center mb-2 mb-md-0"
                     role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" data-bs-toggle="tab" href="#warung">Jadwal Piket</a>
+                        <a class="nav-link active" data-bs-toggle="tab" href="#jadwal-piket">Jadwal Piket</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="tab" href="#laundry">Mata Pelajaran</a>
+                        <a class="nav-link" data-bs-toggle="tab" href="#mata-pelajaran">Mata Pelajaran</a>
                     </li>
                 </ul>
                 <div
                     class="col-12 col-md-5 d-flex mt-md-0 mt-4 flex-column flex-md-row justify-content-md-end align-items-start align-items-md-center gap-2">
-                    <input type="text" class="form-control" placeholder="Search" />
 
                     <select class="form-select" aria-label="Filter Kelas">
-                        <option value="2024">Kelas X A</option>
-                        <option value="2023">Kelas X B</option>
-                        <option value="2022">Kelas XI A</option>
-                        <option value="2021">Kelas XI B</option>
+                        @foreach ($kelasList as $kelas)
+                        <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
+                        @endforeach
                     </select>
                     <select class="form-select" aria-label="Filter Bulan">
                         <option value="1">Januari</option>
@@ -184,9 +182,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse($jadwalPelajaran as $index => $pelajaran)
+                                @forelse($jadwalPelajaran as $pelajaran)
                                     <tr>
-                                        <td>{{ $index + 1 }}</td>
+                                        <td>{{ $loop->iteration }}</td>
                                         <td>{{ $pelajaran->mata_pelajaran }}</td>
                                         <td>{{ $pelajaran->kelas->nama ?? 'N/A' }}</td>
                                         <td>{{ $pelajaran->kategoriPelajaran->nama ?? 'N/A' }}</td>
@@ -208,67 +206,26 @@
     </div>
 </div>
 
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/apexcharts/3.45.1/apexcharts.min.js"></script>
 <script>
     var options = {
-        series: [{
-            name: 'Mata Pelajaran',
-            data: [5, 3, 2, 5, 3, 4, 4]
-        }, {
-            name: 'Kategori Pelajaran',
-            data: [2, 4, 3, 4, 2, 5, 2]
-        }, {
-            name: 'Pengumuman',
-            data: [3, 1, 2, 3, 4, 1, 3]
-        }],
+        labels: @json($labels),
+        series: @json($series),
+        colors: ['#4A90E2', '#50E3C2', '#F5A623'],
         chart: {
-            height: 350,
-            type: 'line',
-            toolbar: {
-                show: false
+            type: 'donut',
+            height: 350
+        },
+        responsive: [{
+            breakpoint: 480,
+            options: {
+                chart: {
+                    width: 200
+                },
             }
-        },
-        colors: ['#0d6efd', '#198754'],
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'smooth',
-            width: 3
-        },
-        // grid: {
-        //     borderColor: '#e7e7e7',
-        //     row: {
-        //         colors: ['#f3f3f3', 'transparent'],
-        //         opacity: 0.5
-        //     },
-        // },
-        markers: {
-            size: 1
-        },
-        xaxis: {
-            categories: ['10 Mar', '11 Mar', '12 Mar', '13 Mar', '14 Mar', '15 Mar', '16 Mar'],
-            // title: {
-            //     text: 'Tanggal'
-            // }
-        },
-        yaxis: {
-            // title: {
-            //     text: 'Jumlah (Rp)'
-            // },
-            labels: {
-                formatter: function(val) {
-                    return val.toFixed(0);
-                }
-            }
-        },
+        }],
         legend: {
             position: 'top',
-            horizontalAlign: 'right',
-            floating: true,
-            offsetY: -25,
-            offsetX: -5
         },
         tooltip: {
             y: {

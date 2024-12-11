@@ -40,14 +40,14 @@
                 </div>
                 
                 <div class="col-12 col-md-6  d-flex gap-2 mt-2 mt-md-0">
-                    <select wire:model.live="filter.kelas" class="form-control" required>
+                    <select wire:model.live="filter.kelas" class="form-control">
                         <option value="">Kelas</option>
                         @foreach ($kelasList as $kelas)
                             <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
                         @endforeach
                     </select>
                     
-                    <select wire:model.live="filter.hari" class="form-control" required>
+                    <select wire:model.live="filter.hari" class="form-control">
                         <option value="">Hari</option>
                         @foreach ($hariList as $hari)
                             <option value="{{ $hari }}">{{ $hari }}</option>

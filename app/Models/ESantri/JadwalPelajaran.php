@@ -1,5 +1,7 @@
 <?php
-namespace App\Models;
+namespace App\Models\ESantri;
+
+use App\Models\Kelas;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +15,8 @@ class JadwalPelajaran extends Model
         'mata_pelajaran', 
         'waktu_mulai', 
         'waktu_selesai', 
-        'hari'
+        'hari',
+        'role_guru'
     ];
 
     public function kelas()
@@ -25,10 +28,4 @@ class JadwalPelajaran extends Model
     {
         return $this->belongsTo(kategoriPelajaran::class);
     }
-
-    protected $casts = [
-        'waktu_mulai' => 'datetime:H:i',
-        'waktu_selesai' => 'datetime:H:i'
-    ];
-    
 }

@@ -177,6 +177,7 @@ return new class extends Migration
             $table->string('keterangan');
             $table->enum('waktu', ['pagi', 'siang', 'sore', 'malam']);
             $table->enum('hari', ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu']);
+            $table->enum('role_guru', ['diniyyah', 'umum'])->default('umum');
             $table->timestamps();
         });
 
@@ -184,9 +185,10 @@ return new class extends Migration
             $table->id();
             $table->string('nama');
             $table->string('deskripsi');
+            $table->enum('role_guru', ['diniyyah', 'umum'])->default('umum');
             $table->timestamps();
         });
-        
+
         Schema::create('jadwal_pelajaran', function (Blueprint $table) {
             $table->id();
             $table->foreignId('kelas_id')->constrained('kelas')->onUpdate('cascade')->onDelete('cascade');
@@ -195,9 +197,9 @@ return new class extends Migration
             $table->time('waktu_mulai');
             $table->time('waktu_selesai');
             $table->enum('hari', ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu']);
+            $table->enum('role_guru', ['diniyyah', 'umum'])->default('umum');
             $table->timestamps();
         });
-
     }
 
     /**
