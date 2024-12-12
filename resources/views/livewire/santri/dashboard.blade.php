@@ -134,29 +134,17 @@
                         </div>
                     </div>
                     <div class="mt-3 d-flex flex-column gap-md-3 gap-2">
-                        <div style="background-color: #f5f5f5"
-                            class="d-flex justify-content-between align-items-center py-2 px-3 rounded">
-                            <div>
-                                <h6 class="fw-medium mb-2">Tahfidz</h6>
-                                <p class="card-subtitle mb-0">04:30 - 06:00</p>
-                            </div>
-                            <span class="badge bg-success">Sekarang</span>
+                        <div class="py-2 px-3 rounded" style="background-color: #f5f5f5">
+                            <h6 class="fw-medium mb-2">Tahfidz</h6>
+                            <p class="card-subtitle mb-0">04:30 - 06:00</p>
                         </div>
-                        <div style="background-color: #f5f5f5"
-                            class="d-flex justify-content-between align-items-center py-2 px-3 rounded">
-                            <div>
-                                <h6 class="fw-medium mb-2">Tahfidz</h6>
-                                <p class="card-subtitle mb-0">04:30 - 06:00</p>
-                            </div>
-                            <span class="badge bg-success">Sekarang</span>
+                        <div class="py-2 px-3 rounded" style="background-color: #f5f5f5">
+                            <h6 class="fw-medium mb-2">Tahfidz</h6>
+                            <p class="card-subtitle mb-0">04:30 - 06:00</p>
                         </div>
-                        <div style="background-color: #f5f5f5"
-                            class="d-flex justify-content-between align-items-center py-2 px-3 rounded">
-                            <div>
-                                <h6 class="fw-medium mb-2">Tahfidz</h6>
-                                <p class="card-subtitle mb-0">04:30 - 06:00</p>
-                            </div>
-                            <span class="badge bg-success">Sekarang</span>
+                        <div class="py-2 px-3 rounded" style="background-color: #f5f5f5">
+                            <h6 class="fw-medium mb-2">Tahfidz</h6>
+                            <p class="card-subtitle mb-0">04:30 - 06:00</p>
                         </div>
                     </div>
                 </div>

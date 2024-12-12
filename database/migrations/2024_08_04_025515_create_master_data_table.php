@@ -177,6 +177,27 @@ return new class extends Migration
             $table->string('keterangan');
             $table->enum('waktu', ['pagi', 'siang', 'sore', 'malam']);
             $table->enum('hari', ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu']);
+            $table->enum('role_guru', ['diniyyah', 'umum'])->default('umum');
+            $table->timestamps();
+        });
+
+        Schema::create('kategori_pelajaran', function (Blueprint $table) {
+            $table->id();
+            $table->string('nama');
+            $table->string('deskripsi');
+            $table->enum('role_guru', ['diniyyah', 'umum'])->default('umum');
+            $table->timestamps();
+        });
+
+        Schema::create('jadwal_pelajaran', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('kelas_id')->constrained('kelas')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreignId('kategori_pelajaran_id')->constrained('kategori_pelajaran')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('mata_pelajaran');
+            $table->time('waktu_mulai');
+            $table->time('waktu_selesai');
+            $table->enum('hari', ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu']);
+            $table->enum('role_guru', ['diniyyah', 'umum'])->default('umum');
             $table->timestamps();
         });
     }
@@ -200,5 +221,7 @@ return new class extends Migration
         Schema::dropIfExists('kegiatan');
         Schema::dropIfExists('pengumuman');
         Schema::dropIfExists('jadwal_piket');
+        Schema::dropIfExists('jadwal_pelajaran');
+        Schema::dropIfExists('kategori_pelajaran');
     }
 };

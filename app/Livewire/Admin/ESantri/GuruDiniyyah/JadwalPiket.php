@@ -3,9 +3,10 @@
 namespace App\Livewire\Admin\ESantri\GuruDiniyyah;
 
 use App\Livewire\Forms\JadwalPiket as FormsJadwalPiket;
-use App\Models\JadwalPiket as ModelsJadwalPiket;
+use App\Models\ESantri\JadwalPiket as ModelsJadwalPiket;
 use App\Models\Santri;
 use App\Models\Kelas;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -20,8 +21,8 @@ class JadwalPiket extends Component
 
     public FormsJadwalPiket $jadwalPiketForm;
 
-    public $hariList;
-    public $waktuList;
+    public $hariList = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
+    public $waktuList = ['pagi', 'siang', 'sore', 'malam'];
 
     public $santris, $kelasList;
     public $jadwalPiketId;
@@ -39,8 +40,6 @@ class JadwalPiket extends Component
     {
         $this->santris = Santri::all();
         $this->kelasList = Kelas::all();
-        $this->hariList = ModelsJadwalPiket::$hariList;
-        $this->waktuList = ModelsJadwalPiket::$waktuList;
     }
 
     public function resetFields()
@@ -58,9 +57,10 @@ class JadwalPiket extends Component
     public function store()
     {
         try {
+            $this->jadwalPiketForm->role_guru = 'diniyyah';
             $this->jadwalPiketForm->validate();
 
-            ModelsJadwalPiket::create($this->pengumumanForm->all());
+            ModelsJadwalPiket::create($this->jadwalPiketForm->all());
 
             session()->flash('success', 'Jadwal piket berhasil ditambahkan!');
 
@@ -80,20 +80,19 @@ class JadwalPiket extends Component
     public function update()
     {
         try {
+            $this->jadwalPiketForm->role_guru = 'diniyyah';
             $this->jadwalPiketForm->validate();
-            
-            $jadwal = ModelsJadwalPiket::findOrFail($this->jadwalPiketId);
-            $jadwal->update($this->jadwalPiketForm->all());
-    
+
+            ModelsJadwalPiket::findOrFail($this->jadwalPiketId)->update($this->jadwalPiketForm->all());
+
             session()->flash('success', 'Jadwal piket berhasil diperbarui!');
 
             $this->dispatch("close-modal-createOrUpdate");
-            
+
             $this->resetFields();
         } catch (\Exception $e) {
             session()->flash('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
-        
     }
 
     public function delete($id)
@@ -107,6 +106,7 @@ class JadwalPiket extends Component
     public function getJadwalList()
     {
         return ModelsJadwalPiket::with('santri', 'kelas')
+            ->where('role_guru', 'diniyyah')
             ->when(!empty($this->filter['hari']), function ($query) {
                 return $query->where('hari', $this->filter['hari']);
             })
@@ -122,7 +122,7 @@ class JadwalPiket extends Component
             })
             ->paginate(10);
     }
-    
+
     public function render()
     {
         return view('livewire.admin.e-santri.guru-diniyyah.jadwal-piket', [

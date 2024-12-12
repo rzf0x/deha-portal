@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\ESantri\GuruDiniyyah;
 
 use App\Livewire\Forms\PengumumanForm;
 use App\Models\Pengumuman as ModelsPengumuman;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -18,7 +19,7 @@ class Pengumuman extends Component
 
     public PengumumanForm $pengumumanForm;
     public $pengumumanId, $detailPengumumanSantri;
-
+    
     #[Computed]
     public function listPengumuman()
     {
@@ -34,11 +35,7 @@ class Pengumuman extends Component
     public function createPengumuman()
     {
         try {
-            $this->pengumumanForm->validate([
-                'judul' => 'required',
-                'isi_pengumuman' => 'required',
-                'tanggal' => 'required|date',
-            ]);
+            $this->pengumumanForm->validate();
 
             ModelsPengumuman::create($this->pengumumanForm->all());
 
@@ -60,11 +57,7 @@ class Pengumuman extends Component
     public function updatePengumuman()
     {
         try {
-            $this->pengumumanForm->validate([
-                'judul' => 'required',
-                'isi_pengumuman' => 'required',
-                'tanggal' => 'required|date',
-            ]);
+            $this->pengumumanForm->validate();
 
             ModelsPengumuman::findOrFail($this->pengumumanId)->update($this->pengumumanForm->all());
 

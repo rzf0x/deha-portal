@@ -94,7 +94,7 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <label class="form-label">Judul</label>
-                            <input type="text" required class="form-control" wire:model.live="pengumumanForm.judul">
+                            <input type="text" class="form-control" required wire:model.live="pengumumanForm.judul">
                             @error('pengumumanForm.judul')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror
@@ -108,8 +108,8 @@
                         </div>
                         <div class="mb-3">
                             <label class="form-label">Tanggal</label>
-                            <input type="date" required class="form-control"
-                                wire:model.live="pengumumanForm.tanggal">
+                            <input type="date" class="form-control"
+                                required wire:model.live="pengumumanForm.tanggal">
                             @error('pengumumanForm.tanggal')
                                 <span class="text-danger">{{ $message }}</span>
                             @enderror

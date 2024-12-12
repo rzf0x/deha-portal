@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\ESantri;
 
+use App\Models\Kelas;
+use App\Models\Santri;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -11,7 +13,7 @@ class JadwalPiket extends Model
 
     protected $table = 'jadwal_piket';
 
-    protected $fillable = ['santri_id', 'kelas_id', 'hari','keterangan','waktu'];
+    protected $fillable = ['santri_id', 'kelas_id', 'hari', 'keterangan', 'waktu','role_guru'];
 
     public function santri()
     {
@@ -21,7 +23,4 @@ class JadwalPiket extends Model
     {
         return $this->belongsTo(Kelas::class);
     }
-    
-    public static $hariList = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
-    public static $waktuList = ['pagi', 'siang', 'sore', 'malam'];
 }
