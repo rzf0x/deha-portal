@@ -43,7 +43,7 @@ return new class extends Migration
             $table->string('nominal')->nullable();
             $table->enum('metode_pembayaran', ['transfer', 'cash'])->default('cash');
             $table->string('bukti_pembayaran')->nullable();
-            
+
             // Relation with pembayaran_tipe
             $table->bigInteger('pembayaran_tipe_id')->unsigned()->comment('relation with pembayaran_tipe');
             $table->foreign('pembayaran_tipe_id')->references('id')->on('pembayaran_tipe')->onDelete('cascade');
@@ -73,7 +73,6 @@ return new class extends Migration
             $table->string('keterangan');
             $table->string('bukti_pembayaran')->nullable();
             $table->enum('status', ['paid', 'unpaid'])->default('unpaid');
- 
             // Relation with pembayaran
             $table->bigInteger('pembayaran_id')->unsigned()->comment('relation with pembayaran');
             $table->foreign('pembayaran_id')->references('id')->on('pembayaran')->onDelete('cascade');
