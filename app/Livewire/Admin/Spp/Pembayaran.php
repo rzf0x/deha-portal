@@ -123,9 +123,6 @@ class Pembayaran extends Component
 
     public function updatePembayaran()
     {
-        if($this->buktiPembayaran && !($this->buktiPembayaran instanceof UploadedFile)) {
-            return;
-        }
         try {
             $this->validate([
                 'buktiPembayaran' => 'required|mimes:jpeg,png,jpg,svg|max:10000', 
@@ -155,7 +152,7 @@ class Pembayaran extends Component
             $this->message = 'berhasil mengupdate pembayaran';
             $this->dispatch('hide-message');
         } catch (\Exception $e) {
-            $this->errorMessage = 'gagal mengupdate pembayaran, tunggu beberapa saat atau coba lagi, tunggu beberapa saat atau coba lagi';
+            $this->errorMessage = 'gagal mengupdate pembayaran, tunggu beberapa saat atau coba lagi, error = '. $e->getMessage();
             $this->dispatch('hide-error');
         }
     }
@@ -179,9 +176,6 @@ class Pembayaran extends Component
 
     public function storeCicilan()
     {
-        if($this->buktiPembayaran && !($this->buktiPembayaran instanceof UploadedFile)) {
-            return;
-        }
         try {
             $this->validate([
                 'jumlahCicilan' => 'required|numeric',
@@ -219,7 +213,7 @@ class Pembayaran extends Component
             $this->message = 'berhasil menyimpan cicilan';
             $this->dispatch('hide-message');
         } catch (\Exception $e) {
-            $this->errorMessage = 'gagal menyimpan cicilan, tunggu beberapa saat atau coba lagi';
+            $this->errorMessage = 'gagal menyimpan cicilan, tunggu beberapa saat atau coba lagi, error = '. $e->getMessage() ;
             $this->dispatch('hide-error');
         }
     }
