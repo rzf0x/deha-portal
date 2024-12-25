@@ -65,7 +65,7 @@ class TambahSantri extends Component
             $this->searchTambahResults = [];
             return;
         }
-        $this->reset('selectedSantri','santri_id');
+        $this->reset('selectedSantri', 'santri_id');
 
         $this->searchTambahResults = Santri::with('kelas', 'kelas.jenjang')
             ->when(!empty($this->filterTambah['jenjang']), function ($query) {
@@ -81,6 +81,7 @@ class TambahSantri extends Component
             ->when(!empty($this->searchSantri), function ($query) {
                 return $query->where('nama', 'like', '%' . $this->searchSantri . '%');
             })
+            ->whereDoesntHave('pembayaran') // Hanya ambil santri yang tidak memiliki pembayaran
             ->orderBy('nama')
             ->take(45)->get();
 

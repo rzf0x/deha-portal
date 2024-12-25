@@ -24,7 +24,6 @@ class DashboardSpp extends Component
     public $totalNominal;
     public $totalNominalDiterima;
     public $totalNominalTertunda;
-    public $persentasePembayaran;
     public $tagihanAkanJatuhTempo;
 
     public $jenjangOptions;
@@ -44,46 +43,43 @@ class DashboardSpp extends Component
 
     public function generateData()
     {
-        // Query utama hanya untuk mengambil santri yang sesuai filter
-        $santriIds = Santri::where('status_kesantrian', 'aktif')
+        $santri = Santri::with('kelas.jenjang', 'Pembayaran')->where('status_kesantrian', 'aktif')
+            ->with(['Pembayaran' => function ($query) {
+                $query->whereHas('pembayaranTimeline', function ($subQuery) {
+                    $subQuery->where('nama_bulan', $this->bulanSekarang);
+                });
+            }])
             ->whereHas('kelas.jenjang', function ($query) {
-                return $query->where('nama', $this->filter['jenjang']);
+                $query->where('nama', $this->filter['jenjang']);
             })
-            ->pluck('id');
-
-        // Query status pembayaran
-        $pembayaranQuery = Pembayaran::whereIn('santri_id', $santriIds)
-            ->whereHas('pembayaranTimeline', function ($query) {
-                $query->where('nama_bulan', $this->bulanSekarang);
-            });
-
-        $statusCounts = $pembayaranQuery->groupBy('status')
-            ->selectRaw('status, count(*) as count, sum(nominal) as nominal')
             ->get();
 
-        // Assign hasil ke properti
-        $this->lunas = $statusCounts->firstWhere('status', 'lunas')->count ?? 0;
-        $this->belum_bayar = $statusCounts->firstWhere('status', 'belum bayar')->count ?? 0;
-        $this->cicilan = $statusCounts->firstWhere('status', 'cicilan')->count ?? 0;
-        $this->totalSantri = $statusCounts->sum('count');
 
-        // Hitung total nominal pembayaran
-        $totalNominalTerbayar = $statusCounts->sum('nominal');
+        $this->lunas = $santri->filter(function ($item) {
+            return $item->Pembayaran->contains('status', 'lunas');
+        })->count();
+
+        $this->belum_bayar = $santri->filter(function ($item) {
+            return $item->Pembayaran->contains('status', 'belum bayar');
+        })->count();
+
+        $this->cicilan = $santri->filter(function ($item) {
+            return $item->Pembayaran->contains('status', 'cicilan');
+        })->count();
+
+        $this->totalSantri = $santri->count();
+
+        $totalNominalTerbayar = $santri->flatMap->Pembayaran->sum('nominal');
+
         $totalNominalPembayaran = DetailItemPembayaran::whereHas('jenjang', function ($query) {
             $query->where('nama', $this->filter['jenjang']);
         })
             ->sum('nominal') * $this->totalSantri;
 
-        // Format nominal
         $this->totalNominalDiterima = $this->formatRupiah($totalNominalTerbayar);
         $this->totalNominalTertunda = $this->formatRupiah($totalNominalTerbayar - $totalNominalPembayaran);
         $this->totalNominal = $this->formatRupiah($totalNominalPembayaran);
 
-        if ($this->totalNominalDiterima > 0 && $totalNominalPembayaran != 0) {
-            $this->persentasePembayaran = round(($totalNominalTerbayar / $totalNominalPembayaran) * 100, 1);
-        } else {
-            $this->persentasePembayaran = 0;
-        }
         $this->tagihanAkanJatuhTempo = $this->calculateDueDate();
 
         $this->dispatch('updateCharts', [

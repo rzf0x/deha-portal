@@ -42,29 +42,9 @@
                 iconClass="bi bi-clock-history" textColor="red" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Persentase Nominal Pembayaran" value="{{ $persentasePembayaran }}" subValue="%"
-                iconClass="bi bi-percent" textColor="purple" />
-        </div>
-        <div class="col-lg-3 col-12">
             <x-card.card-basic title="Pembayaran Akan Jatuh Tempo" value="{{ $tagihanAkanJatuhTempo }}" subValue="hari"
                 iconClass="bi bi-hourglass-split" textColor="yellow" />
         </div>
-        <div class="col-lg-3 col-12">
-            <div class="card">
-                <div class="card-body py-4 px-4">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-xl">
-                            <img src="{{ asset('dist/assets/static/images/faces/1.jpg') }}" alt="Face 1">
-                        </div>
-                        <div class="ms-3 name">
-                            <h5 class="font-bold">{{ Auth::user()->admin->role->nama }}</h5>
-                            <h6 class="text-muted mb-0">{{ Auth::user()->email }}</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <div class="row mb-4">

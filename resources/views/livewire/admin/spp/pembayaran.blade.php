@@ -1,39 +1,43 @@
 <div>
-    <!-- Search Form -->
+
+    {{-- cari santri --}}
     <div class="form-group sticky-top bg-white p-3 shadow-sm cursor-pointer" style="top: 1rem; z-index: 99;">
         <form wire:submit.prevent="searchSantri" class="d-flex gap-3">
             <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri...">
+
             <div class="d-flex gap-3 w-50">
                 <select wire:change='searchSantri' wire:model='filter.jenjang' class="form-select" name=""
                     id="" wire:loading.attr='disabled'>
+
                     <option value="">Pilih Jenjang</option>
-                    @forelse ($jenjangs as $jenjang)
+
+                    @foreach ($jenjangs as $jenjang)
                         <option value="{{ $jenjang->nama }}">{{ $jenjang->nama }}</option>
-                    @empty
-                    @endforelse
+                    @endforeach
                 </select>
+
                 <select wire:change='searchSantri' wire:model='filter.kelas' class="form-select" name=""
                     id="" wire:loading.attr='disabled'>
                     <option value="">Pilih Kelas</option>
-                    @forelse ($kelas as $kelas)
+                    @foreach ($kelas as $kelas)
                         <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
-                    @empty
-                    @endforelse
+                    @endforeach
                 </select>
             </div>
             <button type="submit" class="btn btn-primary w-25">Cari</button>
         </form>
+
         @if ($errorMessage)
             <div class="alert alert-danger mt-3 errorMessage">{{ $errorMessage }}</div>
         @endif
+
         @if ($message)
             <div class="alert alert-success mt-3 message">{{ $message }}</div>
         @endif
     </div>
+    {{-- #end cari santri --}}
 
-    <!-- Error Message -->
-
-    <!-- Search Results -->
+    {{-- result cari santri --}}
     @if (!($santriSelected && $santriSelected?->id))
         <div class="row mt-3">
             @foreach ($searchResults as $santri)
@@ -57,37 +61,49 @@
             @endforeach
         </div>
     @endif
+    {{-- #end result cari santri --}}
 
-    <!-- Santri Biodata and Payment Timeline -->
+    {{-- biodata santri & pembayaran & metode pembayaran --}}
     @if ($santriSelected && $santriSelected?->id)
         <div class="row mt-4">
             <div class="col-12">
-                <!-- Biodata Santri -->
+
+                <!-- biodata santri -->
                 <div class="card p-4 mb-4">
                     <div class="card-header">
                         <h3 class="card-title">Biodata Santri</h3>
                     </div>
                     <div class="row card-body">
-                        @foreach ([
-        'Nama Santri' => $santriSelected->nama,
-        'TTL' => "{$santriSelected->tempat_lahir}, {$santriSelected->tanggal_lahir}",
-        'Kelas' => $santriSelected->kelas->nama,
-        'Kamar' => $santriSelected->kamar->nama,
-        'Jenjang' => $santriSelected->kelas->jenjang->nama,
-    ] as $label => $value)
-                            <div class="col-lg-6">
-                                <h6>{{ $label }}:</h6>
-                                <p>{{ $value }}</p>
-                            </div>
-                        @endforeach
+                        <div class="col-lg-6">
+                            <h6>Nama Santri:</h6>
+                            <p>{{ $santriSelected->nama }}</p>
+                        </div>
+                        <div class="col-lg-6">
+                            <h6>TTL:</h6>
+                            <p>{{ $santriSelected->tempat_lahir }}, {{ $santriSelected->tanggal_lahir }}</p>
+                        </div>
+                        <div class="col-lg-6">
+                            <h6>Kelas:</h6>
+                            <p>{{ $santriSelected->kelas->nama }}</p>
+                        </div>
+                        <div class="col-lg-6">
+                            <h6>Kamar:</h6>
+                            <p>{{ $santriSelected->kamar->nama }}</p>
+                        </div>
+                        <div class="col-lg-6">
+                            <h6>Jenjang:</h6>
+                            <p>{{ $santriSelected->kelas->jenjang->nama }}</p>
+                        </div>
                     </div>
                 </div>
+                <!-- #end biodata santri -->
 
-                <!-- Pembayaran Timeline -->
+                <!-- pembayaran timeline -->
                 <div class="card p-4">
                     <div class="card-title">
                         <h3 class="mt-3">Timeline Pembayaran</h3>
                     </div>
+
                     <div class="d-flex flex-wrap">
                         @foreach ($pembayaran as $item)
                             <button wire:loading.attr="disabled" wire:click="selectPembayaran({{ $item->id }})"
@@ -99,6 +115,7 @@
                             </button>
                         @endforeach
                     </div>
+
                     <hr>
 
                     <div class="mt-1">
@@ -141,44 +158,51 @@
 
                                 <!-- Row for main content sections -->
                                 <div class="row">
-                                    <!-- Payment Details Section -->
-                                    <div
-                                        class="col-12 @if ($selectedStatus === 'cicilan') col-lg-6 @endif d-flex flex-column">
-                                        <div class="form-group">
-                                            <label for="status">Ubah status pembayaran:
-                                                <span wire:target='selectedStatus' wire:loading.class.remove='d-none'
-                                                    class="d-none spinner-border spinner-border-sm"></span>
-                                            </label>
-                                            <select wire:loading.attr="disabled" wire:model.live="selectedStatus"
-                                                class="form-control">
-                                                <option value="lunas">Lunas</option>
-                                                <option value="belum bayar">Belum Bayar</option>
-                                                <option value="cicilan">Cicilan</option>
-                                            </select>
-                                        </div>
 
-                                        @if ($selectedStatus != 'belum bayar')
-                                            <div class="form-group">
-                                                <label for="Metode">Ubah Metode pembayaran:
-                                                    <span wire:target='selectedMetodePembayaran'
+                                    <!-- Payment Details Section -->
+                                    <div class="col-12 @if ($selectedStatus === 'cicilan') col-lg-6 @endif d-flex flex-column">
+
+                                        <div class="form-group">
+                                            <div class="mb-2">
+                                                <label for="status">Ubah status pembayaran:
+                                                    <span wire:target='selectedStatus'
                                                         wire:loading.class.remove='d-none'
                                                         class="d-none spinner-border spinner-border-sm"></span>
                                                 </label>
-                                                <select wire:loading.attr="disabled"
-                                                    wire:model.live="selectedMetodePembayaran" class="form-control">
-                                                    <option value="transfer">Transfer</option>
-                                                    <option value="cash">Cash</option>
+                                                <select wire:loading.attr="disabled" wire:model.live="selectedStatus"
+                                                    class="form-control">
+                                                    <option value="lunas">Lunas</option>
+                                                    <option value="belum bayar">Belum Bayar</option>
+                                                    <option value="cicilan">Cicilan</option>
                                                 </select>
+                                            </div>
+                                            
+                                            @if ($selectedStatus != 'belum bayar')
+                                                {{-- metode pembayaran --}}
+                                                <div class="mb-2">
+                                                    <label for="Metode">Ubah Metode pembayaran:
+                                                        <span wire:target='selectedMetodePembayaran'
+                                                            wire:loading.class.remove='d-none'
+                                                            class="d-none spinner-border spinner-border-sm"></span>
+                                                    </label>
+                                                    <select wire:loading.attr="disabled"
+                                                        wire:model.live="selectedMetodePembayaran"
+                                                        class="form-control">
+                                                        <option value="transfer">Transfer</option>
+                                                        <option value="cash">Cash</option>
+                                                    </select>
+                                                </div>
+
                                                 @if ($selectedStatus !== 'cicilan')
-                                                    <div class="form-group">
+                                                    <div class="mb-2">
                                                         <label for="Metode">Masukan Bukti Pembayaran
-                                                            <span wire:target='buktiPembayaran'
+                                                            <span
+                                                                wire:target='buktiPembayaran,updatePembayaran'
                                                                 wire:loading.class.remove='d-none'
                                                                 class="d-none spinner-border spinner-border-sm"></span>
                                                         </label>
                                                         <input required type="file" class="form-control"
-                                                            wire:loading.attr='disabled'
-                                                            wire:model.live.debounce.1ms="buktiPembayaran">
+                                                            wire:loading.attr='disabled' wire:model="buktiPembayaran">
                                                     </div>
 
                                                     @if ($buktiPembayaran)
@@ -189,12 +213,15 @@
                                                         </div>
                                                     @endif
                                                 @endif
-                                            </div>
-                                        @endif
+                                            @endif
+                                        </div>
+
+                                        {{-- tampilkan button update status pembayaran --}}
                                         @if ($selectedStatus !== 'cicilan')
                                             <div class="d-flex justify-content-end mt-3">
                                                 <div class="d-flex justify-content-end">
-                                                    <button wire:loading.attr="disabled" wire:target='buktiPembayaran'
+                                                    <button wire:loading.attr="disabled"
+                                                        wire:target='buktiPembayaran,updatePembayaran'
                                                         wire:click="updatePembayaran" class="btn btn-primary">Update
                                                         status pembayaran</button>
                                                 </div>
@@ -202,7 +229,7 @@
                                         @endif
                                     </div>
 
-                                    <!-- Installment Details Section -->
+                                    <!-- detail cicilan -->
                                     @if ($selectedStatus === 'cicilan')
                                         <div class="col-12 col-lg-6 d-flex flex-column">
                                             <form wire:submit.prevent="storeCicilan" method="post">
@@ -218,13 +245,13 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="Metode">Masukan Bukti Pembayaran
-                                                        <span wire:target='buktiPembayaran'
+                                                        <span
+                                                            wire:target='buktiPembayaran,updatePembayaran,storeCicilan'
                                                             wire:loading.class.remove='d-none'
                                                             class="d-none spinner-border spinner-border-sm"></span>
                                                     </label>
                                                     <input required type="file" class="form-control"
-                                                        wire:loading.attr='disabled'
-                                                        wire:model.live.debounce.1ms="buktiPembayaran">
+                                                        wire:loading.attr='disabled' wire:model="buktiPembayaran">
                                                 </div>
                                                 @if ($buktiPembayaran)
                                                     <div class="rounded-4 w-100">
@@ -235,8 +262,8 @@
                                                 @endif
                                                 <div class="d-flex justify-content-end">
                                                     <button wire:loading.attr="disabled" wire:loading.class="d-none"
-                                                        wire:target='buktiPembayaran' class="btn btn-primary"
-                                                        wire:click='$refresh'>
+                                                        wire:target='buktiPembayaran,updatePembayaran,storeCicilan'
+                                                        class="btn btn-primary" wire:click='$refresh'>
                                                         Tambahkan Cicilan
                                                     </button>
                                                 </div>
@@ -257,12 +284,12 @@
                             </div>
                         </div>
                     @endif
-
-
-                    <!-- End of Modal Pembayaran -->
+                    <!-- #End of Modal Pembayaran -->
 
                 </div>
-                <!-- Pilih Metode Pembayaran -->
+                <!-- #end pembayaran timeline -->
+
+                <!-- pilih metode pembayaran -->
                 <div class="card p-4">
                     <div class="card-title">
                         <h3 class="mt-3">Pilih Metode Pembayaran:</h3>
@@ -283,9 +310,13 @@
                     <button wire:loading.attr="disabled" class="btn btn-primary"
                         wire:click="calculateTotalAmount">Kalkulasi Nilai</button>
                 </div>
+                <!-- #end pilih metode pembayaran -->
+
             </div>
         </div>
     @endif
+    {{-- #end santri & pembayaran & timeline --}}
+
 </div>
 
 <script>
