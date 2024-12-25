@@ -160,7 +160,8 @@
                                 <div class="row">
 
                                     <!-- Payment Details Section -->
-                                    <div class="col-12 @if ($selectedStatus === 'cicilan') col-lg-6 @endif d-flex flex-column">
+                                    <div
+                                        class="col-12 @if ($selectedStatus === 'cicilan') col-lg-6 @endif d-flex flex-column">
 
                                         <div class="form-group">
                                             <div class="mb-2">
@@ -176,7 +177,7 @@
                                                     <option value="cicilan">Cicilan</option>
                                                 </select>
                                             </div>
-                                            
+
                                             @if ($selectedStatus != 'belum bayar')
                                                 {{-- metode pembayaran --}}
                                                 <div class="mb-2">
@@ -205,12 +206,14 @@
                                                             wire:loading.attr='disabled' wire:model="buktiPembayaran">
                                                     </div>
 
-                                                    @if ($buktiPembayaran && $buktiPembayaran instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
-                                                        <div class="rounded-4 w-100">
-                                                            <img src="{{ $buktiPembayaran?->temporaryUrl() }}"
-                                                                alt="Foto" class="rounded-4 object-fit-cover"
-                                                                style="height: 15rem;">
-                                                        </div>
+                                                    @if ($buktiPembayaran)
+                                                        @if ($buktiPembayaran instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
+                                                            <div class="rounded-4 w-100">
+                                                                <img src="{{ $buktiPembayaran?->temporaryUrl() }}"
+                                                                    alt="Foto" class="rounded-4 object-fit-cover"
+                                                                    style="height: 15rem;">
+                                                            </div>
+                                                        @endif
                                                     @endif
                                                 @endif
                                             @endif
@@ -220,10 +223,23 @@
                                         @if ($selectedStatus !== 'cicilan')
                                             <div class="d-flex justify-content-end mt-3">
                                                 <div class="d-flex justify-content-end">
-                                                    <button wire:loading.attr="disabled"
+                                                    <button
+                                                        @if ($buktiPembayaran) @if (!($buktiPembayaran instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)) 
+                                                        disabled @endif
+                                                        @endif
+                                                        wire:loading.attr="disabled"
                                                         wire:target='buktiPembayaran,updatePembayaran,storeCicilan'
-                                                        wire:click="updatePembayaran" class="btn btn-primary">Update
-                                                        status pembayaran</button>
+                                                        wire:click="updatePembayaran" class="btn btn-primary">
+                                                        @if ($buktiPembayaran)
+                                                            @if (!($buktiPembayaran instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile))
+                                                                tunggu sebentar
+                                                            @else
+                                                                Update status pembayaran
+                                                            @endif
+                                                        @else
+                                                            status pembayaran
+                                                        @endif
+                                                    </button>
                                                 </div>
                                             </div>
                                         @endif
@@ -253,18 +269,32 @@
                                                     <input required type="file" class="form-control"
                                                         wire:loading.attr='disabled' wire:model="buktiPembayaran">
                                                 </div>
-                                                @if ($buktiPembayaran && $buktiPembayaran instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
-                                                    <div class="rounded-4 w-100">
-                                                        <img src="{{ $buktiPembayaran?->temporaryUrl() }}"
-                                                            alt="Foto" class="rounded-4 object-fit-cover"
-                                                            style="height: 15rem;">
-                                                    </div>
+                                                @if ($buktiPembayaran)
+                                                    @if ($buktiPembayaran instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
+                                                        <div class="rounded-4 w-100">
+                                                            <img src="{{ $buktiPembayaran?->temporaryUrl() }}"
+                                                                alt="Foto" class="rounded-4 object-fit-cover"
+                                                                style="height: 15rem;">
+                                                        </div>
+                                                    @endif
                                                 @endif
                                                 <div class="d-flex justify-content-end">
-                                                    <button wire:loading.attr="disabled"
+                                                    <button
+                                                        @if ($buktiPembayaran) @if (!($buktiPembayaran instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)) 
+                                                        disabled @endif
+                                                        @endif
+                                                        type="submit" wire:loading.attr="disabled"
                                                         wire:target='buktiPembayaran,updatePembayaran,storeCicilan'
                                                         class="btn btn-primary">
-                                                        Tambahkan Cicilan
+                                                        @if ($buktiPembayaran)
+                                                            @if (!($buktiPembayaran instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile))
+                                                                tunggu sebentar
+                                                            @else
+                                                                Tambahkan Cicilan
+                                                            @endif
+                                                        @else
+                                                            tambahkan cicilan
+                                                        @endif
                                                     </button>
                                                 </div>
                                             </form>
