@@ -197,7 +197,7 @@
                                                     <div class="mb-2">
                                                         <label for="Metode">Masukan Bukti Pembayaran
                                                             <span
-                                                                wire:target='buktiPembayaran,updatePembayaran'
+                                                                wire:target='buktiPembayaran,updatePembayaran,storeCicilan'
                                                                 wire:loading.class.remove='d-none'
                                                                 class="d-none spinner-border spinner-border-sm"></span>
                                                         </label>
@@ -205,7 +205,7 @@
                                                             wire:loading.attr='disabled' wire:model="buktiPembayaran">
                                                     </div>
 
-                                                    @if ($buktiPembayaran)
+                                                    @if ($buktiPembayaran && $buktiPembayaran instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
                                                         <div class="rounded-4 w-100">
                                                             <img src="{{ $buktiPembayaran?->temporaryUrl() }}"
                                                                 alt="Foto" class="rounded-4 object-fit-cover"
@@ -221,7 +221,7 @@
                                             <div class="d-flex justify-content-end mt-3">
                                                 <div class="d-flex justify-content-end">
                                                     <button wire:loading.attr="disabled"
-                                                        wire:target='buktiPembayaran,updatePembayaran'
+                                                        wire:target='buktiPembayaran,updatePembayaran,storeCicilan'
                                                         wire:click="updatePembayaran" class="btn btn-primary">Update
                                                         status pembayaran</button>
                                                 </div>
@@ -253,7 +253,7 @@
                                                     <input required type="file" class="form-control"
                                                         wire:loading.attr='disabled' wire:model="buktiPembayaran">
                                                 </div>
-                                                @if ($buktiPembayaran)
+                                                @if ($buktiPembayaran && $buktiPembayaran instanceof Livewire\Features\SupportFileUploads\TemporaryUploadedFile)
                                                     <div class="rounded-4 w-100">
                                                         <img src="{{ $buktiPembayaran?->temporaryUrl() }}"
                                                             alt="Foto" class="rounded-4 object-fit-cover"
@@ -261,9 +261,9 @@
                                                     </div>
                                                 @endif
                                                 <div class="d-flex justify-content-end">
-                                                    <button wire:loading.attr="disabled" wire:loading.class="d-none"
+                                                    <button wire:loading.attr="disabled"
                                                         wire:target='buktiPembayaran,updatePembayaran,storeCicilan'
-                                                        class="btn btn-primary" wire:click='$refresh'>
+                                                        class="btn btn-primary">
                                                         Tambahkan Cicilan
                                                     </button>
                                                 </div>

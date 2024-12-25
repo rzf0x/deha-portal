@@ -9,6 +9,7 @@ use App\Models\Santri;
 use App\Models\Spp\Cicilan;
 use App\Models\Spp\DetailItemPembayaran;
 use App\Models\Spp\Pembayaran as SppPembayaran;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -122,6 +123,9 @@ class Pembayaran extends Component
 
     public function updatePembayaran()
     {
+        if($this->buktiPembayaran && !($this->buktiPembayaran instanceof UploadedFile)) {
+            return;
+        }
         try {
             $this->validate([
                 'buktiPembayaran' => 'required|mimes:jpeg,png,jpg,svg|max:10000', 
@@ -151,7 +155,7 @@ class Pembayaran extends Component
             $this->message = 'berhasil mengupdate pembayaran';
             $this->dispatch('hide-message');
         } catch (\Exception $e) {
-            $this->errorMessage = 'gagal mengupdate pembayaran';
+            $this->errorMessage = 'gagal mengupdate pembayaran, tunggu beberapa saat atau coba lagi, tunggu beberapa saat atau coba lagi';
             $this->dispatch('hide-error');
         }
     }
@@ -175,7 +179,9 @@ class Pembayaran extends Component
 
     public function storeCicilan()
     {
-
+        if($this->buktiPembayaran && !($this->buktiPembayaran instanceof UploadedFile)) {
+            return;
+        }
         try {
             $this->validate([
                 'jumlahCicilan' => 'required|numeric',
@@ -213,7 +219,7 @@ class Pembayaran extends Component
             $this->message = 'berhasil menyimpan cicilan';
             $this->dispatch('hide-message');
         } catch (\Exception $e) {
-            $this->errorMessage = 'gagal menyimpan cicilan';
+            $this->errorMessage = 'gagal menyimpan cicilan, tunggu beberapa saat atau coba lagi';
             $this->dispatch('hide-error');
         }
     }
