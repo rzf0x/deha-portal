@@ -7,6 +7,7 @@ use App\Models\Kelas;
 use App\Models\Santri;
 use App\Models\Spp\Pembayaran;
 use App\Models\Spp\PembayaranTimeline;
+use App\Models\TahunAjaran;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
@@ -37,20 +38,26 @@ class TambahSantri extends Component
     public $filterTambah = [
         'jenjang' => '',
         'kelas' => '',
+        'tahun' => '',
     ];
     public $filterList = [
         'jenjang' => '',
         'kelas' => '',
+        'tahun' => '',
     ];
 
-    public $jenjangs = [], $kelases = [];
+    public $jenjangOptions = [], $kelasOptions = [], $tahunOptions = [];
 
     protected $listeners = ['prepareModal' => 'resetForm'];
 
     public function mount()
     {
-        $this->jenjangs = Jenjang::all();
-        $this->kelases = Kelas::all();
+        $this->filterList['tahun'] = date('Y');
+        $this->filterTambah['tahun'] = date('Y');
+
+        $this->jenjangOptions = Jenjang::all();
+        $this->kelasOptions = Kelas::all();
+        $this->tahunOptions = TahunAjaran::all();
     }
 
     public function cariSantri()
@@ -67,7 +74,7 @@ class TambahSantri extends Component
         }
         $this->reset('selectedSantri', 'santri_id');
 
-        $this->searchTambahResults = Santri::with('kelas', 'kelas.jenjang')
+        $this->searchTambahResults = Santri::with('kelas', 'kelas.jenjang', 'pembayaran')
             ->when(!empty($this->filterTambah['jenjang']), function ($query) {
                 return $query->whereHas('kelas.jenjang', function ($subQuery) {
                     $subQuery->where('nama', $this->filterTambah['jenjang']);
@@ -78,15 +85,18 @@ class TambahSantri extends Component
                     $subQuery->where('nama', $this->filterTambah['kelas']);
                 });
             })
+            ->whereDoesntHave('pembayaran', function ($subQuery) {
+                $subQuery->where('tahun_ajaran_id', $this->filterTambah['tahun']);
+            })
             ->when(!empty($this->searchSantri), function ($query) {
                 return $query->where('nama', 'like', '%' . $this->searchSantri . '%');
             })
-            ->whereDoesntHave('pembayaran') // Hanya ambil santri yang tidak memiliki pembayaran
             ->orderBy('nama')
-            ->take(45)->get();
+            ->take(45)
+            ->get();
 
         if ($this->searchTambahResults->isEmpty()) {
-            $this->addError('messageError', 'Santri tidak ditemukan');
+            $this->addError('messageError', 'Santri kosong');
         } else {
             $this->addError('messageError', '');
         }
@@ -104,7 +114,9 @@ class TambahSantri extends Component
     {
         $this->validate();
 
-        $existingPembayaran = Pembayaran::where('santri_id', $this->santri_id)->exists();
+        $existingPembayaran = Pembayaran::where('santri_id', $this->santri_id)
+            ->where('tahun_ajaran_id', $this->filterTambah['tahun'])
+            ->exists();
 
         if ($existingPembayaran) {
             $this->addError('messageError', 'Santri sudah ada di pembayaran');
@@ -118,9 +130,10 @@ class TambahSantri extends Component
                     'santri_id' => $this->santri_id,
                     'pembayaran_timeline_id' => $timeline->id,
                     'pembayaran_tipe_id' => 1,
+                    'tahun_ajaran_id' => $this->filterTambah['tahun'],
                     'nominal' => 0,
                     'metode_pembayaran' => 'cash',
-                    'status' => 'belum bayar'
+                    'status' => 'belum bayar',
                 ]);
             };
 
@@ -136,7 +149,7 @@ class TambahSantri extends Component
     public function delete($santriId)
     {
         try {
-            Pembayaran::where('santri_id', $santriId)->delete();
+            Pembayaran::where('tahun_ajaran_id', $this->filterTambah['tahun'])->where('santri_id', $santriId)->delete();
             session()->flash('message', 'Pembayaran berhasil dihapus!');
         } catch (\Exception $e) {
             $this->addError('messageError', 'Terjadi kesalahan saat menghapus pembayaran!');
@@ -158,6 +171,11 @@ class TambahSantri extends Component
                         $subQuery->where('nama', $this->filterList['kelas']);
                     });
                 })
+                ->when(!empty($this->filterList['tahun']), function ($query) {
+                    return $query->whereHas('pembayaran', function ($query) {
+                        $query->where('tahun_ajaran_id', $this->filterList['tahun']);
+                    });
+                })
                 ->where('nama', 'like', '%' . $this->search . '%')
                 ->orderBy('nama')
                 ->paginate(10),
@@ -175,5 +193,8 @@ class TambahSantri extends Component
             'filterList',
             'filterTambah',
         );
+
+        $this->filterList['tahun'] = date('Y');
+        $this->filterTambah['tahun'] = date('Y');
     }
 }

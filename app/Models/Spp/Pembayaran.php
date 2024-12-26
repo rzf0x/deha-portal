@@ -20,6 +20,7 @@ class Pembayaran extends Model
         'santri_id',
         'pembayaran_timeline_id',
         'bukti_pembayaran',
+        'tahun_ajaran_id',
     ];
 
     public function pembayaranTipe()

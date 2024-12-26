@@ -23,6 +23,11 @@ class DetailLaporanSppSantri extends Component
         $this->santriId = $id;
         // Memuat hanya field yang diperlukan
         $this->santri = Santri::select('id', 'nama', 'kelas_id', 'kamar_id')
+            ->whereHas('pembayaran', function ($query) {
+                $query->when($this->filter['tahun'], function ($query) {
+                    $query->where('tahun_ajaran_id', $this->filter['tahun']);
+                });
+            })
             ->with([
                 'kelas:id,nama',
                 'kamar:id,nama'
@@ -40,7 +45,7 @@ class DetailLaporanSppSantri extends Component
         ])
             ->where('santri_id', $this->santriId)
             ->when($this->filter['tahun'], function ($query) {
-                $query->whereYear('created_at', $this->filter['tahun']);
+                $query->where('tahun_ajaran_id', $this->filter['tahun']);
             })
             ->when($this->filter['status'], function ($query) {
                 $query->where('status', $this->filter['status']);
@@ -53,9 +58,8 @@ class DetailLaporanSppSantri extends Component
     {
         return Pembayaran::query()
             ->where('santri_id', $this->santriId)
-            ->selectRaw('DISTINCT YEAR(created_at) as tahun')
-            ->orderByDesc('tahun')
-            ->pluck('tahun');
+            ->distinct('tahun_ajaran_id')
+            ->pluck('tahun_ajaran_id');
     }
 
     public function render()

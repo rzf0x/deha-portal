@@ -3,6 +3,7 @@
 namespace App\Models\Spp;
 
 use App\Models\Jenjang;
+use App\Models\TahunAjaran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -12,7 +13,7 @@ class DetailItemPembayaran extends Model
 
     protected $table = 'pembayaran_detail';
 
-    protected $fillable = ['nama', 'nominal', 'jenjang_id', 'pembayaran_tipe_id'];
+    protected $fillable = ['nama', 'nominal', 'jenjang_id', 'pembayaran_tipe_id', 'tahun_ajaran_id'];
 
     public function jenjang()
     {

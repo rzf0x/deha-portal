@@ -1,34 +1,47 @@
 <div>
 
     {{-- cari santri --}}
-    <div class="form-group sticky-top bg-white p-3 shadow-sm cursor-pointer" style="top: 1rem; z-index: 99;">
-        <form wire:submit.prevent="searchSantri" class="d-flex gap-3">
-            <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri...">
+    <div class="form-group bg-white p-3 shadow-sm" style="z-index: 99;">
+        @if (!($santriSelected && $santriSelected?->id))
+            <form wire:submit.prevent="searchSantri" class="d-flex gap-3">
+                <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri...">
 
-            <div class="d-flex gap-3 w-50">
-                <select wire:change='searchSantri' wire:model='filter.jenjang' class="form-select" name=""
-                    id="" wire:loading.attr='disabled'>
+                <div class="d-flex gap-3 w-50">
+                    <select wire:change='searchSantri' wire:model='filter.jenjang' class="form-select" name=""
+                        id="" wire:loading.attr='disabled'>
 
-                    <option value="">Pilih Jenjang</option>
+                        <option value="">Pilih Jenjang</option>
 
-                    @foreach ($jenjangs as $jenjang)
-                        <option value="{{ $jenjang->nama }}">{{ $jenjang->nama }}</option>
-                    @endforeach
-                </select>
+                        @foreach ($jenjangOptions as $jenjang)
+                            <option value="{{ $jenjang->nama }}">{{ $jenjang->nama }}</option>
+                        @endforeach
+                    </select>
 
-                <select wire:change='searchSantri' wire:model='filter.kelas' class="form-select" name=""
-                    id="" wire:loading.attr='disabled'>
-                    <option value="">Pilih Kelas</option>
-                    @foreach ($kelas as $kelas)
-                        <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
-                    @endforeach
-                </select>
-            </div>
-            <button type="submit" class="btn btn-primary w-25">Cari</button>
-        </form>
-
+                    <select wire:change='searchSantri' wire:model='filter.kelas' class="form-select" name=""
+                        id="" wire:loading.attr='disabled'>
+                        <option value="">Pilih Kelas</option>
+                        @foreach ($kelasOptions as $kelas)
+                            <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary w-25">Cari</button>
+            </form>
+        @else
+            <button wire:click='kembaliButton' class="btn btn-primary">kembali</button>
+        @endif
+    </div>
+    <div class="sticky-top" style="top:1rem;z-index: 99;">
         @if ($errorMessage)
             <div class="alert alert-danger mt-3 errorMessage">{{ $errorMessage }}</div>
+        @endif
+
+        @if ($errors->any())
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-danger mt-3 errorMessage">
+                    <p>Error, {{ $error }}</p>
+                </div>
+            @endforeach
         @endif
 
         @if ($message)
@@ -100,12 +113,19 @@
 
                 <!-- pembayaran timeline -->
                 <div class="card p-4">
-                    <div class="card-title">
+                    <div class="card-title d-flex justify-content-between align-items-center">
                         <h3 class="mt-3">Timeline Pembayaran</h3>
+                        <div class="">
+                            <select wire:loading.attr='disabled' wire:model.live="filter.tahunAjaran" wire:change='generateDataPembayaranSantri' class="form-select">
+                                @foreach ($tahunAjaranOptions as $tahun)
+                                    <option value="{{ $tahun->nama_tahun }}">{{ $tahun->nama_tahun }}</option>
+                                @endforeach
+                            </select>    
+                        </div>
                     </div>
 
                     <div class="d-flex flex-wrap">
-                        @foreach ($pembayaran as $item)
+                        @forelse ($pembayaranList as $item)
                             <button wire:loading.attr="disabled" wire:click="selectPembayaran({{ $item->id }})"
                                 class="mx-1 my-1 btn 
                                 @if ($item->status === 'lunas') btn-success 
@@ -113,7 +133,11 @@
                                 @else btn-warning @endif">
                                 {{ $bulanTimeline[$item->id] }}
                             </button>
-                        @endforeach
+                            @empty
+                            <button wire:loading.attr="disabled" wire:click="createPembayaranTImeline" class="btn btn-primary">
+                                generate timeline tahun {{ $filter['tahunAjaran'] }}
+                            </button>
+                        @endforelse
                     </div>
 
                     <hr>
@@ -139,7 +163,7 @@
                                     <div class="col-12 @if ($selectedStatus === 'cicilan') col-lg-6 @endif">
                                         <h5>Detail Pembayaran: bulan
                                             <span class="text-primary"
-                                                style="font-weight: 900">{{ $Clickpembayaran->pembayaranTimeline->nama_bulan }}</span>
+                                                style="font-weight: 900">{{ $pembayaranSelected->pembayaranTimeline->nama_bulan }}</span>
                                         </h5>
                                     </div>
 
@@ -148,9 +172,9 @@
                                             <h5>Rincian Cicilan</h5>
                                             <a href="{{ route('spp.detail-laporan-cicilan-santri', [
                                                 'id' => $santriSelected->id,
-                                                'bulan' => $Clickpembayaran->pembayaranTimeline->nama_bulan,
+                                                'bulan' => $pembayaranSelected->pembayaranTimeline->nama_bulan,
                                             ]) }}"
-                                                class="text-decoration-underline {{ $Clickpembayaran->cicilans->isNotEmpty() ? '' : 'd-none' }}">Lihat
+                                                class="text-decoration-underline {{ $pembayaranSelected->cicilans->isNotEmpty() ? '' : 'd-none' }}">Lihat
                                                 Detail Cicilan</a>
                                         </div>
                                     @endif
@@ -322,9 +346,9 @@
                 <!-- pilih metode pembayaran -->
                 <div class="card p-4">
                     <div class="card-title">
-                        <h3 class="mt-3">Pilih Metode Pembayaran:</h3>
+                        <h3 class="mt-3">Lihat Metode Pembayaran:</h3>
                     </div>
-                    @foreach ($detailPembayaran as $item)
+                    @foreach ($listDetailPembayaran as $item)
                         <div class="form-check">
                             <input type="checkbox" class="form-check-input" id="method-{{ $item->id }}"
                                 wire:model.live="selectedMethods" value="{{ $item->id }}">
@@ -335,10 +359,10 @@
                     <hr>
                     <div class="d-flex justify-content-between">
                         <p><strong>Total Pembayaran:</strong></p>
-                        <p class="pr-4">{{ number_format($totalAmount, 0, ',', '.') }}</p>
+                        <p class="pr-4">{{ number_format($totalPembayaran, 0, ',', '.') }}</p>
                     </div>
                     <button wire:loading.attr="disabled" class="btn btn-primary"
-                        wire:click="calculateTotalAmount">Kalkulasi Nilai</button>
+                        wire:click="calculateTotalPembayaran">Kalkulasi Nilai</button>
                 </div>
                 <!-- #end pilih metode pembayaran -->
 
@@ -353,11 +377,12 @@
     window.addEventListener('hide-error', event => {
         setTimeout(() => {
             @this.set('errorMessage', '');
-        }, 2000);
+            @this.call('clearErrors');
+        }, 1000);
     });
     window.addEventListener('hide-message', event => {
         setTimeout(() => {
             @this.set('message', '');
-        }, 2000);
+        }, 1000);
     });
 </script>

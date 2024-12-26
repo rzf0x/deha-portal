@@ -19,27 +19,35 @@
 
     <div class="card">
         <div class="card-body">
-            <div class="row justify-content-between mb-4">
-                <form wire:submit.prevent="$refresh" class="col-4 d-flex gap-3">
+            <div class="d-flex justify-content-between mb-4">
+                <form wire:submit.prevent="$refresh" class="d-flex gap-3">
                     <input type="text" wire:model="search" class="form-control" placeholder="Cari Santri..."
                         required>
                     <button type="submit" class="btn btn-primary w-25">Cari</button>
                 </form>
-                <div class="col-6 d-flex gap-3 pl-5">
-                    <select wire:model="filter.jenjang" wire:change="$refresh"
+                <div class="d-flex gap-3 pl-5">
+                    <select wire:model.live="filter.jenjang"
                         class="form-select py-2 rounded-3 border-2" wire:loading.attr="disabled">
                         <option value="">Pilih Jenjang</option>
-                        @foreach ($jenjangs as $jenjang)
+                        @foreach ($jenjangOptions as $jenjang)
                             <option value="{{ $jenjang->nama }}">{{ $jenjang->nama }}</option>
                         @endforeach
                     </select>
     
                     <!-- Kelas Dropdown -->
-                    <select wire:model="filter.kelas" wire:change="$refresh"
+                    <select wire:model.live="filter.kelas"
                         class="form-select py-2 rounded-3 border-2" wire:loading.attr="disabled">
                         <option value="">Pilih Kelas</option>
-                        @foreach ($kelases as $kelas)
+                        @foreach ($kelasOptions as $kelas)
                             <option value="{{ $kelas->nama }}">{{ $kelas->nama }}</option>
+                        @endforeach
+                    </select>
+
+                    <select wire:model.live="filter.tahun"
+                        class="form-select py-2 rounded-3 border-2" wire:loading.attr="disabled">
+                        <option value="">Pilih Tahun</option>
+                        @foreach ($tahunOptions as $tahun)
+                            <option value="{{ $tahun->nama_tahun }}">{{ $tahun->nama_tahun }}</option>
                         @endforeach
                     </select>
                 </div>

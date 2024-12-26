@@ -60,7 +60,6 @@
                 <h5 class="card-title">Riwayat Pembayaran</h5>
                 <div class="d-flex gap-2">
                     <select wire:model.live="filter.tahun" class="form-select">
-                        <option value="">Pilih Tahun</option>
                         @foreach ($tahunList as $tahun)
                             <option value="{{ $tahun }}">{{ $tahun }}</option>
                         @endforeach
