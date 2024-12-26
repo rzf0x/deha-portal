@@ -34,6 +34,9 @@ return new class extends Migration
             $table->bigInteger('pembayaran_tipe_id')->unsigned()->comment('relation with pembayaran_tipe');
             $table->foreign('pembayaran_tipe_id')->references('id')->on('pembayaran_tipe')->onDelete('cascade');
 
+            $table->string('tahun_ajaran_id')->comment('relation with tahun_ajarans')->default(date('Y'));
+            $table->foreign('tahun_ajaran_id')->references('nama_tahun')->on('tahun_ajarans')->onDelete('cascade');
+
             $table->timestamps();
         });
 
@@ -64,6 +67,10 @@ return new class extends Migration
             $table->bigInteger('angkatan_id')->unsigned()->comment('relation with angkatan')->default(1);
             $table->foreign('angkatan_id')->references('id')->on('angkatans')->onDelete('cascade');
 
+
+            $table->string('tahun_ajaran_id')->comment('relation with tahun_ajarans')->default(date('Y'));
+            $table->foreign('tahun_ajaran_id')->references('nama_tahun')->on('tahun_ajarans')->onDelete('cascade');
+
             $table->timestamps();
         });
 
@@ -76,6 +83,7 @@ return new class extends Migration
             // Relation with pembayaran
             $table->bigInteger('pembayaran_id')->unsigned()->comment('relation with pembayaran');
             $table->foreign('pembayaran_id')->references('id')->on('pembayaran')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

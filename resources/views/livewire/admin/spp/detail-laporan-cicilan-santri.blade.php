@@ -35,9 +35,9 @@
                         <div class="col-md-4">
                             <div class="card bg-danger text-white">
                                 <div class="card-body">
-                                    <h6 class="card-title">Total belum lunas</h6>
+                                    <h6 class="card-title">{{ $total_cicilan_belum_bayar < 0 ? 'Cicilan Lunas Lebih' : 'Total belum lunas' }} </h6>
                                     <h4 class="text-white">
-                                        {{ $total_cicilan_belum_bayar < 0 ? 'Cicilan Lunas melebihi batas' : number_format($total_cicilan_belum_bayar) }}
+                                        {{number_format($total_cicilan_belum_bayar < 0 ? -$total_cicilan_belum_bayar : $total_cicilan_belum_bayar ) }}
                                     </h4>
                                 </div>
                             </div>
@@ -70,7 +70,6 @@
                 <h5 class="card-title">Riwayat Cicilan</h5>
                 <div class="d-flex gap-2">
                     <select wire:model.live="filter.tahun" wire:change='generateData' class="form-select">
-                        <option value="">Pilih Tahun</option>
                         @foreach ($tahunList as $tahun)
                             <option value="{{ $tahun }}">{{ $tahun }}</option>
                         @endforeach

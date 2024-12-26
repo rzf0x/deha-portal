@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Spp;
 use App\Models\Jenjang;
 use App\Models\Kelas;
 use App\Models\Santri;
+use App\Models\TahunAjaran;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -19,18 +20,21 @@ class PembayaranCicilan extends Component
 
     // public $santris;
     public $search = '';
-    public $jenjangs = [];
-    public $kelases = [];
+    public $jenjangOptions = [], $kelasOptions = [], $tahunOptions = [];
 
     public $filter = [
         'jenjang' => '',
         'kelas' => '',
+        'tahun' => '',
     ];
 
     public function mount()
     {
-        $this->jenjangs = Jenjang::all();
-        $this->kelases = Kelas::all();
+        $this->filter['tahun'] = date('Y');
+
+        $this->jenjangOptions = Jenjang::all();
+        $this->kelasOptions = Kelas::all();
+        $this->tahunOptions = TahunAjaran::all();
     }
 
     #[Computed()]
@@ -39,7 +43,10 @@ class PembayaranCicilan extends Component
         $this->resetPage();
 
         return Santri::with(['kelas', 'kamar'])
-        ->has('pembayaran.cicilans') // Only include santri with payments
+        ->has('pembayaran.cicilans')
+        ->whereHas('pembayaran', function($query){
+            $query->where('status', 'cicilan');
+        })
         ->when(!empty($this->filter['jenjang']), function ($query) {
             return $query->whereHas('kelas.jenjang', function ($subQuery) {
                 $subQuery->where('nama', $this->filter['jenjang']);
@@ -48,6 +55,12 @@ class PembayaranCicilan extends Component
         ->when(!empty($this->filter['kelas']), function ($query) {
             return $query->whereHas('kelas', function ($subQuery) {
                 $subQuery->where('nama', $this->filter['kelas']);
+            });
+        })
+        ->when(!empty($this->filter['tahun']), function ($query) {
+            return $query->whereHas('pembayaran', function ($subQuery) {
+                $subQuery->where('tahun_ajaran_id', $this->filter['tahun'])->where('status', 'cicilan');
+
             });
         })
         ->where('nama', 'like', '%' . $this->search . '%')

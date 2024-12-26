@@ -3,8 +3,9 @@
 namespace App\Livewire\Admin\Spp;
 
 use App\Models\Santri;
-use App\Models\Spp\Cicilan; // Ganti Pembayaran menjadi Cicilan
+use App\Models\Spp\Cicilan;
 use App\Models\Spp\DetailItemPembayaran;
+use App\Models\Spp\Pembayaran;
 use Carbon\Carbon;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -15,7 +16,7 @@ class DetailLaporanCicilanSantri extends Component
 
     public $santriId;
     public $santri;
-    
+
     public $filter = [
         'bulan' => '',
         'tahun' => ''
@@ -25,8 +26,11 @@ class DetailLaporanCicilanSantri extends Component
 
     public function mount($id, $bulan = null)
     {
+        $this->filter['bulan'] = $bulan ?? Carbon::now()->monthName;
+        $this->filter['tahun'] = date('Y');
+        
         $this->santriId = $id;
-        // Memuat hanya field yang diperlukan
+
         $this->santri = Santri::select('id', 'nama', 'kelas_id', 'kamar_id',)
             ->with([
                 'kelas',
@@ -34,16 +38,17 @@ class DetailLaporanCicilanSantri extends Component
             ])
             ->findOrFail($id);
 
-            $this->filter['bulan'] = $bulan ?? Carbon::now()->monthName;
-            // dd($this->filter['bulan']);
-        $this->filter['tahun'] = date('Y');
         $this->generateData();
     }
 
     public function generateData()
     {
         $cicilan = $this->getCicilan();
-        $totalPembayaran = DetailItemPembayaran::where('jenjang_id', $this->santri->kelas->jenjang->id)->sum('nominal');
+
+        $totalPembayaran = DetailItemPembayaran::where('tahun_ajaran_id', $this->filter['tahun'])
+            ->where('jenjang_id', $this->santri->kelas->jenjang->id)
+            ->sum('nominal');
+
         $pembayaran_bulan_total = $totalPembayaran * $cicilan->count();
 
         $total_cicilan_belum_bayar = ($this->filter['bulan'] ? $totalPembayaran : $pembayaran_bulan_total) - $cicilan->sum('nominal');
@@ -65,13 +70,13 @@ class DetailLaporanCicilanSantri extends Component
             'pembayaran.cicilans' // Ambil data pembayaran yang terkait
         ])
             ->whereHas('pembayaran', function ($query) {
-                $query->where('status', 'cicilan');
+                $query->where('status', 'cicilan')
+                    ->when($this->filter['tahun'], function ($query) {
+                        $query->where('tahun_ajaran_id', $this->filter['tahun']);
+                    });
             })
             ->whereHas('pembayaran.cicilans', function ($query) {
                 $query->where('santri_id', $this->santriId);
-            })
-            ->when($this->filter['tahun'], function ($query) {
-                $query->whereYear('created_at', $this->filter['tahun']);
             })
             ->when($this->filter['bulan'], function ($query) {
                 $query->whereHas('pembayaran.pembayaranTimeline', function ($q) {
@@ -84,30 +89,15 @@ class DetailLaporanCicilanSantri extends Component
 
     protected function getTahunList()
     {
-        return Cicilan::query()
-            ->whereHas('pembayaran', function ($query) {
-                $query->where('santri_id', $this->santriId);
-                $query->where('status', 'cicilan');
-            })
-            ->selectRaw('DISTINCT YEAR(created_at) as tahun')
-            ->orderByDesc('tahun')
-            ->pluck('tahun');
+        return Pembayaran::query()
+            ->where('santri_id', $this->santriId)
+            ->where('status', 'cicilan')
+            ->distinct('tahun_ajaran_id')
+            ->pluck('tahun_ajaran_id');
     }
     protected function getBulanList()
     {
         return ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-        
-        // return Cicilan::with(['pembayaran.pembayaranTimeline'])
-        //     ->whereHas('pembayaran', function ($query) {
-        //         $query->where('santri_id', $this->santriId);
-        //         $query->where('status', 'cicilan');
-        //     })
-        //     ->get()
-        //     ->pluck('pembayaran.pembayaranTimeline.nama_bulan')
-        //     ->filter()
-        //     ->unique()
-        //     ->values()
-        //     ->toArray();
     }
 
     public function render()

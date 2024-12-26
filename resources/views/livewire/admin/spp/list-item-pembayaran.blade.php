@@ -9,17 +9,24 @@
         <div class="card-body">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <div class="d-flex gap-3">
-                    <select wire:loading.attr='disabled' wire:model.live="jenjangFilter" class="form-select">
+                    <select wire:loading.attr='disabled' wire:model.live="filter.jenjang" class="form-select">
                         <option value="">Pilih Jenjang</option>
                         @foreach ($jenjangOptions as $jenjang)
                             <option value="{{ $jenjang->id }}">{{ $jenjang->nama }}</option>
                         @endforeach
                     </select>
 
-                    <select wire:loading.attr='disabled' wire:model.live="tipePembayaranFilter" class="form-select">
+                    <select wire:loading.attr='disabled' wire:model.live="filter.tipePembayaran" class="form-select">
                         <option value="">Pilih Tipe</option>
                         @foreach ($tipePembayaranOptions as $id => $nama)
                             <option value="{{ $id }}">{{ $nama }}</option>
+                        @endforeach
+                    </select>
+
+                    <select wire:loading.attr='disabled' wire:model.live="filter.tahunAjaran" class="form-select">
+                        <option value="">Pilih Tahun Ajaran</option>
+                        @foreach ($tahunAjaranOptions as $tahun)
+                            <option value="{{ $tahun->nama_tahun }}">{{ $tahun->nama_tahun }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -38,6 +45,7 @@
                             <th>Nominal</th>
                             <th>Jenjang</th>
                             <th>Tipe Pembayaran</th>
+                            <th>Tahun Ajaran</th>
                             <th>Aksi</th>
                         </tr>
                     </thead>
@@ -53,6 +61,7 @@
                                 </td>
                                 <td>{{ $item->jenjang->nama ?? 'N/A' }}</td>
                                 <td>{{ $item->pembayaranTipe?->nama }}</td>
+                                <td>{{ $item->tahun_ajaran_id }}</td>
                                 <td>
                                     <div class="d-flex gap-2">
                                         <button wire:loading.attr='disabled' wire:click="edit({{ $item->id }})" class="btn btn-sm btn-warning">
@@ -67,7 +76,7 @@
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="6" class="text-center">Tidak ada data</td>
+                                <td colspan="7" class="text-center">Tidak ada data</td>
                             </tr>
                         @endforelse
                         {{ $this->getFilteredData->links() }}
@@ -120,6 +129,21 @@
                                 @endforeach
                             </select>
                             @error('ItemPembayaranForm.pembayaran_tipe_id')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Tahun Ajaran</label>
+                            <select wire:loading.attr='disabled' required
+                                class="form-control @error('ItemPembayaranForm.tahun_ajaran_id') is-invalid @enderror"
+                                wire:model="ItemPembayaranForm.tahun_ajaran_id">
+                                <option value="">Pilih Tahun Ajaran</option>
+                                @foreach ($tahunAjaranOptions as $tahun)
+                                    <option value="{{ $tahun->nama_tahun }}">{{ $tahun->nama_tahun }}</option>
+                                @endforeach
+                            </select>
+                            @error('ItemPembayaranForm.tahun_ajaran_id')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
