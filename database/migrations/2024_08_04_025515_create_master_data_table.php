@@ -198,6 +198,11 @@ return new class extends Migration
             $table->time('waktu_selesai');
             $table->enum('hari', ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu']);
             $table->enum('role_guru', ['diniyyah', 'umum'])->default('umum');
+            $table->timestamps();   
+        });
+        
+        Schema::create('tahun_ajarans', function (Blueprint $table) {
+            $table->string('nama_tahun')->primary();
             $table->timestamps();
         });
     }
@@ -223,5 +228,6 @@ return new class extends Migration
         Schema::dropIfExists('jadwal_piket');
         Schema::dropIfExists('jadwal_pelajaran');
         Schema::dropIfExists('kategori_pelajaran');
+        Schema::dropIfExists('tahun_ajaran');
     }
 };

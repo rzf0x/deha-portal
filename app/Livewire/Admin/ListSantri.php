@@ -12,6 +12,8 @@ use App\Models\Santri;
 use App\Models\Kamar;
 use App\Models\Kelas;
 use App\Models\OrangTuaSantri;
+use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
@@ -43,6 +45,8 @@ class ListSantri extends Component
     public $kelas, $kamar, $semester, $angkatan, $santri_id, $jenjang, $santriEditId, $formPage = 1;
     public $kelasFilter, $jenjangFilter, $kamarFilter, $jenisKelaminFilter;
 
+    public $user;
+
     #[Url(except: '', as: 'q-santri')]
     public $search;
 
@@ -51,7 +55,7 @@ class ListSantri extends Component
 
     public function updatedPerPage()
     {
-        $this->resetPage(); 
+        $this->resetPage();
     }
 
     public function mount()
@@ -105,7 +109,14 @@ class ListSantri extends Component
         $waliSantriData = $this->waliSantriForm->all();
         $waliSantriData['santri_id'] = $santri->id;
         OrangTuaSantri::create($waliSantriData);
-        
+
+        User::create([
+            'roles_id' => 6,
+            'email' => $this->santriForm->nisn,
+            'name' => $this->santriForm->nama,
+            'password' => Hash::make($this->santriForm->nisn),
+        ]);
+
         return to_route('admin.master-santri.santri')->with(['message' => "Success created " . $this->santriForm->nama . " !"]);
     }
 
@@ -118,6 +129,8 @@ class ListSantri extends Component
 
         // Data Wali dan Data Alamat
         $waliData = OrangTuaSantri::where('santri_id', $santriId)->first();
+
+        $this->user = User::where('email', $santriData->nisn)->first();
 
         $this->foto = $santriData->foto;
         $this->santriForm->nama = $santriData->nama;
@@ -209,6 +222,13 @@ class ListSantri extends Component
         OrangTuaSantri::where('santri_id', $this->santriEditId)
             ->update($this->waliSantriForm->all());
 
+        $this->user->update([
+            'roles_id' => 6,
+            'email' => $this->santriForm->nisn,
+            'name' => $this->santriForm->nama,
+            'password' => Hash::make($this->santriForm->nisn),
+        ]);
+
         return to_route('admin.master-santri.santri')
             ->with(['message' => "Success updated " . $santri->nama . " !"]);
     }
@@ -231,7 +251,7 @@ class ListSantri extends Component
             return Santri::with(['kelas', 'kamar'])
                 ->where(function ($query) {
                     $query->whereRaw('nama LIKE ?', ["%{$this->search}%"])
-                        ->orWhereRaw('CASE 
+                        ->orWhereRaw('CASE
                                 WHEN jenis_kelamin = "putera" THEN "laki-laki"
                                 WHEN jenis_kelamin = "puteri" THEN "perempuan"
                                 END LIKE ?', ["%{$this->search}%"])

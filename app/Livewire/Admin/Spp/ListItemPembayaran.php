@@ -6,6 +6,7 @@ use App\Livewire\Forms\ItemPembayaranForm;
 use App\Models\Jenjang;
 use App\Models\Spp\DetailItemPembayaran;
 use App\Models\Spp\TipePembayaran;
+use App\Models\TahunAjaran;
 use Livewire\Component;
 use Livewire\Attributes\{Title, Computed};
 use Livewire\WithPagination;
@@ -19,10 +20,22 @@ class ListItemPembayaran extends Component
     public ItemPembayaranForm $ItemPembayaranForm;
 
     public ?int $itemPembayaranId = null;
-    public string $jenjangFilter = '';
-    public string $tipePembayaranFilter = '';
-    
-    public $jenjangOptions, $tipePembayaranOptions;
+
+    public $filter = [
+        'jenjang' => '',
+        'tipePembayaran' => '',
+        'tahunAjaran' => '',
+    ];
+
+    public $jenjangOptions, $tipePembayaranOptions, $tahunAjaranOptions;
+
+    public function mount()
+    {
+        $this->filter['tahunAjaran'] = date('Y');
+        $this->jenjangOptions = Jenjang::all();
+        $this->tipePembayaranOptions = TipePembayaran::pluck('nama', 'id');
+        $this->tahunAjaranOptions = TahunAjaran::all();
+    }
 
     #[Computed]
     public function getFilteredData()
@@ -30,16 +43,10 @@ class ListItemPembayaran extends Component
         $this->resetPage();
 
         return DetailItemPembayaran::with(['pembayaranTipe', 'jenjang'])
-            ->when($this->jenjangFilter, fn($q) => $q->where('jenjang_id', $this->jenjangFilter))
-            ->when($this->tipePembayaranFilter, fn($q) => $q->where('pembayaran_tipe_id', $this->tipePembayaranFilter))
+            ->when($this->filter['jenjang'], fn($q) => $q->where('jenjang_id', $this->filter['jenjang']))
+            ->when($this->filter['tipePembayaran'], fn($q) => $q->where('pembayaran_tipe_id', $this->filter['tipePembayaran']))
+            ->when($this->filter['tahunAjaran'], fn($q) => $q->where('tahun_ajaran_id', $this->filter['tahunAjaran']))
             ->paginate(10);
-    }
-
-    public function mount()
-    {
-        $this->ItemPembayaranForm->pembayaran_tipe_id = TipePembayaran::where('nama', 'SPP')->value('id');
-            $this->jenjangOptions = Jenjang::all();
-            $this->tipePembayaranOptions = TipePembayaran::pluck('nama', 'id');
     }
 
     public function edit(DetailItemPembayaran $detail)
@@ -55,6 +62,7 @@ class ListItemPembayaran extends Component
         $this->reset('itemPembayaranId');
         $this->ItemPembayaranForm->reset();
         $this->ItemPembayaranForm->pembayaran_tipe_id = TipePembayaran::where('nama', 'SPP')->value('id');
+        $this->ItemPembayaranForm->tahun_ajaran_id = TahunAjaran::where('nama_tahun', date('Y'))->value('nama_tahun');
     }
 
     public function store()

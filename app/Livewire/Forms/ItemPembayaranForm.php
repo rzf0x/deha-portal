@@ -16,4 +16,6 @@ class ItemPembayaranForm extends Form
     public $jenjang_id;
     #[Validate('required')]
     public $pembayaran_tipe_id;
+    #[Validate('required')]
+    public $tahun_ajaran_id;
 }

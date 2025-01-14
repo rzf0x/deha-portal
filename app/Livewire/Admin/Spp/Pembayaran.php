@@ -2,19 +2,18 @@
 
 namespace App\Livewire\Admin\Spp;
 
-use App\Models\Admin\Spp\PembayaranCicilan;
 use App\Models\Jenjang;
 use App\Models\Kelas;
 use App\Models\Santri;
 use App\Models\Spp\Cicilan;
 use App\Models\Spp\DetailItemPembayaran;
 use App\Models\Spp\Pembayaran as SppPembayaran;
+use App\Models\Spp\PembayaranTimeline;
+use App\Models\TahunAjaran;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Title;
-use Livewire\Attributes\Validate;
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use Livewire\WithPagination;
 
 class Pembayaran extends Component
 {
@@ -22,41 +21,58 @@ class Pembayaran extends Component
 
     #[Title('Halaman Pembayaran Spp')]
 
+    // search santri input
     public $search = '';
     public $searchResults = [];
 
+    // santri selected
     public $santriSelected = null;
 
-    public $errorMessage = '';
-    public $message = '';
+    // message
+    public $errorMessage, $message;
 
-    public $totalAmount = 0;
+    // list detail pembayaran
+    public $listDetailPembayaran;
+
+    // untuk mengkalkulasi yang harus di bayar
+    public $totalPembayaran = 0;
     public $selectedMethods = [];
     public $isModalOpen = false;
 
-    public $pembayaran;
-    public $Clickpembayaran;
-    public $selectedStatus;
-    public $selectedMetodePembayaran;
-    public $updatedPembayaran;
-    public $detailPembayaran;
-    public $cicilan;
-    public $jumlahCicilan;
-    public $keteranganCicilan;
+    // pembayaran
+    public $pembayaranList;
+    public $pembayaranSelected;
+
+    // input data
+    public $selectedStatus, $selectedMetodePembayaran;
     public $buktiPembayaran;
+    public $jumlahCicilan, $keteranganCicilan;
+
+    // untuk filter santri
+    public $jenjangOptions, $kelasOptions, $tahunAjaranOptions;
 
     public $filter = [
         'jenjang' => '',
         'kelas' => '',
+        'tahunAjaran' => ''
     ];
 
-    public $jenjangs, $kelas;
+    // untuk menampilkan nama bulan pembayaran
     public $bulanTimeline = [];
 
     public function mount()
     {
-        $this->jenjangs = Jenjang::all();
-        $this->kelas = Kelas::all();
+        $this->filter['tahunAjaran'] = date('Y');
+
+        $this->tahunAjaranOptions = TahunAjaran::all();
+        $this->jenjangOptions = Jenjang::all();
+        $this->kelasOptions = Kelas::all();
+    }
+
+    public function kembaliButton()
+    {
+        $this->searchResults = [];
+        $this->santriSelected = '';
     }
 
     public function searchSantri()
@@ -70,6 +86,9 @@ class Pembayaran extends Component
 
         $this->searchResults = Santri::with(['kelas', 'kelas.jenjang'])
             ->has('pembayaran')
+            ->whereHas('pembayaran', function ($query) {
+                $query->where('tahun_ajaran_id', $this->filter['tahunAjaran']);
+            })
             ->when(!empty($this->filter['jenjang']), function ($query) {
                 return $query->whereHas('kelas.jenjang', function ($subQuery) {
                     $subQuery->where('nama', $this->filter['jenjang']);
@@ -95,63 +114,94 @@ class Pembayaran extends Component
     }
 
     public function selectSantri($santriId)
-    {   
+    {
         $this->santriSelected = Santri::with([
             'kelas.jenjang',
             'kamar',
-            'pembayaran.cicilans',
-            'pembayaran.pembayaranTimeline'
-        ])->find($santriId);
+            'pembayaran' => function ($query) {
+                $query->with([
+                    'cicilans',
+                    'pembayaranTimeline'
+                ]);
+            },
+        ])
+            ->find($santriId);
 
-        $this->pembayaran = $this->santriSelected->pembayaran;
+        $this->generateDataPembayaranSantri();
+    }
 
-        $this->bulanTimeline = $this->pembayaran->pluck('pembayaranTimeline.nama_bulan', 'id')->toArray();
+    public function generateDataPembayaranSantri()
+    {
+        $this->pembayaranList = $this->santriSelected->pembayaran()
+            ->where('tahun_ajaran_id', $this->filter['tahunAjaran'])
+            ->get();
 
-        $this->detailPembayaran();
+        $this->bulanTimeline = $this->pembayaranList->load('pembayaranTimeline')->pluck('pembayaranTimeline.nama_bulan', 'id')->toArray();
+
+        $this->listDetailPembayaran = DetailItemPembayaran::where('jenjang_id', $this->santriSelected->kelas->jenjang->id)
+            ->where('tahun_ajaran_id', $this->filter['tahunAjaran'])
+            ->get();
+
         $this->reset(['keteranganCicilan', 'jumlahCicilan', 'buktiPembayaran', 'isModalOpen']);
     }
 
     public function selectPembayaran($pembayaranId)
     {
-        $this->Clickpembayaran = SppPembayaran::with('pembayaranTimeline', 'cicilans')->where('id', $pembayaranId)->first();
+        $this->pembayaranSelected = SppPembayaran::with('pembayaranTimeline', 'cicilans')
+            ->where('id', $pembayaranId)->first();
         $this->isModalOpen = true;
-        $this->selectedStatus = $this->Clickpembayaran->status;
-        $this->selectedMetodePembayaran = $this->Clickpembayaran->metode_pembayaran;
+        $this->selectedStatus = $this->pembayaranSelected->status;
+        $this->selectedMetodePembayaran = $this->pembayaranSelected->metode_pembayaran;
         $this->reset(['keteranganCicilan', 'jumlahCicilan', 'buktiPembayaran']);
     }
 
     public function updatePembayaran()
     {
-        try {
+        $this->pembayaranSelected->status = $this->selectedStatus;
+
+        if ($this->pembayaranSelected->status != 'belum bayar') {
+            $this->dispatch('hide-error');
             $this->validate([
-                'buktiPembayaran' => 'required|mimes:jpeg,png,jpg,svg|max:10000', 
+                'buktiPembayaran' => 'required|mimes:jpeg,png,jpg,svg|max:10000',
+                'pembayaranSelected.status' => 'required|string',
+                'pembayaranSelected.metode_pembayaran' => 'required|string',
+            ], [
+                '*.required' => 'Data gagal dimasukkan: :attribute tidak boleh kosong.',
+                '*.numeric' => 'Data gagal dimasukkan: :attribute harus berupa angka.',
+                '*.string' => 'Data gagal dimasukkan: :attribute harus berupa teks.',
+                'buktiPembayaran.required' => 'Bukti pembayaran kosong. silahkan masukan buktiPembayaran terlebih dahulu',
+                'buktiPembayaran.mimes' => 'Bukti pembayaran harus berupa file gambar dengan format jpeg, png, jpg, atau svg.',
+                'buktiPembayaran.max' => 'Ukuran bukti pembayaran tidak boleh lebih dari 9 MB.',
             ]);
+        }
 
-            $this->Clickpembayaran->status = $this->selectedStatus;
-
-            if ($this->Clickpembayaran->status == 'lunas') {
-                $this->Clickpembayaran->nominal = $this->detailPembayaran->sum('nominal');
-            } else if ($this->Clickpembayaran->status == 'cicilan') {
-                $this->Clickpembayaran->nominal = $this->santriSelected->pembayaran->where('pembayaran_timeline_id', $this->Clickpembayaran->pembayaran_timeline_id)->flatMap->cicilans->sum('nominal');
-            } else if ($this->Clickpembayaran->status == 'belum bayar') {
-                $this->Clickpembayaran->nominal = 0;
+        try {
+            if ($this->pembayaranSelected->status == 'lunas') {
+                $this->pembayaranSelected->nominal = $this->listDetailPembayaran->sum('nominal');
+            } else if ($this->pembayaranSelected->status == 'cicilan') {
+                $this->pembayaranSelected->nominal = $this->santriSelected->pembayaran
+                    ->where('pembayaran_timeline_id', $this->pembayaranSelected->pembayaran_timeline_id)
+                    ->where('tahun_ajaran_id', $this->filter['tahunAjaran'])
+                    ->flatMap->cicilans->sum('nominal');
+            } else if ($this->pembayaranSelected->status == 'belum bayar') {
+                $this->pembayaranSelected->nominal = 0;
             }
 
-            if ($this->Clickpembayaran->bukti_pembayaran) Storage::disk('public')->delete($this->Clickpembayaran->bukti_pembayaran);
-            $this->buktiPembayaran = $this->buktiPembayaran->store('e-spp/bukti-transfer', 'public');
+            if ($this->pembayaranSelected->status != 'belum bayar') {
+                if ($this->pembayaranSelected->bukti_pembayaran) Storage::disk('public')->delete($this->pembayaranSelected->bukti_pembayaran);
+                $this->buktiPembayaran = $this->buktiPembayaran->store('e-spp/bukti-transfer', 'public');
+                $this->pembayaranSelected->metode_pembayaran = $this->selectedMetodePembayaran;
+                $this->pembayaranSelected->bukti_pembayaran = $this->buktiPembayaran;
+            }
 
-            $this->Clickpembayaran->metode_pembayaran = $this->selectedMetodePembayaran;
-            $this->Clickpembayaran->bukti_pembayaran = $this->buktiPembayaran;
-            $this->Clickpembayaran->save();
+            $this->pembayaranSelected->save();
 
-            $this->pembayaran = SppPembayaran::with('pembayaranTimeline')->where('santri_id', $this->santriSelected->id)->get();
             $this->isModalOpen = false;
 
-            
             $this->message = 'berhasil mengupdate pembayaran';
             $this->dispatch('hide-message');
         } catch (\Exception $e) {
-            $this->errorMessage = 'gagal mengupdate pembayaran';
+            $this->errorMessage = 'gagal mengupdate pembayaran, terdapat kesalahan silahkan coba lagi';
             $this->dispatch('hide-error');
         }
     }
@@ -161,50 +211,56 @@ class Pembayaran extends Component
         $this->isModalOpen = false;
     }
 
-    public function calculateTotalAmount()
+    public function calculateTotalPembayaran()
     {
-        $this->totalAmount = 0;
+        $this->totalPembayaran = 0;
 
         foreach ($this->selectedMethods as $methodId) {
-            $item = $this->detailPembayaran->firstWhere('id', $methodId);
+            $item = $this->listDetailPembayaran->firstWhere('id', $methodId);
             if ($item) {
-                $this->totalAmount += $item->nominal;
+                $this->totalPembayaran += $item->nominal;
             }
         }
     }
 
     public function storeCicilan()
     {
+        $this->dispatch('hide-error');
+        $this->validate([
+            'jumlahCicilan' => 'required|numeric',
+            'keteranganCicilan' => 'required|string',
+            'pembayaranSelected.id' => 'required|exists:pembayaran,id',
+            'buktiPembayaran' => 'required|mimes:jpeg,png,jpg,svg|max:10000',
+        ], [
+            '*.required' => 'Data gagal dimasukkan: :attribute tidak boleh kosong.',
+            '*.numeric' => 'Data gagal dimasukkan: :attribute harus berupa angka.',
+            '*.string' => 'Data gagal dimasukkan: :attribute harus berupa teks.',
+            'pembayaranSelected.id.exists' => 'Data gagal dimasukkan: pembayaran tidak ditemukan.',
+            'buktiPembayaran.mimes' => 'Bukti pembayaran harus berupa file gambar dengan format jpeg, png, jpg, atau svg.',
+            'buktiPembayaran.max' => 'Ukuran bukti pembayaran tidak boleh lebih dari 9 MB.',
+        ]);
 
         try {
-            $this->validate([
-                'jumlahCicilan' => 'required|numeric',
-                'keteranganCicilan' => 'required|string',
-                'Clickpembayaran.id' => 'required|exists:pembayaran,id', 
-                'buktiPembayaran' => 'required|mimes:jpeg,png,jpg,svg|max:10000', 
-            ]);
-
             $this->updatePembayaran();
 
             Cicilan::create([
-                'pembayaran_id' => $this->Clickpembayaran->id,
+                'pembayaran_id' => $this->pembayaranSelected->id,
                 'keterangan' => $this->keteranganCicilan,
                 'nominal' => $this->jumlahCicilan,
                 'bukti_pembayaran' => $this->buktiPembayaran
             ]);
 
             $total_nominal_cicilan = Cicilan::query()->select(['nominal'])
-                ->with(['pembayaran.cicilans', 'pembayaran.pembayaranTimeline'])
                 ->whereHas('pembayaran.cicilans', function ($query) {
                     $query
+                        ->where('tahun_ajaran_id', $this->filter['tahunAjaran'])
                         ->where('santri_id', $this->santriSelected->id)
-                        ->where('pembayaran_timeline_id', $this->Clickpembayaran->pembayaran_timeline_id);
+                        ->where('pembayaran_timeline_id', $this->pembayaranSelected->pembayaran_timeline_id);
                 })
                 ->sum('nominal');
 
-            $this->Clickpembayaran->nominal = $total_nominal_cicilan;
-
-            $this->Clickpembayaran->save();
+            $this->pembayaranSelected->nominal = $total_nominal_cicilan;
+            $this->pembayaranSelected->save();
 
             // Reset form
             $this->reset(['jumlahCicilan', 'keteranganCicilan', 'buktiPembayaran']);
@@ -213,14 +269,49 @@ class Pembayaran extends Component
             $this->message = 'berhasil menyimpan cicilan';
             $this->dispatch('hide-message');
         } catch (\Exception $e) {
-            $this->errorMessage = 'gagal menyimpan cicilan';
+            $this->errorMessage = 'gagal menyimpan cicilan, terdapat kesalahan silahkan coba lagi';
             $this->dispatch('hide-error');
         }
     }
-
-    public function detailPembayaran()
+    public function clearErrors()
     {
-        $this->detailPembayaran = DetailItemPembayaran::where('jenjang_id', $this->santriSelected->kelas->jenjang->id)->get();
+        $this->resetErrorBag(); // Reset semua error
+    }
+
+    public function createPembayaranTImeline()
+    {
+        $existingPembayaran = SppPembayaran::where('santri_id', $this->santriSelected->id)
+            ->where('tahun_ajaran_id', $this->filter['tahunAjaran'])
+            ->exists();
+
+        if ($existingPembayaran) {
+            $this->errorMessage = 'gagal, sudah ada timeline di pembayaran';
+            $this->dispatch('hide-error');
+            return;
+        }
+
+        try {
+            $timelines = PembayaranTimeline::all();
+            foreach ($timelines as $timeline) {
+                SppPembayaran::create([
+                    'santri_id' => $this->santriSelected->id,
+                    'pembayaran_timeline_id' => $timeline->id,
+                    'pembayaran_tipe_id' => 1,
+                    'tahun_ajaran_id' => $this->filter['tahunAjaran'],
+                    'nominal' => 0,
+                    'metode_pembayaran' => 'cash',
+                    'status' => 'belum bayar',
+                ]);
+            };
+
+            $this->message = 'berhasil membuat timeline pada pembayaran';
+            $this->dispatch('hide-message');
+
+            $this->generateDataPembayaranSantri();
+        } catch (\Exception $e) {
+            $this->errorMessage = 'gagal, terdapat kesalahan' . $e->getMessage();
+            $this->dispatch('hide-error');
+        }
     }
 
     public function render()

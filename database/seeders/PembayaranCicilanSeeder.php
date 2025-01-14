@@ -17,6 +17,7 @@ class PembayaranCicilanSeeder extends Seeder
             'nominal' => '250000',
             'keterangan' => 'Cicilan pertama',
             'pembayaran_id' => 1, // Sesuaikan dengan ID pembayaran yang ada
+            'tahun_ajaran_id' => date('Y'),
         ]);
     }
 }

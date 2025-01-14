@@ -13,44 +13,44 @@
         <div class="sidebar-menu">
 
             {{-- Superadmin Sidebar --}}
-            @if (Auth::user()->admin?->roles_id == 1)
+            @if (Auth::user()?->admin?->roles_id == 1)
             @include('components.layouts.partials.sidebar.sidebar_superadmin')
             {{-- #Superadmin Sidebar --}}
 
             {{-- E-SPP Sidebar --}}
-            @elseif (Auth::user()->admin?->roles_id == 2)
+            @elseif (Auth::user()?->admin?->roles_id == 2)
             @include('components.layouts.partials.sidebar.sidebar_spp')
             {{-- #E-SPP Sidebar --}}
 
             {{-- E-Cashless Sidebar --}}
-            @elseif (Auth::user()->admin?->roles_id == 3)
+            @elseif (Auth::user()?->admin?->roles_id == 3)
             @include('components.layouts.partials.sidebar.sidebar_admin_e_cashless')
             {{-- #E-Cashless Sidebar --}}
 
             {{-- Petugas Warung Sidebar --}}
-            @elseif (Auth::user()->admin?->roles_id == 4)
+            @elseif (Auth::user()?->admin?->roles_id == 4)
             @include('components.layouts.partials.sidebar.sidebar_petugas_warung')
             {{-- #Petugas Warung Sidebar --}}
 
             {{-- Petugas Laundry Sidebar --}}
-            @elseif (Auth::user()->admin?->roles_id == 5)
+            @elseif (Auth::user()?->admin?->roles_id == 5)
             @include('components.layouts.partials.sidebar.sidebar_petugas_laundry')
             {{-- #Petugas Laundry Sidebar --}}
 
             {{-- ! roles_id == 6 redirect ke santri ! --}}
-            
+
             {{-- Santri Sidebar --}}
-            @elseif (Auth::user()->admin?->roles_id == 6)
+            @elseif (Auth::user()?->admin?->roles_id == 6)
             @include('components.layouts.partials.sidebar.sidebar_santri')
             {{-- #Santri Sidebar --}}
 
             {{-- E-Santri Guru Diniyyah --}}
-            @elseif (Auth::user()->admin?->roles_id == 7)
+            @elseif (Auth::user()?->admin?->roles_id == 7)
             @include('components.layouts.partials.sidebar.sidebar_guru_diniyyah')
             {{-- #E-Santri Guru Diniyyah Sidebar --}}
 
             {{-- E-Santri Guru Umum --}}
-            @elseif (Auth::user()->admin?->roles_id == 8)
+            @elseif (Auth::user()?->admin?->roles_id == 8)
             @include('components.layouts.partials.sidebar.sidebar_guru_umum')
             {{-- #E-Santri Guru Umum Sidebar --}}
 

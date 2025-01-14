@@ -21,14 +21,14 @@
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ $detailKegiatanModal?->judul }}</h5>
+                    <h5 class="modal-title text-dark">{{ $detailKegiatanModal?->judul }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-2"><b>{{ $detailKegiatanModal?->isi_kegiatan ?? '-' }}</p>
+                    <p class="mb-2 text-dark"><b>{{ $detailKegiatanModal?->isi_kegiatan ?? '-' }}</p>
                 </div>
                 <div class="modal-footer justify-content-start">
-                    <p class="mb-2">
+                    <p class="mb-2 text-dark">
                         {{ \Carbon\Carbon::parse($detailKegiatanModal?->waktu_mulai)->format('d M Y H:i') ?? '-' }} -
                         {{ \Carbon\Carbon::parse($detailKegiatanModal?->waktu_selesai)->format('d M Y H:i') ?? '-' }}
                     </p>

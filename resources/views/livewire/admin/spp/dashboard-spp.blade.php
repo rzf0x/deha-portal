@@ -1,11 +1,25 @@
 <div>
-    <div class="form-group sticky-top bg-white p-3 shadow-sm cursor-pointer" style="top: 1rem; z-index: 99;">
-        <select wire:model.live="filter.jenjang" wire:change='generateData' wire:loading.attr="disabled"
-            class="form-select">
-            @foreach ($jenjangOptions as $jenjang)
-                <option value="{{ $jenjang->nama }}">{{ $jenjang->nama }} </option>
-            @endforeach
-        </select>
+    <div class="form-group sticky-top bg-white p-3 shadow-sm" style="top: 1rem; z-index: 99;">
+        <div class="d-flex gap-3">
+            <select wire:model.live="filter.jenjang" wire:change='generateData' wire:loading.attr="disabled"
+                class="form-select">
+                @foreach ($jenjangOptions as $jenjang)
+                    <option value="{{ $jenjang->nama }}">{{ $jenjang->nama }} </option>
+                @endforeach
+            </select>
+            <select wire:model.live="filter.tahun" wire:change='generateData' wire:loading.attr="disabled"
+                class="form-select">
+                @foreach ($tahunOptions as $tahun)
+                    <option value="{{ $tahun->nama_tahun }}">{{ $tahun->nama_tahun }} </option>
+                @endforeach
+            </select>
+            <select wire:model.live="filter.bulan" wire:change='generateData' wire:loading.attr="disabled"
+                class="form-select">
+                @foreach ($bulanOptions as $bulan)
+                    <option value="{{ $bulan }}">{{ $bulan }} </option>
+                @endforeach
+            </select>
+        </div>
         <span wire:target='filter.jenjang' wire:loading.class.remove='d-none'
             class="d-none spinner-border spinner-border-sm absolute-right"></span>
     </div>
@@ -15,15 +29,15 @@
                 iconClass="bi bi-people-fill" textColor="orange" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Santri belum bayar bulan ini" value="{{ $belum_bayar }}" subValue="Santri"
+            <x-card.card-basic title="Santri belum bayar" value="{{ $belum_bayar }}" subValue="Santri"
                 iconClass="bi bi-info-circle-fill" textColor="red" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Santri sudah lunas bulan ini" value="{{ $lunas }}" subValue="Santri"
+            <x-card.card-basic title="Santri sudah lunas" value="{{ $lunas }}" subValue="Santri"
                 iconClass="bi bi-circle-fill" textColor="green" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Santri cicilan bulan ini" value="{{ $cicilan }}" subValue="Santri"
+            <x-card.card-basic title="Santri cicilan" value="{{ $cicilan }}" subValue="Santri"
                 iconClass="bi bi-circle-fill" textColor="blue" />
         </div>
 
@@ -42,36 +56,16 @@
                 iconClass="bi bi-clock-history" textColor="red" />
         </div>
         <div class="col-lg-3 col-12">
-            <x-card.card-basic title="Persentase Nominal Pembayaran" value="{{ $persentasePembayaran }}" subValue="%"
-                iconClass="bi bi-percent" textColor="purple" />
-        </div>
-        <div class="col-lg-3 col-12">
             <x-card.card-basic title="Pembayaran Akan Jatuh Tempo" value="{{ $tagihanAkanJatuhTempo }}" subValue="hari"
                 iconClass="bi bi-hourglass-split" textColor="yellow" />
         </div>
-        <div class="col-lg-3 col-12">
-            <div class="card">
-                <div class="card-body py-4 px-4">
-                    <div class="d-flex align-items-center">
-                        <div class="avatar avatar-xl">
-                            <img src="{{ asset('dist/assets/static/images/faces/1.jpg') }}" alt="Face 1">
-                        </div>
-                        <div class="ms-3 name">
-                            <h5 class="font-bold">{{ Auth::user()->admin->role->nama }}</h5>
-                            <h6 class="text-muted mb-0">{{ Auth::user()->email }}</h6>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <div class="row mb-4">
         <div class="col-lg-8 mb-4 mb-lg-0">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Overview Nominal Pembayaran</h4>
+                    <h4 class="card-title">Overview Pembayaran {{ $filter['tahun'] }} {{ $filter['jenjang'] }}</h4>
                 </div>
                 <div wire:ignore class="card-body" style="position: relative;">
                     <div id="pembayaranChart" style="min-height: 365px;"></div>
@@ -81,7 +75,7 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
-                    <h4 class="card-title">Overview Pembayaran Santri</h4>
+                    <h4 class="card-title">Overview Pembayaran {{ $filter['bulan'] }}</h4>
                 </div>
                 <div wire:ignore class="card-body" style="position: relative;">
                     <div id="kelunasanSantriChart" style="min-height: 365px;"></div>
@@ -105,9 +99,7 @@
             }
         },
         xaxis: {
-            categories: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September',
-                'Oktober', 'November', 'Desember'
-            ]
+            categories: @json($bulanOptions)
         },
         yaxis: {
             min: 0,
