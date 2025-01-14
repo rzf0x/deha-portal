@@ -47,9 +47,9 @@
                 Santri</a>
         </form>
 
-        <div class="text-center mt-5 text-lg fs-6">
+        {{-- <div class="text-center mt-5 text-lg fs-6">
             <p class="text-gray-600">Kamu belum punya akun? <a href="{{ route('register') }}"
                     class="font-bold text-primary">Daftar dulu</a></p>
-        </div>
+        </div> --}}
     </div>
 </div>

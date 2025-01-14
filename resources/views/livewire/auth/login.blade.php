@@ -33,17 +33,16 @@
             @endif
         </div>
 
-        @error('error')
-            <div class="text-center text-danger">
-                login gagal, password atau email salah
-            </div>
-        @enderror
+        @if ($errors->has('credentials'))
+            <span class="text-danger">{{ $errors->first('credentials') }}</span>
+        @endif
+
         <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-3">
             Log in <span wire:loading.class="spinner-border spinner-border-sm"></span>
         </button>
-        <a href="" class="btn btn-outline-primary btn-lg w-100 mt-2">Masuk Sebagai Santri</a>
+        <a href="{{ route('login-santri') }}" class="btn btn-outline-primary btn-lg w-100 mt-2">Masuk Sebagai Santri</a>
 
-        <p class="m-0 text-dark text-xl text-center mt-5">Belum punya akun? Sini <a href="{{ route('register') }}"
-            class="text-primary fw-bold text-decoration-underline">Daftar dulu</a></p>
+        {{-- <p class="m-0 text-dark text-xl text-center mt-5">Belum punya akun? Sini <a href="{{ route('register') }}"
+            class="text-primary fw-bold text-decoration-underline">Daftar dulu</a></p> --}}
     </form>
 </div>

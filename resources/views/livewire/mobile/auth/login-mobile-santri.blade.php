@@ -46,9 +46,9 @@
             <a href="{{ route('login') }}" class="mt-3 btn btn-outline-primary btn-md w-100">Masuk Sebagai Administrator</a>
         </form>
 
-        <div class="text-center mt-5 text-lg fs-6">
+        {{-- <div class="text-center mt-5 text-lg fs-6">
             <p class="text-gray-600">Kamu belum punya akun? <a href="{{ route('register') }}"
                     class="font-bold">Registrasi</a> dulu yuk!</p>
-        </div>
+        </div> --}}
     </div>
 </div>

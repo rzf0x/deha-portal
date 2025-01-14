@@ -9,13 +9,14 @@
 
     <form wire:submit='login'>
         <div class="form-group position-relative has-icon-left mb-4">
-            <input required type="text" wire:model='nisn' class="form-control form-control-xl" placeholder="Masukkan NISN">
+            <input required type="text" wire:model='nisn' class="form-control form-control-xl"
+                placeholder="Masukkan NISN">
             <div class="form-control-icon">
                 <i class="bi bi-person"></i>
             </div>
 
             @if ($errors->has('nisn'))
-                <span class="text-danger">{{ $errors->first('nisn') }}</span>
+                <span class="text-danger mt-2">{{ $errors->first('nisn') }}</span>
             @endif
 
         </div>
@@ -29,7 +30,7 @@
                 <i :class="!show ? 'bi-eye-slash' : 'bi-eye'"></i>
             </div>
             @if ($errors->has('password'))
-                <span class="text-danger">{{ $errors->first('password') }}</span>
+                <span class="text-danger mt-2">{{ $errors->first('password') }}</span>
             @endif
         </div>
 
@@ -41,8 +42,9 @@
         <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-3">
             Log in <span wire:loading.class="spinner-border spinner-border-sm"></span>
         </button>
-        <a href="" class="btn btn-outline-primary btn-lg w-100 mt-2">Masuk Sebagai Administrator</a>
-        <p class="m-0 text-dark text-xl text-center mt-5">Belum punya akun? Sini <a href="{{ route('register') }}"
-            class="text-primary fw-bold text-decoration-underline">Daftar dulu</a></p>
+        <a href="{{ route('login') }}" class="btn btn-outline-primary btn-lg w-100 mt-2">Masuk Sebagai
+            Administrator</a>
+        {{-- <p class="m-0 text-dark text-xl text-center mt-5">Belum punya akun? Sini <a href="{{ route('register') }}"
+            class="text-primary fw-bold text-decoration-underline">Daftar dulu</a></p> --}}
     </form>
 </div>

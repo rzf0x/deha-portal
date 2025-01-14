@@ -85,13 +85,13 @@
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Update Profile</h5>
+                    <h5 class="modal-title text-dark">Update Profile</h5>
                     <button type="button" wire:click='close' class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form wire:submit.prevent='updateProfileSantri'>
                     <div class="modal-body">
                         <div class="mb-2">
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label text-dark">Email</label>
                             <input type="text" class="form-control" id="email" wire:model.live="userForm.email"
                                 placeholder="Email" required>
                             @error('userForm.email')
@@ -99,7 +99,7 @@
                             @enderror
                         </div>
                         <div class="mb-2">
-                            <label for="password" class="form-label">Password</label>
+                            <label for="password" class="form-label text-dark">Password</label>
                             <div class="form-group position-relative">
                                 <input type="{{ $showPassword ? 'text' : 'password' }}" class="form-control"
                                     id="password" wire:model.live="userForm.password" placeholder="Password">

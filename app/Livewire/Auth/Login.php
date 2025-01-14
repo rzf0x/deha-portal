@@ -64,7 +64,7 @@ class Login extends Component
                 return redirect()->route('santri.dashboard');
             }
         } else {
-            $this->addError('error', 'Invalid credentials!');
+            $this->addError('credentials', 'Gagal masuk, email atau password salah!');
         }
     }
 

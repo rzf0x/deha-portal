@@ -9,7 +9,7 @@ use App\Models\Spp\Pembayaran;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Santri extends Model 
+class Santri extends Model
 {
     use HasFactory;
 
@@ -47,7 +47,7 @@ class Santri extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'nisn', 'email');
     }
 
     public function kelas()
