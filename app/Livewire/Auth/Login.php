@@ -3,6 +3,7 @@
 namespace App\Livewire\Auth;
 
 use App\Models\admin\Role;
+use Detection\MobileDetect;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Validate;
 use Livewire\Attributes\Title;
@@ -17,6 +18,14 @@ class Login extends Component
     public $password;
 
     #[Title('Halaman Login')]
+
+    public $is_mobile;
+
+    public function mount()
+    {
+        $mobile = new MobileDetect();
+        $this->is_mobile = $mobile->isMobile();
+    }
 
     public function login()
     {
@@ -54,11 +63,9 @@ class Login extends Component
             } else {
                 return redirect()->route('santri.dashboard');
             }
-        }
-        else{
+        } else {
             $this->addError('error', 'Invalid credentials!');
         }
-
     }
 
     public function logout()
@@ -69,6 +76,7 @@ class Login extends Component
 
     public function render()
     {
+        if ($this->is_mobile) return view('livewire.mobile.auth.login-mobile')->layout('components.layouts.auth-mobile');
         return view('livewire.auth.login')->layout('components.layouts.auth');
     }
 }

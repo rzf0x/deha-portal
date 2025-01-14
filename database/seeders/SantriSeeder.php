@@ -43,7 +43,7 @@ class SantriSeeder extends Seeder
             [
                 'foto'                  => '',
                 'nama'                  => 'Muhammad Rajo',
-                'nisn'                  => '0102100612',
+                'nisn'                  => '0102100611',
                 'nism'                  => '131232150027240102',
                 'kewarganegaraan'       => 'WNI',
                 'nik'                   => '3215125401100001',

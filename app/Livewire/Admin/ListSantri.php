@@ -12,6 +12,7 @@ use App\Models\Santri;
 use App\Models\Kamar;
 use App\Models\Kelas;
 use App\Models\OrangTuaSantri;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\On;
@@ -51,7 +52,7 @@ class ListSantri extends Component
 
     public function updatedPerPage()
     {
-        $this->resetPage(); 
+        $this->resetPage();
     }
 
     public function mount()
@@ -105,7 +106,7 @@ class ListSantri extends Component
         $waliSantriData = $this->waliSantriForm->all();
         $waliSantriData['santri_id'] = $santri->id;
         OrangTuaSantri::create($waliSantriData);
-        
+
         return to_route('admin.master-santri.santri')->with(['message' => "Success created " . $this->santriForm->nama . " !"]);
     }
 
@@ -231,7 +232,7 @@ class ListSantri extends Component
             return Santri::with(['kelas', 'kamar'])
                 ->where(function ($query) {
                     $query->whereRaw('nama LIKE ?', ["%{$this->search}%"])
-                        ->orWhereRaw('CASE 
+                        ->orWhereRaw('CASE
                                 WHEN jenis_kelamin = "putera" THEN "laki-laki"
                                 WHEN jenis_kelamin = "puteri" THEN "perempuan"
                                 END LIKE ?', ["%{$this->search}%"])

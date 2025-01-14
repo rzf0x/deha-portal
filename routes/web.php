@@ -12,6 +12,8 @@ Route::prefix('auth')->group(function () {
     Route::get('/login', Auth\Login::class)->name('login');
     Route::get('/register', Auth\Register::class)->name('register');
     Route::get('/logout', Auth\Logout::class)->name('auth.logout');
+
+    Route::get('/login-santri', Auth\LoginSantri::class)->name('login-santri');
 });
 
 Route::fallback(function () {

@@ -19,7 +19,7 @@
         type="image/png">
 
     <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/app.css') }}">
-    <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/app-dark.css') }}">
+    {{-- <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/app-dark.css') }}"> --}}
     <link rel="stylesheet" crossorigin href="{{ asset('dist/assets/compiled/css/iconly.css') }}">
 
     {{-- CSS Custom --}}
@@ -51,7 +51,7 @@
         </div>
 
     </div>
-    <script src="{{ asset('dist/assets/static/js/components/dark.js') }}"></script>
+    {{-- <script src="{{ asset('dist/assets/static/js/components/dark.js') }}"></script> --}}
     <script src="{{ asset('dist/assets/extensions/perfect-scrollbar/perfect-scrollbar.min.js') }}"></script>
 
     <script src="{{ asset('dist/assets/compiled/js/app.js') }}"></script>

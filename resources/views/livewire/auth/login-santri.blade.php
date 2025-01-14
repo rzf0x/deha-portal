@@ -4,18 +4,18 @@
     </a>
     <h1 class="auth-title mt-5">Selamat datang di Deha Portal</h1>
     <p class="auth-subtitle mb-5 pe-5">
-        Login menggunakan email & password yang benar 👋
+        Login menggunakan NISN & password yang benar 👋
     </p>
 
     <form wire:submit='login'>
         <div class="form-group position-relative has-icon-left mb-4">
-            <input required type="email" wire:model='email' class="form-control form-control-xl" placeholder="Email">
+            <input required type="text" wire:model='nisn' class="form-control form-control-xl" placeholder="Masukkan NISN">
             <div class="form-control-icon">
                 <i class="bi bi-person"></i>
             </div>
 
-            @if ($errors->has('email'))
-                <span class="text-danger">{{ $errors->first('email') }}</span>
+            @if ($errors->has('nisn'))
+                <span class="text-danger">{{ $errors->first('nisn') }}</span>
             @endif
 
         </div>
@@ -35,14 +35,13 @@
 
         @error('error')
             <div class="text-center text-danger">
-                login gagal, password atau email salah
+                login gagal, password atau nisn salah
             </div>
         @enderror
         <button type="submit" class="btn btn-primary btn-block btn-lg shadow-lg mt-3">
             Log in <span wire:loading.class="spinner-border spinner-border-sm"></span>
         </button>
-        <a href="" class="btn btn-outline-primary btn-lg w-100 mt-2">Masuk Sebagai Santri</a>
-
+        <a href="" class="btn btn-outline-primary btn-lg w-100 mt-2">Masuk Sebagai Administrator</a>
         <p class="m-0 text-dark text-xl text-center mt-5">Belum punya akun? Sini <a href="{{ route('register') }}"
             class="text-primary fw-bold text-decoration-underline">Daftar dulu</a></p>
     </form>

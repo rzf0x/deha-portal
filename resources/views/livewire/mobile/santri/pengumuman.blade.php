@@ -26,15 +26,15 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        <p class="mb-2">{{ $detailPengumumanModal?->judul }}</p>
+                        <p class="mb-2 text-dark">{{ $detailPengumumanModal?->judul }}</p>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-2">{{ $detailPengumumanModal?->isi_pengumuman }}</p>
+                    <p class="mb-2 text-dark">{{ $detailPengumumanModal?->isi_pengumuman }}</p>
                 </div>
                 <div class="modal-footer justify-content-start">
-                    <p class="mb-2 small">
+                    <p class="mb-2 small text-dark">
                         {{ \Carbon\Carbon::parse($detailPengumumanModal?->tanggal)->format('d M Y') }}</p>
                 </div>
             </div>
