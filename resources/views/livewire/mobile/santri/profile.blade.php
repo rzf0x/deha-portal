@@ -35,47 +35,47 @@
         <div class="card">
             <div class="card-body">
                 <div class="">
-                    <h6 class="mb-2 small ">Email</h6>
-                    <p class="fw-medium m-0">{{ auth()->user()->email ?? '-' }}</p>
+                    <h6 class="mb-2 small text-dark ">Email</h6>
+                    <p class="fw-medium text-dark m-0">{{ auth()->user()->email ?? '-' }}</p>
                 </div>
                 <div class="mt-3">
-                    <h6 class="mb-2 small ">Password</h6>
-                    <p class="fw-medium m-0">{{ auth()->user()->password ?? '-' }}</p>
+                    <h6 class="mb-2 small text-dark ">Password</h6>
+                    <p class="fw-medium text-dark m-0">{{ auth()->user()->password ?? '-' }}</p>
                 </div>
                 <div class="mt-3">
-                    <h6 class="mb-2 small ">Jenjang</h6>
-                    <p class="fw-medium m-0">{{ $profile?->kelas->jenjang->nama ?? '-' }}</p>
+                    <h6 class="mb-2 small text-dark ">Jenjang</h6>
+                    <p class="fw-medium text-dark m-0">{{ $profile?->kelas->jenjang->nama ?? '-' }}</p>
                 </div>
                 <div class="mt-3">
-                    <h6 class="mb-2 small">Kamar</h6>
-                    <p class="fw-medium m-0">{{ $profile?->kamar->nama ?? '-' }}</p>
+                    <h6 class="mb-2 small text-dark">Kamar</h6>
+                    <p class="fw-medium text-dark m-0">{{ $profile?->kamar->nama ?? '-' }}</p>
                 </div>
                 <div class="mt-3">
-                    <h6 class="mb-2 small">Jenis Kelamin</h6>
-                    <p class="fw-medium m-0">
+                    <h6 class="mb-2 small text-dark">Jenis Kelamin</h6>
+                    <p class="fw-medium text-dark m-0">
                         {{ $profile?->jenis_kelamin == 'putera' ? 'laki-laki' : 'perempuan' ?? '-' }}
                     </p>
                 </div>
                 <div class="mt-3">
-                    <h6 class="mb-2 small">Tempat/Tanggal Lahir</h6>
-                    <p class="fw-medium m-0">{{ $profile?->tempat_lahir ?? '-' }},
+                    <h6 class="mb-2 small text-dark">Tempat/Tanggal Lahir</h6>
+                    <p class="fw-medium text-dark m-0">{{ $profile?->tempat_lahir ?? '-' }},
                         {{ \Carbon\Carbon::parse($profile?->tanggal_lahir)->format('d M Y') }}
                 </div>
                 <div class="mt-3">
-                    <h6 class="mb-2 small">Aktifitas Pendidikan</h6>
+                    <h6 class="mb-2 small text-dark">Aktifitas Pendidikan</h6>
                     <p class="fw-medium m-0 badge m-0 bg-primary">{{ $profile?->aktivitas_pendidikan ?? '-' }}</p>
                 </div>
                 <div class="mt-3">
-                    <h6 class="mb-2 small">NISN</h6>
-                    <p class="fw-medium m-0">{{ $profile?->nisn ?? '-' }}</p>
+                    <h6 class="mb-2 small text-dark">NISN</h6>
+                    <p class="fw-medium text-dark m-0">{{ $profile?->nisn ?? '-' }}</p>
                 </div>
                 <div class="mt-3">
-                    <h6 class="mb-2 small">NISM</h6>
-                    <p class="fw-medium m-0">{{ $profile?->nism ?? '-' }}</p>
+                    <h6 class="mb-2 small text-dark">NISM</h6>
+                    <p class="fw-medium text-dark m-0">{{ $profile?->nism ?? '-' }}</p>
                 </div>
                 <div class="mt-3">
-                    <h6 class="mb-2 small">NPSN</h6>
-                    <p class="fw-medium m-0">{{ $profile?->npsn ?? '-' }}</p>
+                    <h6 class="mb-2 small text-dark">NPSN</h6>
+                    <p class="fw-medium text-dark m-0">{{ $profile?->npsn ?? '-' }}</p>
                 </div>
             </div>
         </div>
@@ -85,13 +85,13 @@
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Update Profile</h5>
+                    <h5 class="modal-title text-dark">Update Profile</h5>
                     <button type="button" wire:click='close' class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form wire:submit.prevent='updateProfileSantri'>
                     <div class="modal-body">
                         <div class="mb-2">
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label text-dark">Email</label>
                             <input type="text" class="form-control" id="email" wire:model.live="userForm.email"
                                 placeholder="Email" required>
                             @error('userForm.email')
@@ -99,7 +99,7 @@
                             @enderror
                         </div>
                         <div class="mb-2">
-                            <label for="password" class="form-label">Password</label>
+                            <label for="password" class="form-label text-dark">Password</label>
                             <div class="form-group position-relative">
                                 <input type="{{ $showPassword ? 'text' : 'password' }}" class="form-control"
                                     id="password" wire:model.live="userForm.password" placeholder="Password">

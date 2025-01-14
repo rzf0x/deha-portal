@@ -43,6 +43,7 @@ class Dashboard extends Component
                 return $query->where('nama_bulan', $value);
             })->first();
     }
+
     #[Computed]
     public function listPengumuman()
     {

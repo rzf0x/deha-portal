@@ -27,8 +27,8 @@
                     <h6 class="card-title text-white">Perkembangan Akademik</h6>
                     <div class="mt-4">
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="card-subtitle text-white">Tahfidz</span>
-                            <span class="card-subtitle text-white">80%</span>
+                            <span class="card-subtitle text-dark text-white">Tahfidz</span>
+                            <span class="card-subtitle text-dark text-white">80%</span>
                         </div>
                         <div style="background-color: #c0c0c0; height: 8px;" class="progress rounded-5">
                             <div class="progress-bar rounded-5 bg-white" role="progressbar"
@@ -44,8 +44,8 @@
                     <h6 class="card-title text-white">Perkembangan Akademik</h6>
                     <div class="mt-4">
                         <div class="d-flex justify-content-between mb-2">
-                            <span class="card-subtitle text-white">Tahfidz</span>
-                            <span class="card-subtitle text-white">80%</span>
+                            <span class="card-subtitle text-dark text-white">Tahfidz</span>
+                            <span class="card-subtitle text-dark text-white">80%</span>
                         </div>
                         <div style="background-color: #c0c0c0; height: 8px;" class="progress rounded-5">
                             <div class="progress-bar rounded-5 bg-white" role="progressbar"
@@ -61,7 +61,7 @@
         <div class="card mt-3">
             <div class="card-body">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h6 class="card-title m-0 d-inline-flex align-items-center gap-2">Status SPP <div
+                    <h6 class="card-title text-dark m-0 d-inline-flex align-items-center gap-2">Status SPP <div
                             class="status-spp">
                             @php
                                 $statusClass = 'bg-secondary';
@@ -97,7 +97,7 @@
     <div class="card mt-4">
         <div class="card-body">
             <div class="d-flex mb-3 align-items-center justify-content-between">
-                <h6 class="card-title">Jadwal Hari Ini</h6>
+                <h6 class="card-title text-dark">Jadwal Hari Ini</h6>
                 <div class="form-group">
                     <select class="form-control form-control-sm" name="" id="">
                         <option>Senin</option>
@@ -111,22 +111,22 @@
             <div class="d-flex flex-column gap-md-3 gap-2">
                 <div class="d-flex justify-content-between align-items-center pb-2 rounded">
                     <div>
-                        <h6 class="fw-medium mb-2">Tahfidz</h6>
-                        <p class="card-subtitle mb-0">04:30 - 06:00</p>
+                        <h6 class="fw-medium text-dark mb-2">Tahfidz</h6>
+                        <p class="card-subtitle text-dark mb-0">04:30 - 06:00</p>
                     </div>
                     <span class="badge bg-success">Sekarang</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center pb-2 rounded">
                     <div>
-                        <h6 class="fw-medium mb-2">Tahfidz</h6>
-                        <p class="card-subtitle mb-0">04:30 - 06:00</p>
+                        <h6 class="fw-medium text-dark mb-2">Tahfidz</h6>
+                        <p class="card-subtitle text-dark mb-0">04:30 - 06:00</p>
                     </div>
                     <span class="badge bg-success">Sekarang</span>
                 </div>
                 <div class="d-flex justify-content-between align-items-center rounded">
                     <div>
-                        <h6 class="fw-medium mb-2">Tahfidz</h6>
-                        <p class="card-subtitle mb-0">04:30 - 06:00</p>
+                        <h6 class="fw-medium text-dark mb-2">Tahfidz</h6>
+                        <p class="card-subtitle text-dark mb-0">04:30 - 06:00</p>
                     </div>
                     <span class="badge bg-success">Sekarang</span>
                 </div>
@@ -137,13 +137,13 @@
     <div class="mt-4">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title">Jadwal Piket</h6>
+                <h6 class="card-title text-dark">Jadwal Piket</h6>
                 <div class="mt-4">
                     <div style="background-color: #f5f5f5;"
                         class="p-3 d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="fw-medium mb-2">Senin</h6>
-                            <p class="card-subtitle mb-0">Membersihkan Masjid</p>
+                            <h6 class="fw-medium text-dark mb-2">Senin</h6>
+                            <p class="card-subtitle text-dark mb-0">Membersihkan Masjid</p>
                         </div>
                         <span class="badge bg-primary">Pagi</span>
                     </div>
@@ -152,8 +152,8 @@
                     <div style="background-color: #f5f5f5;"
                         class="p-3 d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="fw-medium mb-2">Kamis</h6>
-                            <p class="card-subtitle mb-0">Membersihkan Kelas</p>
+                            <h6 class="fw-medium text-dark mb-2">Kamis</h6>
+                            <p class="card-subtitle text-dark mb-0">Membersihkan Kelas</p>
                         </div>
                         <span class="badge bg-warning">Sore</span>
                     </div>
@@ -162,8 +162,8 @@
                     <div style="background-color: #f5f5f5;"
                         class="p-3 d-flex justify-content-between align-items-center">
                         <div>
-                            <h6 class="fw-medium mb-2">Sabtu</h6>
-                            <p class="card-subtitle mb-0">Kerja Bakti</p>
+                            <h6 class="fw-medium text-dark mb-2">Sabtu</h6>
+                            <p class="card-subtitle text-dark mb-0">Kerja Bakti</p>
                         </div>
                         <span class="badge bg-primary">Sore</span>
                     </div>
@@ -176,19 +176,19 @@
         <div class="card">
             <div class="card-body d-flex flex-column gap-2">
                 <div class="d-flex mb-3 justify-content-between align-items-center mb-3">
-                    <h6 class="card-title">Pengumuman</h6>
+                    <h6 class="card-title text-dark">Pengumuman</h6>
                     <a href="{{ route('santri.pengumuman') }}" class="btn btn-dark btn-sm">Lihat
                         Semua</a>
                 </div>
                 @forelse ($this->listPengumuman() as $item)
-                    <div data-bs-toggle="modal" wire:click='detailPengumuman("{{ $item->id }}")'
-                        data-bs-target="#detailPengumuman" class="">
+                    <div style="background-color: #f5f5f5;" data-bs-toggle="modal" wire:click='detailPengumuman("{{ $item->id }}")'
+                        data-bs-target="#detailPengumuman" class="p-3">
                         <div class="border-start border-info ps-3">
-                            <h6 class="fw-medium mb-2">{{ $item->judul }}</h6>
-                            <p class="card-subtitle mb-0">
+                            <h6 class="fw-bold text-dark mb-2">{{ $item->judul }}</h6>
+                            <p class="fw-medium text-dark mb-0">
                                 {{ Str::limit($item->isi_pengumuman, 64, '...') ?? '-' }}
                             </p>
-                            <p class="text-muted small mt-1">
+                            <p class="text-dark small mt-1 mb-0">
                                 {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
                             </p>
                         </div>
@@ -204,7 +204,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex mb-3 justify-content-between align-items-center mb-3">
-                    <h6 class="cm-0 ard-title">Kegiatan Mendatang</h6>
+                    <h6 class="m-0 text-dark card-title">Kegiatan Mendatang</h6>
                     <a href="{{ route('santri.kegiatan') }}" class="btn btn-sm btn-dark">Lihat
                         Semua</a>
                 </div>
@@ -212,8 +212,8 @@
                     <div data-bs-toggle="modal" wire:click='detailKegiatan("{{ $item->id }}")'
                         data-bs-target="#detailKegiatan" class="mt-3 rounded-3">
                         <div style="background-color: #f5f5f5;" class="p-3">
-                            <h6 class="fw-medium mb-2">{{ $item->judul }}</h6>
-                            <p class="small mb-0">
+                            <h6 class="fw-medium text-dark mb-2">{{ $item->judul }}</h6>
+                            <p class="small text-dark mb-0">
                                 {{ \Carbon\Carbon::parse($item->waktu_mulai)->format('d M Y H:i') }} -
                                 {{ \Carbon\Carbon::parse($item->waktu_selesai)->format('d M Y H:i') ?? '-' }}</p>
                         </div>
@@ -229,14 +229,14 @@
         <div class="modal-dialog modal-md modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">{{ $detailKegiatanModal?->judul }}</h5>
+                    <h5 class="modal-title text-dark">{{ $detailKegiatanModal?->judul }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-2"><b>{{ $detailKegiatanModal?->isi_kegiatan ?? '-' }}</p>
+                    <p class="mb-2 text-dark"><b>{{ $detailKegiatanModal?->isi_kegiatan ?? '-' }}</p>
                 </div>
                 <div class="modal-footer justify-content-start">
-                    <p class="mb-2">
+                    <p class="mb-2 text-dark">
                         {{ \Carbon\Carbon::parse($detailKegiatanModal?->waktu_mulai)->format('d M Y H:i') ?? '-' }} -
                         {{ \Carbon\Carbon::parse($detailKegiatanModal?->waktu_selesai)->format('d M Y H:i') ?? '-' }}
                     </p>
@@ -250,15 +250,15 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">
-                        <p class="mb-2">{{ $detailPengumumanModal?->judul ?? '-' }}</p>
+                        <p class="mb-2 text-dark">{{ $detailPengumumanModal?->judul ?? '-' }}</p>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-2">{{ $detailPengumumanModal?->isi_pengumuman ?? '-' }}</p>
+                    <p class="mb-2 text-dark">{{ $detailPengumumanModal?->isi_pengumuman ?? '-' }}</p>
                 </div>
                 <div class="modal-footer justify-content-start">
-                    <p class="mb-2">
+                    <p class="mb-2 text-dark">
                         {{ \Carbon\Carbon::parse($detailPengumumanModal?->tanggal)->format('d M Y') ?? '-' }}</p>
                 </div>
             </div>

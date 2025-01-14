@@ -50,7 +50,7 @@
                     <div class="mt-3">
                         <h6 class="mb-2 ">Tempat/Tanggal Lahir</h6>
                         <p class="fw-medium">{{ $profile?->tempat_lahir  ?? '-' }},
-                            {{ \Carbon\Carbon::parse($profile?->tanggal_lahir)->format('d M Y') }} 
+                            {{ \Carbon\Carbon::parse($profile?->tanggal_lahir)->format('d M Y') }}
                     </div>
                     <div class="mt-3">
                         <h6 class="mb-2">Aktifitas Pendidikan</h6>
@@ -77,13 +77,13 @@
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Update Profile</h5>
+                    <h5 class="modal-title text-dark">Update Profile</h5>
                     <button type="button" wire:click='close' class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <form wire:submit.prevent='updateProfileSantri'>
                     <div class="modal-body">
                         <div class="mb-2">
-                            <label for="email" class="form-label">Email</label>
+                            <label for="email" class="form-label text-dark">Email</label>
                             <input type="text" class="form-control" id="email" wire:model.live="userForm.email"
                                 placeholder="Email" required>
                             @error('userForm.email')
@@ -91,7 +91,7 @@
                             @enderror
                         </div>
                         <div class="mb-2">
-                            <label for="password" class="form-label">Password</label>
+                            <label for="password" class="form-label text-dark">Password</label>
                             <div class="form-group position-relative">
                                 <input type="{{ $showPassword ? 'text' : 'password' }}" class="form-control"
                                     id="password" wire:model.live="userForm.password" placeholder="Password">
